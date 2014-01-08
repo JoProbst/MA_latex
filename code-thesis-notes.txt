@@ -1,0 +1,31 @@
+MOP.  CODE THESIS NOTES.
+DATE. January 8th, 2014.
+
+
+[style guides]
+  - Wikipedia, Book Design. \cf{http://en.wikipedia.org/wiki/Book_design}
+  - The Chicago Manual of Style. \cf{http://www.chicagomanualofstyle.org}
+  - Writing a Thesis with LaTex. \cf{http://www.tug.org/pracjourn/2008-1/mori/} or material.
+  - Writing for Computer Science. \cf{https://eng.kuleuven.be/english/education/reporting/writing-for-computer-science-zobel.pdf} or material.
+  
+
+[plotting]
+  - Gnuplot. \cf{http://gnuplot.info/}
+  - Gnuplot. Not so FAQ. \cf{http://t16web.lanl.gov/Kawano/gnuplot/index-e.html}
+  - Matplotlib. \cf{http://matplotlib.sourceforge.net/}
+  - R. \cf{http://www.r-project.org/}
+
+
+[compilation]
+  - Commands:
+    > pdflatex thesis
+    > bibtex thesis
+    > pdflatex thesis
+    > pdflatex thesis
+    > pdflatex thesis
+  - This should create the file thesis.pdf.
+  - If not, make sure you have all the require packages installed (see webisthesis.cls).
+  - If everything works like it should, you should not be forced to change anything in webisthesis.cls at all.
+
+
+[end]
