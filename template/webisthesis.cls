@@ -36,9 +36,9 @@
 %%   hyperref.
 %%   E.g. \usehyperref[breaklinks=true] to allow linebreaks within links.
 %%
-%% \formatdatelong{<dd>}{<mm>}{<yyyy>}
+%% \formatdateshort{<dd>}{<mm>}{<yyyy>}
 %%   Analogous to \formatdate{<dd>}{<mm>}{<yyyy>} of the datetime package, but
-%%   prints the month as a word.
+%%   prints a shorter version to be used in tables or figures.
 %%
 %% New environments
 %% ----------------
@@ -67,8 +67,8 @@
 %% Stefan Brecheisen (Institut fuer Informatik der LMU Muenchen)
 %%
 
-\def\fileversion{v1.1}
-\def\filedate{2014/01/07}
+\def\fileversion{v1.2}
+\def\filedate{2014/01/08}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{webisthesis}[\filedate\space\fileversion]
 
@@ -109,14 +109,30 @@
 % Language
 \RequirePackage[\documentlanguage]{babel}
 % Datetime
-\newcommand{\formatdatelong}[3]{{\longdate\formatdate{#1}{#2}{#3}}}
+% Add ``.'' after abbreviated months
+\expandafter\newcommand\csname shortdateperiod1\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod2\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod3\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod4\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod5\endcsname{}% May
+\expandafter\newcommand\csname shortdateperiod6\endcsname{e}% June
+\expandafter\newcommand\csname shortdateperiod7\endcsname{y}% July
+\expandafter\newcommand\csname shortdateperiod8\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod9\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod10\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod11\endcsname{.}
+\expandafter\newcommand\csname shortdateperiod12\endcsname{.}
+\newcommand{\formatdateshort}[3]{{\shortdate\formatdate{#1}{#2}{#3}}}
 \ifthenelse{\equal{\documentlanguage}{english}}{%
-  \RequirePackage[iso,nodayofweek]{datetime}%
+  \RequirePackage[us,nodayofweek]{datetime}%
+  \renewcommand{\formatdateshort}[3]{\shortmonthname[#2]{}\csname shortdateperiod#2\endcsname{}\ #1, #3}%
 }{}
 \ifthenelse{\equal{\documentlanguage}{ngerman}}{%
-  \RequirePackage[ddmmyyyy,nodayofweek]{datetime}%
-  \renewcommand{\dateseparator}{.}%
-  \renewcommand{\formatdatelong}[3]{#1.\ \monthname[#2]{} #3}%
+  \RequirePackage[nodayofweek]{datetime}%
+  \newdateformat{germanlongdate}{\THEDAY.\ \monthname[\THEMONTH]{} \THEYEAR}%
+  \germanlongdate%
+  %\renewcommand{\dateseparator}{.}%
+  \renewcommand{\formatdateshort}[3]{#1.#2.#3}%
 }{}
 
 
@@ -132,7 +148,7 @@
 \newcommand{\ThesisSetSupervisors}[1]{\global\thesissupervisors{#1}}
 
 \newtoks\thesissubmissiondate
-\newcommand{\ThesisSetSubmissionDate}[3]{\global\thesissubmissiondate{\formatdatelong{#1}{#2}{#3}}}
+\newcommand{\ThesisSetSubmissionDate}[3]{\global\thesissubmissiondate{\formatdate{#1}{#2}{#3}}}
 
 \newtoks\thesislocation
 \newcommand{\ThesisSetLocation}[1]{\global\thesislocation{#1}}
@@ -142,7 +158,7 @@
 \newcommand{\ThesisSetStudentNumber}[1]{\global\thesisauthorstudentnumber{#1}}
 
 \newtoks\thesisauthordateofbirth
-\newcommand{\ThesisSetDateOfBirth}[3]{\global\thesisauthordateofbirth{\formatdate{#1}{#2}{#3}}}
+\newcommand{\ThesisSetDateOfBirth}[3]{\global\thesisauthordateofbirth{\formatdateshort{#1}{#2}{#3}}}
 
 \newtoks\thesisauthorplaceofbirth
 \newcommand{\ThesisSetPlaceOfBirth}[1]{\global\thesisauthorplaceofbirth{#1}}
