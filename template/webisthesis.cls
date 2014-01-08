@@ -67,7 +67,7 @@
 %% Stefan Brecheisen (Institut fuer Informatik der LMU Muenchen)
 %%
 
-\def\fileversion{v1.2}
+\def\fileversion{v1.3}
 \def\filedate{2014/01/08}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{webisthesis}[\filedate\space\fileversion]
@@ -132,7 +132,7 @@
   \newdateformat{germanlongdate}{\THEDAY.\ \monthname[\THEMONTH]{} \THEYEAR}%
   \germanlongdate%
   %\renewcommand{\dateseparator}{.}%
-  \renewcommand{\formatdateshort}[3]{#1.#2.#3}%
+  \renewcommand{\formatdateshort}[3]{\twodigit{#1}.\twodigit{#2}.#3}%
 }{}
 
 
@@ -217,13 +217,13 @@
 \newtoks\thesisfrontmatterkeywords
 \ifthenelse{\equal{\documentlanguage}{english}}{%
   \global\thesisfrontpagefaculty{Faculty of Media}
-  \global\thesisfrontpagecourse{}%{Course of Studies}
+  \global\thesisfrontpagecourse{Degree Programme }
   \global\thesisfrontpagetypename{'s Thesis}
-  \global\thesisfrontpagestudentnumber{Student number}
-  \global\thesisfrontpageborn{Born in \the\thesisauthorplaceofbirth, on %
-    \the\thesisauthordateofbirth}
-  \global\thesisfrontpagesupervisor{Supervisor}
-  \global\thesisfrontpagedateofsubmission{Date of submission}
+  \global\thesisfrontpagestudentnumber{Matriculation Number}
+  \global\thesisfrontpageborn{Born \the\thesisauthordateofbirth{} in %
+    \the\thesisauthorplaceofbirth}
+  \global\thesisfrontpagesupervisor{Referee}
+  \global\thesisfrontpagedateofsubmission{Submission date}
   \global\thesisdeclarationtitle{Declaration}
   \global\thesisdeclarationtext{Unless otherwise indicated in the text or %
     references, this thesis is entirely the product of my own scholarly work.}
@@ -270,25 +270,16 @@
       {\bf\thesistype\the\thesisfrontpagetypename}
 		\end{center}
     \vspace{\fill}\normalsize
-    \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}} lr }
-      
-      \the\thesisauthor & \the\thesisfrontpagestudentnumber{} %
-        \the\thesisauthorstudentnumber\\
-      \the\thesisfrontpageborn & \\
-      & \\
-      & \\
-      & \\
-      \newcounter{supervisors}\makeatletter%
-      \@for \name:=\the\thesissupervisors\do{%
-        \addtocounter{supervisors}{1}\arabic{supervisors}. %
-        \the\thesisfrontpagesupervisor: \name \\%
-      }%
-      \makeatother%
-      & \\
-      & \\
-      & \\
-      \the\thesisfrontpagedateofsubmission: \the\thesissubmissiondate & \\
-    \end{tabular*}
+    \the\thesisauthor\hfill\the\thesisfrontpagestudentnumber{} %
+      \the\thesisauthorstudentnumber\\%
+    \the\thesisfrontpageborn\\[3em]
+    \newcounter{supervisors}\makeatletter%
+    \@for \name:=\the\thesissupervisors\do{%
+      \addtocounter{supervisors}{1}\arabic{supervisors}. %
+      \the\thesisfrontpagesupervisor: \name \\%
+    }%
+    \makeatother\\[3em]%
+    \the\thesisfrontpagedateofsubmission: \the\thesissubmissiondate
   \end{titlepage}
 }%
 
