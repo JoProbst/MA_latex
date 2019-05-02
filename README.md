@@ -10,6 +10,7 @@ Style guides
   - [The Chicago Manual of Style](http://www.chicagomanualofstyle.org)
   - [Writing a Thesis with LaTex](http://www.tug.org/pracjourn/2008-1/mori/) or material.
   - [Writing for Computer Science](https://eng.kuleuven.be/english/education/reporting/writing-for-computer-science-zobel.pdf) or material.
+  - [How to write a great research paper](https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/)
   
 
 Plotting
