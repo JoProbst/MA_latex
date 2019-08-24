@@ -1,5 +1,9 @@
 MOP.  CODE THESIS NOTES.
-DATE. January 8th, 2014.
+DATE. August 24th, 2019.
+
+
+[science craftsmanship]
+  - Things a scientist is suppposed to know. \cf{https://github.com/philippbayer/Things-a-scientist-is-suppposed-to-know} or material.
 
 
 [style guides]
