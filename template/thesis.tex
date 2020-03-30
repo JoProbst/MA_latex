@@ -38,6 +38,16 @@
 %    For tabular-style formatting of mathematical environments.
 %
 
+%
+% Commenting (by your supervisor)
+% -------------------------------
+\usepackage{soul}
+\newcommand{\bscom}[2]{%
+  % #1 Original text.
+  % #2 Replacement text.
+    \st{\scriptsize\,#1}{\color{blue}\scriptsize\,#2}%
+  }
+
 % Create links in the pdf document
 % Hyperref has some incompatibilities with other packages
 % Some other packages must be loaded before, some after hyperref
