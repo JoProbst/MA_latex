@@ -1,7 +1,12 @@
 Code Thesis Notes
-=============
+=================
 
-Date: 2017-11-07
+Date: April 4th, 2020
+
+
+Sscience Craftsmanship
+----------------------
+  - [Things a scientist is suppposed to know](https://github.com/philippbayer/Things-a-scientist-is-suppposed-to-know) or material.
 
 
 Style guides
@@ -11,6 +16,7 @@ Style guides
   - [Writing a Thesis with LaTex](http://www.tug.org/pracjourn/2008-1/mori/) or material.
   - [Writing for Computer Science](https://eng.kuleuven.be/english/education/reporting/writing-for-computer-science-zobel.pdf) or material.
   - [How to write a great research paper](https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/)
+  - [Google's Technical Wrting Courses for Engineers](https://developers.google.com/tech-writing)
   
 
 Plotting
