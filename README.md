@@ -4,7 +4,7 @@ Code Thesis Notes
 Date: April 4th, 2020
 
 
-Sscience Craftsmanship
+Science Craftsmanship
 ----------------------
   - [Things a scientist is suppposed to know](https://github.com/philippbayer/Things-a-scientist-is-suppposed-to-know) or material.
 
