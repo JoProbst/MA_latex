@@ -5,19 +5,23 @@ Date: April 4th, 2020
 
 
 Science Craftsmanship
-----------------------
+---------------------
+  - [How to write a great research paper](https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/)
   - [Things a scientist is suppposed to know](https://github.com/philippbayer/Things-a-scientist-is-suppposed-to-know) or material.
 
 
-Writing and Style Guides
+Technical Writing Guides
 ------------------------
-  - [Wikipedia, Book Design](http://en.wikipedia.org/wiki/Book_design)
-  - [The Chicago Manual of Style](http://www.chicagomanualofstyle.org)
+  - [Google's Technical Wrting Courses for Engineers](https://developers.google.com/tech-writing)
   - [Writing a Thesis with LaTex](http://www.tug.org/pracjourn/2008-1/mori/) or material.
   - [Writing for Computer Science](https://archive.org/details/springer_10.1007-978-0-85729-422-7/mode/2up) or material.
-  - [How to write a great research paper](https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/)
-  - [Google's Technical Wrting Courses for Engineers](https://developers.google.com/tech-writing)
-  
+
+
+Style Guides
+------------
+  - [The Chicago Manual of Style](http://www.chicagomanualofstyle.org)
+  - [Wikipedia, Book Design](http://en.wikipedia.org/wiki/Book_design)
+
 
 Plotting
 --------
