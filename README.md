@@ -9,8 +9,8 @@ Sscience Craftsmanship
   - [Things a scientist is suppposed to know](https://github.com/philippbayer/Things-a-scientist-is-suppposed-to-know) or material.
 
 
-Style guides
-------------
+Writing and Style Guides
+------------------------
   - [Wikipedia, Book Design](http://en.wikipedia.org/wiki/Book_design)
   - [The Chicago Manual of Style](http://www.chicagomanualofstyle.org)
   - [Writing a Thesis with LaTex](http://www.tug.org/pracjourn/2008-1/mori/) or material.
