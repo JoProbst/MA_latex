@@ -1,0 +1,93 @@
+\chapter{Introduction}\label{introduction}
+% Showing natbib citation commands
+Let us get started by citing \citet{manning:1999}!
+So what did \citeauthor{manning:1999} do in \citeyear{manning:1999}?
+Good question!
+% Showing hyperref reference commands
+Maybe it is answered in \autoref{introduction} on page~\pageref{introduction}?
+Just to have something show up in the list of figures, I included \autoref{fig:a}.
+\begin{figure}[bt]% bottom or top of page (for small figures/tables)
+  \begin{center}{\huge\bf A}\end{center}
+  \caption{The first letter in the Roman alphabet.}\label{fig:a}
+\end{figure}
+% \formatdate (or \formatdateshort)
+This date does not exist: \formatdateshort{30}{2}{2014}
+and is the same as \formatdate{30}{2}{2014}.
+% An example table
+And here is some table with some numbers (\autoref{tab:numbers})
+which deserves to be on an extra page.
+\begin{table}[p]% extra page (usually for large figures/tables)
+\caption{Tables have their captions above, figures below.}
+\label{tab:numbers}%
+\centering\small
+\begin{tabular}{@{}lccc@{}} % use @{} to remove spacing
+\toprule
+\multicolumn{4}{c}{\bf Some numbers}\\
+\midrule
+& 1999 & 2000 & 2001 \\
+\cmidrule(l){2-4} % cmidrule: A line from 2nd to 4th column, trimmed on the left hand side
+Distance (km) & 23 & 18 & 42 \\
+Awesomeness (aws) & 3.2 & 8.1 & 2.4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\newcommand{\checkYes}{\faCheck}% Uses \faCheck of \usepackage{fontawesome}
+\newcommand{\checkPartially}{{\color{gray}(\faCheck)}}
+\newcommand{\checkNo}{\faTimes}
+\caption{A matrix showing which attributes an entity has, \checkYes, partially has, \checkPartially, or has not \checkNo.}
+\label{tab:checkmarks}
+\centering\small
+\begin{tabular}{@{}l@{\hspace{3\tabcolsep}}cccc@{}} % Use @{\hspace{2\tabcolsep}} to double the spacing
+\toprule
+\bf Entities & \bf Attribute1 & \bf Attribute2 & \bf Attribute3 & \bf Attribute4 \\
+\midrule
+Entity1 & \checkYes & \checkNo & \checkPartially & \checkNo \\
+Entity2 & \checkNo & \checkPartially & \checkYes & \checkPartially \\
+Entity3 & \checkPartially & \checkYes & \checkNo & \checkYes \\
+Entity4 & \checkYes & \checkNo & \checkPartially & \checkNo \\
+Entity5 & \checkNo & \checkPartially & \checkYes & \checkPartially \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}
+\setlength{\tabcolsep}{1pt} % minimal horizontal space between cells
+\newcommand{\heatmapcellwidth}{6em} % ensure same width for all cells
+\newcommand{\heatmapcell}[2][0]{%
+  % \heatmapcell[1]{00} for 1.00
+  % \heatmapcell{XX}    for 0.XX
+  \providecommand{\heatmapcellfg}{0.00}%
+  \providecommand{\heatmapcellbg}{1.00}%
+  \ifnum #2 > 09 \renewcommand{\heatmapcellfg}{0.00}\renewcommand{\heatmapcellbg}{1.00}\else\fi%
+  \ifnum #2 > 19 \renewcommand{\heatmapcellfg}{0.00}\renewcommand{\heatmapcellbg}{0.95}\else\fi%
+  \ifnum #2 > 29 \renewcommand{\heatmapcellfg}{0.00}\renewcommand{\heatmapcellbg}{0.85}\else\fi%
+  \ifnum #2 > 39 \renewcommand{\heatmapcellfg}{0.00}\renewcommand{\heatmapcellbg}{0.75}\else\fi%
+  \ifnum #2 > 49 \renewcommand{\heatmapcellfg}{0.00}\renewcommand{\heatmapcellbg}{0.60}\else\fi%
+  \ifnum #2 > 59 \renewcommand{\heatmapcellfg}{1.00}\renewcommand{\heatmapcellbg}{0.40}\else\fi%
+  \ifnum #2 > 69 \renewcommand{\heatmapcellfg}{1.00}\renewcommand{\heatmapcellbg}{0.20}\else\fi%
+  \ifnum #2 > 79 \renewcommand{\heatmapcellfg}{1.00}\renewcommand{\heatmapcellbg}{0.10}\else\fi%
+  \ifnum #2 > 89 \renewcommand{\heatmapcellfg}{1.00}\renewcommand{\heatmapcellbg}{0.00}\else\fi%
+  \ifnum #1 = 1 \renewcommand{\heatmapcellfg}{1.00}\renewcommand{\heatmapcellbg}{0.00}\else\fi%
+  \definecolor{cellfg}{gray}{\heatmapcellfg}%
+  \definecolor{cellbg}{gray}{\heatmapcellbg}%
+  \fcolorbox{white}{cellbg}{\parbox{\heatmapcellwidth}{\centering\color{cellfg}\rule[-0pt]{0pt}{1ex}#1.#2}}%
+}
+\caption{A heatmap.}
+\label{tab:heatmap}
+\centering\small
+\begin{tabular}{@{}l@{\hspace{5pt}}cccc@{}} % Use @{\hspace{Xpt}} to specify separation
+\toprule
+\bf Entities & \bf Attribute1 & \bf Attribute2 & \bf Attribute3 & \bf Attribute4 \\
+\midrule
+Entity1 & \heatmapcell{72} & \heatmapcell{05} & \heatmapcell{20} & \heatmapcell{20} \\
+Entity2 & \heatmapcell[1]{00} & \heatmapcell{11} & \heatmapcell{12} & \heatmapcell{91} \\
+Entity3 & \heatmapcell{63} & \heatmapcell{36} & \heatmapcell{68} & \heatmapcell{27} \\
+Entity4 & \heatmapcell{69} & \heatmapcell{48} & \heatmapcell{28} & \heatmapcell{59} \\
+Entity5 & \heatmapcell{12} & \heatmapcell{69} & \heatmapcell{82} & \heatmapcell{42} \\
+Entity6 & \heatmapcell{23} & \heatmapcell{07} & \heatmapcell{45} & \heatmapcell{85} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
