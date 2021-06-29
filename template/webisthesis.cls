@@ -6,7 +6,7 @@
 %% ---------------------------------------------------------------------
 %% - english      For a thesis written in English
 %% - german       For a thesis written in German
-%% - bachelor     For a bachelor thesis (B.Sc. Medieninformatik)
+%% - bachelor     For a bachelor thesis (B.Sc. Informatik)
 %% - master       For a master thesis   (M.Sc. Computer Science for Digital Media)
 %% - buw          For a thesis in Weimar 
 %% - ul           For a thesis in Leipzig
@@ -282,7 +282,7 @@
 \ifthenelse{\equal{\thesistype}{Bachelor}}{%
   \ifthenelse{\equal{\documentlanguage}{ngerman}}{%
     \ifthenelse{\equal{\thesisuniversity}{buw}}{%
-      \global\thesisprogramme{Medieninformatik}
+      \global\thesisprogramme{Informatik}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
       \global\thesisprogramme{Informatik, B.Sc.}
@@ -296,7 +296,7 @@
   }{}
   \ifthenelse{\equal{\documentlanguage}{english}}{%
     \ifthenelse{\equal{\thesisuniversity}{buw}}{%
-      \global\thesisprogramme{Medieninformatik}
+      \global\thesisprogramme{Informatik}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
       \global\thesisprogramme{Computer Science, B.Sc.}
