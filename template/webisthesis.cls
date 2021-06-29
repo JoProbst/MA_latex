@@ -8,7 +8,11 @@
 %% - german       For a thesis written in German
 %% - bachelor     For a bachelor thesis (B.Sc. Medieninformatik)
 %% - master       For a master thesis   (M.Sc. Computer Science and Media)
-%% Default: [german,bachelor]
+%% - buw          For a thesis in Weimar 
+%% - ul           For a thesis in Leipzig
+%% - mlu          For a thesis in Halle
+%% - pb           For a thesis in Paderborn
+%% Default: [german,bachelor,buw]
 %%
 %% New commands
 %% ------------
@@ -21,6 +25,7 @@
 %% \ThesisSetSupervisors{<comma-separated list of your supervisors>}
 %% \ThesisSetSubmissionDate{<dd>}{<mm>}{<yyyy of your final submission>}
 %% \ThesisSetLocation{<your current location>} (optional, default: Weimar)
+%% \ThesisSetProgramme{<custom degree programme name>} (optional)
 %%   These commands can be used to specify some of the values that are used for
 %%   generating the title page, the declaration of independent work and PDF meta
 %%   attributes of the document (when \usehyperref is also used).
@@ -67,8 +72,8 @@
 %% Stefan Brecheisen (Institut fuer Informatik der LMU Muenchen)
 %%
 
-\def\fileversion{v1.3}
-\def\filedate{2014/01/08}
+\def\fileversion{v1.4}
+\def\filedate{2021/05/04}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{webisthesis}[\filedate\space\fileversion]
 
@@ -104,7 +109,23 @@
 }
 \ExecuteOptions{bachelor} % default
 
-\ProcessOptions
+% University
+\newcommand{\thesisuniversity}{}
+\DeclareOption{buw}{%
+    \renewcommand{\thesisuniversity}{buw}
+}
+\DeclareOption{ul}{%
+    \renewcommand{\thesisuniversity}{ul}
+}
+\DeclareOption{mlu}{%
+    \renewcommand{\thesisuniversity}{mlu}
+}
+\DeclareOption{pb}{%
+    \renewcommand{\thesisuniversity}{pb}
+}
+\ExecuteOptions{buw} % default
+
+\ProcessOptions%
 
 % Language
 \RequirePackage[\documentlanguage]{babel}
@@ -153,6 +174,9 @@
 \newtoks\thesislocation
 \newcommand{\ThesisSetLocation}[1]{\global\thesislocation{#1}}
 \ThesisSetLocation{Weimar} % default
+
+\newtoks\thesisprogramme
+\newcommand{\ThesisSetProgramme}[1]{\global\thesisprogramme{#1}}
 
 \newtoks\thesisauthorstudentnumber
 \newcommand{\ThesisSetStudentNumber}[1]{\global\thesisauthorstudentnumber{#1}}
@@ -204,10 +228,120 @@
 \AtBeginDocument{\checkthesisvariables}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Template words
+% University-specific template words
+\newtoks\thesisfrontpageuniversity
 \newtoks\thesisfrontpagefaculty
 \newtoks\thesisfrontpagecourse
 \newtoks\thesisfrontpagetypename
+
+\ifthenelse{\equal{\documentlanguage}{english}}{%
+  \ifthenelse{\equal{\thesisuniversity}{buw}}{%
+    \global\thesisfrontpageuniversity{Bauhaus-Universit\"at Weimar}
+    \global\thesisfrontpagefaculty{Faculty of Media}
+    \global\thesisfrontpagecourse{Degree Programme }
+  }{}
+  \ifthenelse{\equal{\thesisuniversity}{ul}}{%
+    \global\thesisfrontpageuniversity{Leipzig University} 
+    \global\thesisfrontpagefaculty{Institute of Computer Science}
+    \global\thesisfrontpagecourse{Degree Programme }
+  }{}
+  \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+    \global\thesisfrontpageuniversity{Martin Luther University Halle-Wittenberg} 
+    \global\thesisfrontpagefaculty{Institute of Computer Science}
+    \global\thesisfrontpagecourse{Degree Programme }
+  }{}
+  \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
+    \global\thesisfrontpageuniversity{Paderborn University} 
+    \global\thesisfrontpagefaculty{Institute of Computer Science}
+    \global\thesisfrontpagecourse{Degree Programme }
+  }{}
+}{}
+\ifthenelse{\equal{\documentlanguage}{ngerman}}{%
+  \ifthenelse{\equal{\thesisuniversity}{buw}}{%
+    \global\thesisfrontpageuniversity{Bauhaus-Universit\"at Weimar}
+    \global\thesisfrontpagefaculty{Fakult\"at Medien}
+    \global\thesisfrontpagecourse{Studiengang }
+  }{}
+  \ifthenelse{\equal{\thesisuniversity}{ul}}{%
+    \global\thesisfrontpageuniversity{Universit\"at Leipzig} 
+    \global\thesisfrontpagefaculty{Institut f\"ur Informatik}
+    \global\thesisfrontpagecourse{Studiengang }
+  }{}
+  \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+    \global\thesisfrontpageuniversity{Martin-Luther-Universit\"at Halle-Wittenberg} 
+    \global\thesisfrontpagefaculty{Institut f\"ur Informatik}
+    \global\thesisfrontpagecourse{Studiengang }
+  }{}
+  \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
+    \global\thesisfrontpageuniversity{Universität Paderborn} 
+    \global\thesisfrontpagefaculty{Institute of Computer Science}
+    \global\thesisfrontpagecourse{Degree Programme }
+  }{} 
+}{}
+
+\ifthenelse{\equal{\thesistype}{Bachelor}}{%
+  \ifthenelse{\equal{\documentlanguage}{ngerman}}{%
+    \ifthenelse{\equal{\thesisuniversity}{buw}}{%
+      \global\thesisprogramme{Medieninformatik}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
+      \global\thesisprogramme{Informatik, B.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+      \global\thesisprogramme{Informatik, B.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
+      \global\thesisprogramme{Informatik, B.Sc.}
+    }{}
+  }{}
+  \ifthenelse{\equal{\documentlanguage}{english}}{%
+    \ifthenelse{\equal{\thesisuniversity}{buw}}{%
+      \global\thesisprogramme{Medieninformatik}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
+      \global\thesisprogramme{Computer Science, B.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+      \global\thesisprogramme{Computer Science, B.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
+      \global\thesisprogramme{Computer Science, B.Sc.}
+    }{}
+  }{}
+}{}
+\ifthenelse{\equal{\thesistype}{Master}}{%
+  \ifthenelse{\equal{\documentlanguage}{ngerman}}{%
+    \ifthenelse{\equal{\thesisuniversity}{buw}}{%
+      \global\thesisprogramme{Computer Science for Digital Media}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
+      \global\thesisprogramme{Informatik, M.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+      \global\thesisprogramme{Informatik, M.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
+      \global\thesisprogramme{Informatik, M.Sc.}
+    }{}
+  }{}
+    \ifthenelse{\equal{\documentlanguage}{english}}{%
+    \ifthenelse{\equal{\thesisuniversity}{buw}}{%
+      \global\thesisprogramme{Computer Science for Digital Media}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{ul}}{%  
+      \global\thesisprogramme{Computer Science, M.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+      \global\thesisprogramme{Computer Science, M.Sc.}
+    }{}
+    \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
+      \global\thesisprogramme{Computer Science, M.Sc.}
+    }{}
+  }{}
+}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University-agnostic words
 \newtoks\thesisfrontpagestudentnumber
 \newtoks\thesisfrontpageborn
 \newtoks\thesisfrontpagesupervisor
@@ -216,8 +350,6 @@
 \newtoks\thesisdeclarationtext
 \newtoks\thesisfrontmatterkeywords
 \ifthenelse{\equal{\documentlanguage}{english}}{%
-  \global\thesisfrontpagefaculty{Faculty of Media}
-  \global\thesisfrontpagecourse{Degree Programme }
   \global\thesisfrontpagetypename{'s Thesis}
   \global\thesisfrontpagestudentnumber{Matriculation Number}
   \global\thesisfrontpageborn{Born \the\thesisauthordateofbirth{} in %
@@ -230,11 +362,9 @@
   \global\thesisfrontmatterkeywords{Keywords}
 }{}
 \ifthenelse{\equal{\documentlanguage}{ngerman}}{%
-  \global\thesisfrontpagefaculty{Fakult\"at Medien}
-  \global\thesisfrontpagecourse{Studiengang }
   \global\thesisfrontpagetypename{arbeit}
   \global\thesisfrontpagestudentnumber{Matrikelnummer}
-  \global\thesisfrontpageborn{geb. am: \the\thesisauthordateofbirth{} in %
+  \global\thesisfrontpageborn{geb.\ am: \the\thesisauthordateofbirth{} in %
     \the\thesisauthorplaceofbirth}
   \global\thesisfrontpagesupervisor{Gutachter}
   \global\thesisfrontpagedateofsubmission{Datum der Abgabe}
@@ -245,22 +375,15 @@
   \global\thesisfrontmatterkeywords{Schl\"usselworte}
 }{}
 
-\newtoks\thesisfrontpagecoursename
-\ifthenelse{\equal{\thesistype}{Bachelor}}{%
-  \global\thesisfrontpagecoursename{Medieninformatik}%
-}{}
-\ifthenelse{\equal{\thesistype}{Master}}{%
-  \global\thesisfrontpagecoursename{Computer Science and Media}%
-}{}
-
 % Frontpage
 \newcommand{\frontpage}{%
   \begin{titlepage}
 		\vspace{2cm}
 		\hspace*{-1cm}
-    \parbox{10cm}{\normalsize Bauhaus-Universit\"at Weimar\\
+    \parbox{10cm}{\normalsize
+      \the\thesisfrontpageuniversity\\
       \the\thesisfrontpagefaculty\\
-      \the\thesisfrontpagecourse\the\thesisfrontpagecoursename}
+      \the\thesisfrontpagecourse\the\thesisprogramme}
 
 		\begin{center}
 			\vspace{3cm}\Huge
