@@ -282,7 +282,7 @@
 \ifthenelse{\equal{\thesistype}{Bachelor}}{%
   \ifthenelse{\equal{\documentlanguage}{ngerman}}{%
     \ifthenelse{\equal{\thesisuniversity}{buw}}{%
-      \global\thesisprogramme{Informatik}
+      \global\thesisprogramme{Medieninformatik}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
       \global\thesisprogramme{Informatik, B.Sc.}
@@ -296,7 +296,7 @@
   }{}
   \ifthenelse{\equal{\documentlanguage}{english}}{%
     \ifthenelse{\equal{\thesisuniversity}{buw}}{%
-      \global\thesisprogramme{Informatik}
+      \global\thesisprogramme{Medieninformatik}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
       \global\thesisprogramme{Computer Science, B.Sc.}
