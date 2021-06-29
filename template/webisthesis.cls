@@ -7,7 +7,7 @@
 %% - english      For a thesis written in English
 %% - german       For a thesis written in German
 %% - bachelor     For a bachelor thesis (B.Sc. Medieninformatik)
-%% - master       For a master thesis   (M.Sc. Computer Science and Media)
+%% - master       For a master thesis   (M.Sc. Computer Science for Digital Media)
 %% - buw          For a thesis in Weimar 
 %% - ul           For a thesis in Leipzig
 %% - mlu          For a thesis in Halle
