@@ -8,7 +8,7 @@ Science Craftsmanship
 ---------------------
   - [How to write a great research paper](https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/)
   - [Things a scientist is suppposed to know](https://github.com/philippbayer/Things-a-scientist-is-suppposed-to-know) or material.
-
+  - [Resources to Help Global Equality for PhDs in NLP / AI](https://github.com/zhijing-jin/nlp-phd-global-equality)
 
 Technical Writing Guides
 ------------------------
