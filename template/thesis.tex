@@ -1,12 +1,12 @@
-%\documentclass[german,bachelor]{webisthesis}
-\documentclass[english,master]{webisthesis}
+% \documentclass[german,bachelor,mlu]{webisthesis}
+\documentclass[german,master,buw]{webisthesis}
 %
 % Non-default programme
 % ---------------------
-%\documentclass[english,master,buw]{webisthesis}\global\thesisprogramme{Human-Computer Interaction}
-%\documentclass[english,master,buw]{webisthesis}\global\thesisfrontpagefaculty{Faculty of Civil Engineering/Faculty of Media}\global\thesisprogramme{Digital Engineering}
-%\documentclass[german,bachelor,buw]{webisthesis}\global\thesisprogramme{Informatik\\Schwerpunkt Medieninformatik}
-%\documentclass[german,bachelor,buw]{webisthesis}\global\thesisprogramme{Informatik\\Schwerpunkt Security and Data Science}
+% \documentclass[english,master,buw]{webisthesis}\global\thesisprogramme{Human-Computer Interaction}
+% \documentclass[english,master,buw]{webisthesis}\global\thesisfrontpagefaculty{Faculty of Civil Engineering/Faculty of Media}\global\thesisprogramme{Digital Engineering}
+% \documentclass[german,bachelor,buw]{webisthesis}\global\thesisprogramme{Informatik\\Schwerpunkt Medieninformatik}
+% \documentclass[german,bachelor,buw]{webisthesis}\global\thesisprogramme{Informatik\\Schwerpunkt Security and Data Science}
 %
 % When you change the language, pdflatex may halt on recompilation.
 % Just hit enter to continue and recompile again. This should fix it.
@@ -15,15 +15,16 @@
 %
 % Values
 % ------
-\ThesisSetTitle{The Title of my Thesis}
-\ThesisSetKeywords{These, Are, My keywords} % only for PDF meta attributes
+\ThesisSetTitle{The Title of the Thesis}
+\ThesisSetKeywords{These, are, my, Keywords} % only for PDF meta attributes
+\ThesisSetLocation{Where  I Live} 
 
-\ThesisSetAuthor{First name Surname}
+\ThesisSetAuthor{FirstName LastName}
 \ThesisSetStudentNumber{01234}
 \ThesisSetDateOfBirth{1}{1}{1984}
 \ThesisSetPlaceOfBirth{Duckburg}
 
-\ThesisSetSupervisors{Prof.\ Dr.\ Benno Stein,Prof.\ Dr.\ Unknown Yet}
+\ThesisSetSupervisors{Prof.\ Dr.\ Unkown Yet,Prof.\ Dr.\ Also Unknown}
 
 \ThesisSetSubmissionDate{31}{2}{2022}
 
@@ -37,13 +38,13 @@
 \usepackage{booktabs}
 %    For tables ``looking the right way''.
 %
-%\usepackage{tabularx}
+% \usepackage{tabularx}
 %    Enables tables with columns that automatically fill the page width.
 %
-%\usepackage[ruled,algochapter]{algorithm2e}
+% \usepackage[ruled,algochapter]{algorithm2e}
 %    A package for pseudo code algorithms.
 %
-%\usepackage{amsmath}
+% \usepackage{amsmath}
 %    For tabular-style formatting of mathematical environments.
 %
 
@@ -64,8 +65,9 @@
 % Create links in the pdf document
 % Hyperref has some incompatibilities with other packages
 % Some other packages must be loaded before, some after hyperref
-% Additional options to the hyperref package can be provided in the braces []
-\usehyperref[backref] % This will add back references in the bibliography
+% Additional options to the hyperref package can be provided in the braces [], like in
+% \usehyperref[backref] % This will add back references in the bibliography that some people like ... some don't ... so better ask your supervisor ;-)
+\usehyperref
 
 \begin{document}
 \begin{frontmatter}
@@ -75,17 +77,17 @@
 
   \tableofcontents
 
-  %\chapter*{Acknowledgements} % optional
-  %I thank the authors of the webisthesis template for their excellent work!
+  % \chapter*{Acknowledgements} % optional
+  % I thank the authors of the webisthesis template for their excellent work!
 
-  %\listoffigures % optional
+  % \listoffigures % optional, usually not needed
 
-  %\listoftables % optional
+  % \listoftables % optional, usually not needed
 
-  %\listofalgorithms % optional
+  % \listofalgorithms % optional, usually not needed
   %    requires package algorithm2e
 
-  % optional: list of symbols/notation (e.g., using the nomencl package)
+  % optional: list of symbols/notation (e.g., using the nomencl package) but usually not needed
 \end{frontmatter}
 
 \include{chapter1}

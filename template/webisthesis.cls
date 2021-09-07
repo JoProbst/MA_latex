@@ -39,7 +39,7 @@
 %%   certain packages. Use this command at the appropriate place.
 %%   The optional parameter can be used to forward additional options to
 %%   hyperref.
-%%   E.g. \usehyperref[breaklinks=true] to allow linebreaks within links.
+%%   For instance, \usehyperref[breaklinks=true] to allow linebreaks within links.
 %%
 %% \formatdateshort{<dd>}{<mm>}{<yyyy>}
 %%   Analogous to \formatdate{<dd>}{<mm>}{<yyyy>} of the datetime package, but
@@ -72,8 +72,8 @@
 %% Stefan Brecheisen (Institut fuer Informatik der LMU Muenchen)
 %%
 
-\def\fileversion{v1.4}
-\def\filedate{2021/05/04}
+\def\fileversion{v1.5}
+\def\filedate{2021/09/08}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{webisthesis}[\filedate\space\fileversion]
 
@@ -236,7 +236,7 @@
 
 \ifthenelse{\equal{\documentlanguage}{english}}{%
   \ifthenelse{\equal{\thesisuniversity}{buw}}{%
-    \global\thesisfrontpageuniversity{Bauhaus-Universit\"at Weimar}
+    \global\thesisfrontpageuniversity{Bauhaus-Universit{{\"a}}t Weimar}
     \global\thesisfrontpagefaculty{Faculty of Media}
     \global\thesisfrontpagecourse{Degree Programme }
   }{}
@@ -246,7 +246,7 @@
     \global\thesisfrontpagecourse{Degree Programme }
   }{}
   \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
-    \global\thesisfrontpageuniversity{Martin Luther University Halle-Wittenberg} 
+    \global\thesisfrontpageuniversity{Martin-Luther-Universit{{\"a}}t Halle-Wittenberg} 
     \global\thesisfrontpagefaculty{Institute of Computer Science}
     \global\thesisfrontpagecourse{Degree Programme }
   }{}
@@ -258,24 +258,24 @@
 }{}
 \ifthenelse{\equal{\documentlanguage}{ngerman}}{%
   \ifthenelse{\equal{\thesisuniversity}{buw}}{%
-    \global\thesisfrontpageuniversity{Bauhaus-Universit\"at Weimar}
-    \global\thesisfrontpagefaculty{Fakult\"at Medien}
+    \global\thesisfrontpageuniversity{Bauhaus-Universit{\"a}t Weimar}
+    \global\thesisfrontpagefaculty{Fakult{\"a}t Medien}
     \global\thesisfrontpagecourse{Studiengang }
   }{}
   \ifthenelse{\equal{\thesisuniversity}{ul}}{%
-    \global\thesisfrontpageuniversity{Universit\"at Leipzig} 
-    \global\thesisfrontpagefaculty{Institut f\"ur Informatik}
+    \global\thesisfrontpageuniversity{Universit{\"a}t Leipzig} 
+    \global\thesisfrontpagefaculty{Institut f{\"u}r Informatik}
     \global\thesisfrontpagecourse{Studiengang }
   }{}
   \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
-    \global\thesisfrontpageuniversity{Martin-Luther-Universit\"at Halle-Wittenberg} 
-    \global\thesisfrontpagefaculty{Institut f\"ur Informatik}
+    \global\thesisfrontpageuniversity{Martin-Luther-Universit{\"a}t Halle-Wittenberg} 
+    \global\thesisfrontpagefaculty{Institut f{\"u}r Informatik}
     \global\thesisfrontpagecourse{Studiengang }
   }{}
   \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
-    \global\thesisfrontpageuniversity{Universität Paderborn} 
-    \global\thesisfrontpagefaculty{Institute of Computer Science}
-    \global\thesisfrontpagecourse{Degree Programme }
+    \global\thesisfrontpageuniversity{Universit{\"a}t Paderborn} 
+    \global\thesisfrontpagefaculty{Institut f{\"u}r Informatik}
+    \global\thesisfrontpagecourse{Studiengang }
   }{} 
 }{}
 
@@ -368,11 +368,11 @@
     \the\thesisauthorplaceofbirth}
   \global\thesisfrontpagesupervisor{Gutachter}
   \global\thesisfrontpagedateofsubmission{Datum der Abgabe}
-  \global\thesisdeclarationtitle{Erkl\"arung}
+  \global\thesisdeclarationtitle{Erkl{\"a}rung}
   \global\thesisdeclarationtext{Hiermit versichere ich, dass ich diese Arbeit %
-    selbstst\"andig verfasst und keine anderen als die angegebenen Quellen und %
+    selbstst{\"a}ndig verfasst und keine anderen als die angegebenen Quellen und %
     Hilfsmittel verwendet habe.}
-  \global\thesisfrontmatterkeywords{Schl\"usselworte}
+  \global\thesisfrontmatterkeywords{Schl{\"u}sselworte}
 }{}
 
 % Frontpage
