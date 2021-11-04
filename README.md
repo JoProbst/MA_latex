@@ -16,6 +16,9 @@ Technical Writing Guides
   - [Writing a Thesis with LaTex](http://www.tug.org/pracjourn/2008-1/mori/) or material.
   - [Writing for Computer Science](https://archive.org/details/springer_10.1007-978-0-85729-422-7/mode/2up) or material.
 
+Organizing Literature
+------------------------
+See our [guide](https://git.webis.de/code-generic/code-webis-faq#how-to-do-literature-research) on literature research.
 
 Style Guides
 ------------
