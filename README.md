@@ -1,7 +1,7 @@
 Code Thesis Notes
 =================
 
-Date: April 4th, 2020
+Date: April 5th, 2022
 
 
 Science Craftsmanship
@@ -26,6 +26,7 @@ Style Guides
 ------------
   - [The Chicago Manual of Style](http://www.chicagomanualofstyle.org)
   - [Wikipedia, Book Design](http://en.wikipedia.org/wiki/Book_design)
+  - [A detailed guide to colors in data vis style guides](https://blog.datawrapper.de/colors-for-data-vis-style-guides/)
 
 
 Plotting
