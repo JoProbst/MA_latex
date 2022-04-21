@@ -22,6 +22,11 @@ Organizing Literature
 ------------------------
 See our [guide](https://git.webis.de/code-generic/code-webis-faq#how-to-do-literature-research) on literature research.
 
+
+Organizing Code and data
+------------------------
+  - [Cookiecutter Project Template](https://drivendata.github.io/cookiecutter-data-science/#cookiecutter-data-science)
+
 Style Guides
 ------------
   - [The Chicago Manual of Style](http://www.chicagomanualofstyle.org)
