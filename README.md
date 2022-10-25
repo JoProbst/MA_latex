@@ -1,7 +1,7 @@
 Code Thesis Notes
 =================
 
-Date: April 5th, 2022
+Date: October 25th, 2022
 
 
 Science Craftsmanship
@@ -54,3 +54,10 @@ Compilation
   2. This should create the file thesis.pdf.
   3. If not, make sure you have all the require packages installed (see webisthesis.cls).
   4. If everything works like it should, you should not be forced to change anything in webisthesis.cls at all.
+
+
+Overleaf
+--------
+
+This template can also be found in the Overleaf Gallery.
+- [Overleaf Template](https://www.overleaf.com/latex/templates/webis-thesis-template/nfhzrtmtzjty)
