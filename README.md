@@ -59,5 +59,5 @@ Compilation
 Overleaf
 --------
 
-This template can also be found in the Overleaf Gallery.
+This template can also be found in the Overleaf Gallery. If you use Overleaf, make sure to share a link to your thesis in your Gitlab repository's readme so that your supervisor(s) can find it quickly. Also make sure to copy the LaTex source code from Overleaf into your Gitlab repository when you are done.
 - [Overleaf Template](https://www.overleaf.com/latex/templates/webis-thesis-template/nfhzrtmtzjty)
