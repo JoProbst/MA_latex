@@ -11,6 +11,7 @@ Science Craftsmanship
   - [Resources to Help Global Equality for PhDs in NLP / AI](https://github.com/zhijing-jin/nlp-phd-global-equality)
   - [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/)
   - [Jimmy Lin's Guide to Science](https://github.com/lintool/guide)
+  - [Warning Signs in Experimental Design](https://norvig.com/experiment-design.html)
 
 Technical Writing Guides
 ------------------------
