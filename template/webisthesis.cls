@@ -10,7 +10,7 @@
 %% - master       For a master thesis   (M.Sc. Computer Science for Digital Media)
 %% - buw          For a thesis in Weimar 
 %% - ul           For a thesis in Leipzig
-%% - mlu          For a thesis in Halle
+%% - fsu          For a thesis in Jena
 %% - pb           For a thesis in Paderborn
 %% Default: [german,bachelor,buw]
 %%
@@ -117,8 +117,8 @@
 \DeclareOption{ul}{%
     \renewcommand{\thesisuniversity}{ul}
 }
-\DeclareOption{mlu}{%
-    \renewcommand{\thesisuniversity}{mlu}
+\DeclareOption{fsu}{%
+    \renewcommand{\thesisuniversity}{fsu}
 }
 \DeclareOption{pb}{%
     \renewcommand{\thesisuniversity}{pb}
@@ -245,8 +245,8 @@
     \global\thesisfrontpagefaculty{Institute of Computer Science}
     \global\thesisfrontpagecourse{Degree Programme }
   }{}
-  \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
-    \global\thesisfrontpageuniversity{Martin-Luther-Universit{{\"a}}t Halle-Wittenberg} 
+  \ifthenelse{\equal{\thesisuniversity}{fsu}}{% 
+    \global\thesisfrontpageuniversity{Friedrich-Schiller-Universität Jena} 
     \global\thesisfrontpagefaculty{Institute of Computer Science}
     \global\thesisfrontpagecourse{Degree Programme }
   }{}
@@ -267,8 +267,8 @@
     \global\thesisfrontpagefaculty{Institut f{\"u}r Informatik}
     \global\thesisfrontpagecourse{Studiengang }
   }{}
-  \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
-    \global\thesisfrontpageuniversity{Martin-Luther-Universit{\"a}t Halle-Wittenberg} 
+  \ifthenelse{\equal{\thesisuniversity}{fsu}}{% 
+    \global\thesisfrontpageuniversity{Friedrich-Schiller-Universität Jena} 
     \global\thesisfrontpagefaculty{Institut f{\"u}r Informatik}
     \global\thesisfrontpagecourse{Studiengang }
   }{}
@@ -286,8 +286,9 @@
     }{}
     \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
       \global\thesisprogramme{Informatik, B.Sc.}
+      %\global\thesisprogramme{Digital Humanities, B.Sc.}
     }{}
-    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+    \ifthenelse{\equal{\thesisuniversity}{fsu}}{% 
       \global\thesisprogramme{Informatik, B.Sc.}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
@@ -301,7 +302,7 @@
     \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
       \global\thesisprogramme{Computer Science, B.Sc.}
     }{}
-    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+    \ifthenelse{\equal{\thesisuniversity}{fsu}}{% 
       \global\thesisprogramme{Computer Science, B.Sc.}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
@@ -316,9 +317,11 @@
     }{}
     \ifthenelse{\equal{\thesisuniversity}{ul}}{% 
       \global\thesisprogramme{Informatik, M.Sc.}
+      %\global\thesisprogramme{Digital Humanities, M.Sc.}
     }{}
-    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+    \ifthenelse{\equal{\thesisuniversity}{fsu}}{% 
       \global\thesisprogramme{Informatik, M.Sc.}
+      %\global\thesisprogramme{Computational and Data Science, M.Sc.}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
       \global\thesisprogramme{Informatik, M.Sc.}
@@ -330,9 +333,12 @@
     }{}
     \ifthenelse{\equal{\thesisuniversity}{ul}}{%  
       \global\thesisprogramme{Computer Science, M.Sc.}
+      %\global\thesisprogramme{Digital Humanities, M.Sc.}
+      %\global\thesisprogramme{Data Science, M.Sc.}
     }{}
-    \ifthenelse{\equal{\thesisuniversity}{mlu}}{% 
+    \ifthenelse{\equal{\thesisuniversity}{fsu}}{% 
       \global\thesisprogramme{Computer Science, M.Sc.}
+      %\global\thesisprogramme{Computational and Data Science, M.Sc.}
     }{}
     \ifthenelse{\equal{\thesisuniversity}{pb}}{% 
       \global\thesisprogramme{Computer Science, M.Sc.}
