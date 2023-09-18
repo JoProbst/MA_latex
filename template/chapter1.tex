@@ -1,26 +1,40 @@
 \chapter{Introduction}\label{structure}
-\begin{itemize}
-  \item Release of ChatGPT, Bing, Bard.. (links to models)
-  \item Chatbots are becoming more and more popular
-  \item Domain of question answering, especially medical domain
-  \item Evaluation of models is important
-  \item Evaluation of chatbots is hard and still lacking
-  \item Usually only done on Multiple Choice tasks or human evaluation \cite{singhal:2022}
-  \item Human evaluation is expensive and time consuming
-  \item Multiple choice tasks are not really representative of a real conversation
-  \item We propose a new metric for evaluating chatbots based on information retrieval techniques
-  \item Dataset from \cite{goeuriot:2021}
-  \item Use it to evaluate different chatbots
-  \item Show that it's able to capture number of model parameters
-\end{itemize}
 
+% Health questions often asked on the internet.
+% Release of new chatbots like ChatGPT and Bing.
+% Fast growing products.
+% => will be used for health questions
+% Current evaluation techniques for Large Language Models are mostly based on either multipe choice tasks or human evaluation.
+% (Cite model announcment paperks and show taksk on which they are evaluated)
+% While human evaluation is the most accurate way to evaluate a model, it is also very expensive and time consuming.
+% Multiple choice tasks are easier to conduct, but are not really representative of the health question answering task.
+% We propose a new metric for evaluating chatbots based on information retrieval techniques.
+% We use a dataset from \cite{goeuriot:2021} to evaluate different chatbots.
+% We show that our metric is able to capture the number of model parameters.
 
-\enlargethispage{\baselineskip}
 
 \section{Motivation}\label{sec:motivation}
 
-\section{Research Question}\label{sec:research-question}
+\section{Research Questions}\label{sec:research-question}
+
 
 \section{Scope and Limitations}\label{sec:scope-and-limitations}
+This thesis is meant as a first step in investigating the use of information retrieval techniques for evaluating Large Language Models.
+The used dataset is not originally intendet for this purpose and was adapted accordingly.
+Limitations of the dataset will be discussed in detail in section MISSING.
+
 
 \section{Structure of the Thesis}\label{sec:structure-of-the-thesis}
+The thesis is structured as follows:\\\\
+After this Introduction, the related work will be discussed.
+First, the different retrieval methods used in this work are presented, together with the evaluation metrics used to compare them.
+Then, LLMs in general are introduced on a high level. 
+Current evaluation methods for LLMs are also presented in this section.
+\\
+The next section describes the experimental setting, from dataset collection and preparation over developement of the different retrieval pipelines and generation of LLM responses the the questions in the dataset.
+\\
+Afterwards, the experimental results are presented. The results contain the comparison of the different retrieval methods as well as a ranking of the LLM answers using the best retrieval method.
+Additionally, the results of ranking the LLM answers are compared to the results of the current evaluation methods introduced in the related work section.
+Noteworthy shortecomeings of the LLMS are also discussed in this section.
+\\
+The thesis is concluded with a discussion and limitations section, followed by a conclusion and an outlook on future work.

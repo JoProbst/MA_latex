@@ -2,6 +2,93 @@
 %%% Still, you might want to post-process some of the DBLP BibTeX entries ...
 
 %%% ... like changing to titlecase in the title and series fields below and probably removing the DBLP-specific fields timestamp, biburl, and bibsource
+@article{brown:2020,
+  author     = {Tom B. Brown and
+                Benjamin Mann and
+                Nick Ryder and
+                Melanie Subbiah and
+                Jared Kaplan and
+                Prafulla Dhariwal and
+                Arvind Neelakantan and
+                Pranav Shyam and
+                Girish Sastry and
+                Amanda Askell and
+                Sandhini Agarwal and
+                Ariel Herbert{-}Voss and
+                Gretchen Krueger and
+                Tom Henighan and
+                Rewon Child and
+                Aditya Ramesh and
+                Daniel M. Ziegler and
+                Jeffrey Wu and
+                Clemens Winter and
+                Christopher Hesse and
+                Mark Chen and
+                Eric Sigler and
+                Mateusz Litwin and
+                Scott Gray and
+                Benjamin Chess and
+                Jack Clark and
+                Christopher Berner and
+                Sam McCandlish and
+                Alec Radford and
+                Ilya Sutskever and
+                Dario Amodei},
+  title      = {Language Models are Few-Shot Learners},
+  journal    = {CoRR},
+  volume     = {abs/2005.14165},
+  year       = {2020},
+  url        = {https://arxiv.org/abs/2005.14165},
+  eprinttype = {arXiv},
+  eprint     = {2005.14165}
+}
+
+@article{devlin:2018,
+  author     = {Jacob Devlin and
+                Ming{-}Wei Chang and
+                Kenton Lee and
+                Kristina Toutanova},
+  title      = {{BERT:} Pre-training of Deep Bidirectional Transformers for Language
+                Understanding},
+  journal    = {CoRR},
+  volume     = {abs/1810.04805},
+  year       = {2018},
+  url        = {http://arxiv.org/abs/1810.04805},
+  eprinttype = {arXiv},
+  eprint     = {1810.04805}
+}
+
+@article{ermakova:2022,
+  title    = {Overview of the {CLEF} 2022 {SimpleText} {Task} 2: {Complexity} {Spotting} in {Scientific} {Abstracts}},
+  abstract = {This paper provides an overview of the Task 2: What is unclear? of the Automatic Simplification of Scientific Texts (SimpleText) lab, run as part of CLEF 2022. The main aim of the SimpleText lab is to promote a more open scientific information access via automatic text simplification. Task 2 focuses on complexity spotting within scientific texts (passage). Thus, the goal is to detect the terms/concepts that require specific background knowledge for understanding of the passage and to assess their complexity for non-experts. Overall, four runs from four different teams have been submitted to this task. In this paper, we describe the data collection, the task setup, and the evaluation procedure. We also give a brief overview of the participating approaches.},
+  language = {en},
+  author   = {Ermakova, Liana and Ovchinnikov, Irina and Kamps, Jaap and Nurbakova, Diana and Araújo, Sílvia and Hannachi, Radia},
+  keywords = {notion}
+}
+
+@inproceedings{goeuriot:2021,
+  title    = {Consumer {Health} {Search} at {CLEF} {eHealth} 2021},
+  url      = {https://www.semanticscholar.org/paper/Consumer-Health-Search-at-CLEF-eHealth-2021-Goeuriot-Suominen/49795bd68af14c6c6970ce68aafcfe9d61a076fa},
+  abstract = {This paper details materials, methods, results, and analyses of the Consumer Health Search Task of the CLEF eHealth 2021 Evaluation Lab. This task investigates the effectiveness of information retrieval (IR) approaches in providing access to medical information to laypeople. For this a TREC-style evaluation methodology was applied: a shared collection of documents and queries is distributed, participants’ runs received, relevance assessments generated, and participants’ submissions evaluated. The task generated a new representative web corpus including web pages acquired from a 2021 CommonCrawl and social media content from Twitter and Reddit, along with a new collection of 55 manually generated layperson medical queries and their respective credibility, understandability, and topicality assessments for returned documents. This year’s task focused on three subtask: (i) ad-hoc IR, (ii) weakly supervised IR, and (iii) document credibility prediction. In total, 15 runs were submitted to the three subtasks: eight addressed the ad-hoc IR task, three the weakly supervised IR challenge, and 4 the document credibility prediction challenge. As in previous years, the organizers have made data and tools associated with the task available for future research and development.},
+  urldate  = {2023-06-15},
+  author   = {Goeuriot, L. and Suominen, H. and Pasi, G. and Bassani, Elias and Brew-Sam, N. and Sáez, Gabriela Nicole González and Kelly, L. and Mulhem, P. and Seneviratne, Sandaru and Upadhyay, Rishabh and Viviani, Marco and Xu, Chenchen},
+  year     = {2021},
+  keywords = {notion}
+}
+
+@misc{imperial:2021,
+  title     = {{BERT} {Embeddings} for {Automatic} {Readability} {Assessment}},
+  url       = {http://arxiv.org/abs/2106.07935},
+  abstract  = {Automatic readability assessment (ARA) is the task of evaluating the level of ease or difficulty of text documents for a target audience. For researchers, one of the many open problems in the field is to make such models trained for the task show efficacy even for low-resource languages. In this study, we propose an alternative way of utilizing the information-rich embeddings of BERT models with handcrafted linguistic features through a combined method for readability assessment. Results show that the proposed method outperforms classical approaches in readability assessment using English and Filipino datasets, obtaining as high as 12.4\% increase in F1 performance. We also show that the general information encoded in BERT embeddings can be used as a substitute feature set for low-resource languages like Filipino with limited semantic and syntactic NLP tools to explicitly extract feature values for the task.},
+  urldate   = {2023-06-17},
+  publisher = {arXiv},
+  author    = {Imperial, Joseph Marvin},
+  month     = jul,
+  year      = {2021},
+  note      = {arXiv:2106.07935 [cs]},
+  keywords  = {Computer Science - Computation and Language, notion}
+}
+
 @book{jurafsky:2009,
   author    = {Dan Jurafsky and
                James H. Martin},
@@ -14,7 +101,7 @@
   url       = {https://www.worldcat.org/oclc/315913020},
   isbn      = {9780135041963}
 }
-
+  
 %%% Recommended bibkeys: <last name first author>:<year> 
 %%% (in case of a key collision add a, b, c, ... at the end)
 
@@ -30,44 +117,214 @@
 }
 
 %%% Another change to DBLP BibTeX entries: spelling out journal names like here
-@article{pedregosa:2011,
-  author    = {Fabian Pedregosa and
-               Ga{\"{e}}l Varoquaux and
-               Alexandre Gramfort and
-               Vincent Michel and
-               Bertrand Thirion and
-               Olivier Grisel and
-               Mathieu Blondel and
-               Peter Prettenhofer and
-               Ron Weiss and
-               Vincent Dubourg and
-               Jake VanderPlas and
-               Alexandre Passos and
-               David Cournapeau and
-               Matthieu Brucher and
-               Matthieu Perrot and
-               Edouard Duchesnay},
-  title     = {Scikit-learn: Machine Learning in Python},
-  journal   = {Journal of Machine Learning Research},
-  volume    = {12},
-  pages     = {2825--2830},
-  year      = {2011},
-  url       = {http://dl.acm.org/citation.cfm?id=2078195}
+@inproceedings{meel:2020,
+  title     = {Web {Text} {Content} {Credibility} {Analysis} using {Max} {Voting} and {Stacking} {Ensemble} {Classifiers}},
+  doi       = {10.1109/ACCTHPA49271.2020.9213234},
+  abstract  = {The social media has become a great medium for people around the world to openly express their thoughts and views. But for all its advantages, it has also paved way for many people and organizations to intentionally spread fake news and misinform others. And the rate at which fake news is being currently generated, it has become critical to create a reliable mechanism that can efficiently classify a real news from a fake one. This research paper analyses the different approaches, involving ensemble learning, that can be used to accomplish the same by using only text features of the news data. We observe that a combination of three optimal ML algorithms, clubbed by an advanced ensemble learning technique, can give results with an accuracy of more than ninety eight percent.},
+  booktitle = {2020 {Advanced} {Computing} and {Communication} {Technologies} for {High} {Performance} {Applications} ({ACCTHPA})},
+  author    = {Meel, Priyanka and Chawla, Puneet and Jain, Sahil and Rai, Utkarsh},
+  month     = jul,
+  year      = {2020},
+  keywords  = {Analytical models, Logistics, Machine learning, Measurement, Radio frequency, Stacking, Support vector machines, bernoulli naïve bayes, ensemble, fake news detection, k-nearest neighbors, logistic regression, notion, random forest, svm},
+  pages     = {157--161}
 }
 
 %%% When some BibTeX entry is not available at DBLP, try to mimick DBLP's "look and feel" like below
-@article{rosenblatt:1958,
-  author    = {Frank Rosenblatt},
-  title     = {The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain},
-  journal   = {Psychological Review},
-  volume    = {65},
-  number    = {6},
-  pages     = {386--408},
-  year      = {1958}
+@article{mitra:2015,
+  title      = {{CREDBANK}: {A} {Large}-{Scale} {Social} {Media} {Corpus} {With} {Associated} {Credibility} {Annotations}},
+  volume     = {9},
+  copyright  = {Copyright (c) 2021 Proceedings of the International AAAI Conference on Web and Social Media},
+  issn       = {2334-0770},
+  shorttitle = {{CREDBANK}},
+  url        = {https://ojs.aaai.org/index.php/ICWSM/article/view/14625},
+  doi        = {10.1609/icwsm.v9i1.14625},
+  abstract   = {Social media has quickly risen to prominence as a news source, yet lingering doubts remain about its ability to spread rumor and misinformation. Systematically studying this phenomenon, however, has been difficult due to the need to collect large-scale, unbiased data along with in-situ judgements of its accuracy. In this paper we present CREDBANK, a corpus designed to bridge this gap by systematically combining machine and human computation.  Specifically, CREDBANK is a corpus of tweets, topics, events and associated human credibility judgements. It is based on the real-time tracking of more than 1 billion streaming tweets over a period of more than three months, computational summarizations of those tweets, and intelligent routings of the tweet streams to human annotators — within a few hours of those events unfolding on Twitter. In total CREDBANK comprises more than 60 million tweets grouped into 1049 real-world events, each annotated by 30 human annotators. As an example, with CREDBANK one can quickly calculate that roughly 24\% of the events in the global tweet stream are not perceived as credible. We have made CREDBANK publicly available, and hope it will enable new research questions related to online information credibility in fields such as social science, data mining and health.},
+  language   = {en},
+  number     = {1},
+  urldate    = {2023-06-17},
+  journal    = {Proceedings of the International AAAI Conference on Web and Social Media},
+  author     = {Mitra, Tanushree and Gilbert, Eric},
+  year       = {2015},
+  note       = {Number: 1},
+  keywords   = {Micro labor annotations, notion},
+  pages      = {258--267}
 }
 
 %%% Finally, you will probably most often cite some conference papers; make sure to rather not fetch the cross-referenced BibTex entries from DBLP
 %%% Suggested change to the standard BibTeX entry: endash (--) for the date range of a conference (like in the pages field)
+@misc{nori:2023,
+  title     = {Capabilities of {GPT}-4 on {Medical} {Challenge} {Problems}},
+  url       = {http://arxiv.org/abs/2303.13375},
+  abstract  = {Large language models (LLMs) have demonstrated remarkable capabilities in natural language understanding and generation across various domains, including medicine. We present a comprehensive evaluation of GPT-4, a state-of-the-art LLM, on medical competency examinations and benchmark datasets. GPT-4 is a general-purpose model that is not specialized for medical problems through training or engineered to solve clinical tasks. Our analysis covers two sets of official practice materials for the USMLE, a three-step examination program used to assess clinical competency and grant licensure in the United States. We also evaluate performance on the MultiMedQA suite of benchmark datasets. Beyond measuring model performance, experiments were conducted to investigate the influence of test questions containing both text and images on model performance, probe for memorization of content during training, and study probability calibration, which is of critical importance in high-stakes applications like medicine. Our results show that GPT-4, without any specialized prompt crafting, exceeds the passing score on USMLE by over 20 points and outperforms earlier general-purpose models (GPT-3.5) as well as models specifically fine-tuned on medical knowledge (Med-PaLM, a prompt-tuned version of Flan-PaLM 540B). In addition, GPT-4 is significantly better calibrated than GPT-3.5, demonstrating a much-improved ability to predict the likelihood that its answers are correct. We also explore the behavior of the model qualitatively through a case study that shows the ability of GPT-4 to explain medical reasoning, personalize explanations to students, and interactively craft new counterfactual scenarios around a medical case. Implications of the findings are discussed for potential uses of GPT-4 in medical education, assessment, and clinical practice, with appropriate attention to challenges of accuracy and safety.},
+  urldate   = {2023-06-29},
+  publisher = {arXiv},
+  author    = {Nori, Harsha and King, Nicholas and McKinney, Scott Mayer and Carignan, Dean and Horvitz, Eric},
+  month     = apr,
+  year      = {2023},
+  note      = {arXiv:2303.13375 [cs]},
+  keywords  = {Computer Science - Artificial Intelligence, Computer Science - Computation and Language, notion}
+}
+
+@article{pedregosa:2011,
+  author  = {Fabian Pedregosa and
+             Ga{\"{e}}l Varoquaux and
+             Alexandre Gramfort and
+             Vincent Michel and
+             Bertrand Thirion and
+             Olivier Grisel and
+             Mathieu Blondel and
+             Peter Prettenhofer and
+             Ron Weiss and
+             Vincent Dubourg and
+             Jake VanderPlas and
+             Alexandre Passos and
+             David Cournapeau and
+             Matthieu Brucher and
+             Matthieu Perrot and
+             Edouard Duchesnay},
+  title   = {Scikit-learn: Machine Learning in Python},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12},
+  pages   = {2825--2830},
+  year    = {2011},
+  url     = {http://dl.acm.org/citation.cfm?id=2078195}
+}
+
+@article{radford:2018,
+  title     = {Improving language understanding by generative pre-training},
+  author    = {Radford, Alec and Narasimhan, Karthik and Salimans, Tim and Sutskever, Ilya},
+  year      = {2018},
+  publisher = {OpenAI}
+}
+
+@inproceedings{ranasinghe_transquest_2020,
+  address    = {Barcelona, Spain (Online)},
+  title      = {{TransQuest}: {Translation} {Quality} {Estimation} with {Cross}-lingual {Transformers}},
+  shorttitle = {{TransQuest}},
+  url        = {https://aclanthology.org/2020.coling-main.445},
+  doi        = {10.18653/v1/2020.coling-main.445},
+  abstract   = {Recent years have seen big advances in the field of sentence-level quality estimation (QE), largely as a result of using neural-based architectures. However, the majority of these methods work only on the language pair they are trained on and need retraining for new language pairs. This process can prove difficult from a technical point of view and is usually computationally expensive. In this paper we propose a simple QE framework based on cross-lingual transformers, and we use it to implement and evaluate two different neural architectures. Our evaluation shows that the proposed methods achieve state-of-the-art results outperforming current open-source quality estimation frameworks when trained on datasets from WMT. In addition, the framework proves very useful in transfer learning settings, especially when dealing with low-resourced languages, allowing us to obtain very competitive results.},
+  urldate    = {2023-06-17},
+  booktitle  = {Proceedings of the 28th {International} {Conference} on {Computational} {Linguistics}},
+  publisher  = {International Committee on Computational Linguistics},
+  author     = {Ranasinghe, Tharindu and Orasan, Constantin and Mitkov, Ruslan},
+  month      = dec,
+  year       = {2020},
+  keywords   = {notion},
+  pages      = {5070--5081}
+}
+
+@article{roberts:2020,
+  author     = {Adam Roberts and
+                Colin Raffel and
+                Noam Shazeer},
+  title      = {How Much Knowledge Can You Pack Into the Parameters of a Language
+                Model?},
+  journal    = {CoRR},
+  volume     = {abs/2002.08910},
+  year       = {2020},
+  url        = {https://arxiv.org/abs/2002.08910},
+  eprinttype = {arXiv},
+  eprint     = {2002.08910}
+}
+
+@article{rosenblatt:1958,
+  author  = {Frank Rosenblatt},
+  title   = {The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain},
+  journal = {Psychological Review},
+  volume  = {65},
+  number  = {6},
+  pages   = {386--408},
+  year    = {1958}
+}
+
+@article{singhal:2022,
+  author     = {Karan Singhal and
+                Shekoofeh Azizi and
+                Tao Tu and
+                S. Sara Mahdavi and
+                Jason Wei and
+                Hyung Won Chung and
+                Nathan Scales and
+                Ajay Kumar Tanwani and
+                Heather Cole{-}Lewis and
+                Stephen Pfohl and
+                Perry Payne and
+                Martin Seneviratne and
+                Paul Gamble and
+                Chris Kelly and
+                Nathaneal Sch{\"{a}}rli and
+                Aakanksha Chowdhery and
+                Philip Andrew Mansfield and
+                Blaise Ag{\"{u}}era y Arcas and
+                Dale R. Webster and
+                Gregory S. Corrado and
+                Yossi Matias and
+                Katherine Chou and
+                Juraj Gottweis and
+                Nenad Tomasev and
+                Yun Liu and
+                Alvin Rajkomar and
+                Joelle K. Barral and
+                Christopher Semturs and
+                Alan Karthikesalingam and
+                Vivek Natarajan},
+  title      = {Large Language Models Encode Clinical Knowledge},
+  journal    = {CoRR},
+  volume     = {abs/2212.13138},
+  year       = {2022},
+  url        = {https://doi.org/10.48550/arXiv.2212.13138},
+  doi        = {10.48550/arXiv.2212.13138},
+  eprinttype = {arXiv},
+  eprint     = {2212.13138},
+  timestamp  = {Mon, 26 Jun 2023 20:49:54 +0200},
+  biburl     = {https://dblp.org/rec/journals/corr/abs-2212-13138.bib},
+  bibsource  = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{tanaka:2010,
+  address   = {New York, NY, USA},
+  series    = {{ICUIMC} '10},
+  title     = {Evaluating credibility of web information},
+  isbn      = {978-1-60558-893-3},
+  url       = {https://doi.org/10.1145/2108616.2108645},
+  doi       = {10.1145/2108616.2108645},
+  abstract  = {We describe a new concept and method for evaluating the Web information credibility. The quality control of information (text, image, video etc.) on the Web is generally insufficient due to low publishing barriers. As a result, there is a large amount of mistaken and unreliable information on the Web that can have detrimental effects on users. This calls for technology that facilitates the judging of the credibility (expertise and trustworthiness) of Web content and the accuracy of the information that users encounter on the Web. Such technology should be able to handle a wide range of tasks: extracting several credibility-related features from the target Web content, extracting reputation-related information for the target Web content, such as hyperlinks and social bookmarks and evaluating its distribution, and evaluating features of the target content authors. We propose and describe methodologies of analyzing information credibility of Web information: (1) content analysis, (2) social support analysis and (3) author analysis. We overview our recent research activities on Web information credibility evaluation based on this methodologies.},
+  urldate   = {2023-06-17},
+  booktitle = {Proceedings of the 4th {International} {Conference} on {Uniquitous} {Information} {Management} and {Communication}},
+  publisher = {Association for Computing Machinery},
+  author    = {Tanaka, Katsumi and Ohshima, Hiroaki and Jatowt, Adam and Nakamura, Satoshi and Yamamoto, Yusuke and Sumiya, Kazutoshi and Lee, Ryong and Kitayama, Daisuke and Yumoto, Takayuki and Kawai, Yukiko and Zhang, Jianwei and Nakajima, Shinsuke and Inagaki, Yoichi},
+  month     = jan,
+  year      = {2010},
+  keywords  = {credibility, trustworthiness, web search},
+  pages     = {1--10}
+}
+
+@article{Touvron:2023,
+  title   = {Llama 2: Open foundation and fine-tuned chat models},
+  author  = {Touvron, Hugo and Martin, Louis and Stone, Kevin and Albert, Peter and Almahairi, Amjad and Babaei, Yasmine and Bashlykov, Nikolay and Batra, Soumya and Bhargava, Prajjwal and Bhosale, Shruti and others},
+  journal = {arXiv preprint arXiv:2307.09288},
+  year    = {2023}
+}
+
+@article{vaswani:2017,
+  author     = {Ashish Vaswani and
+                Noam Shazeer and
+                Niki Parmar and
+                Jakob Uszkoreit and
+                Llion Jones and
+                Aidan N. Gomez and
+                Lukasz Kaiser and
+                Illia Polosukhin},
+  title      = {Attention Is All You Need},
+  journal    = {CoRR},
+  volume     = {abs/1706.03762},
+  year       = {2017},
+  url        = {http://arxiv.org/abs/1706.03762},
+  eprinttype = {arXiv},
+  eprint     = {1706.03762}
+}
+
 @inproceedings{zuccon:2016,
   author    = {Guido Zuccon and
                Jo{\~{a}}o R. M. Palotti and
@@ -93,177 +350,4 @@
   year      = {2016},
   url       = {https://doi.org/10.1145/2983323.2983723},
   doi       = {10.1145/2983323.2983723}
-}
-
-@article{devlin:2018,
-  author       = {Jacob Devlin and
-                  Ming{-}Wei Chang and
-                  Kenton Lee and
-                  Kristina Toutanova},
-  title        = {{BERT:} Pre-training of Deep Bidirectional Transformers for Language
-                  Understanding},
-  journal      = {CoRR},
-  volume       = {abs/1810.04805},
-  year         = {2018},
-  url          = {http://arxiv.org/abs/1810.04805},
-  eprinttype    = {arXiv},
-  eprint       = {1810.04805},
-  timestamp    = {Tue, 30 Oct 2018 20:39:56 +0100},
-  biburl       = {https://dblp.org/rec/journals/corr/abs-1810-04805.bib},
-  bibsource    = {dblp computer science bibliography, https://dblp.org}
-}
-
-@article{singhal:2022,
-  author       = {Karan Singhal and
-                  Shekoofeh Azizi and
-                  Tao Tu and
-                  S. Sara Mahdavi and
-                  Jason Wei and
-                  Hyung Won Chung and
-                  Nathan Scales and
-                  Ajay Kumar Tanwani and
-                  Heather Cole{-}Lewis and
-                  Stephen Pfohl and
-                  Perry Payne and
-                  Martin Seneviratne and
-                  Paul Gamble and
-                  Chris Kelly and
-                  Nathaneal Sch{\"{a}}rli and
-                  Aakanksha Chowdhery and
-                  Philip Andrew Mansfield and
-                  Blaise Ag{\"{u}}era y Arcas and
-                  Dale R. Webster and
-                  Gregory S. Corrado and
-                  Yossi Matias and
-                  Katherine Chou and
-                  Juraj Gottweis and
-                  Nenad Tomasev and
-                  Yun Liu and
-                  Alvin Rajkomar and
-                  Joelle K. Barral and
-                  Christopher Semturs and
-                  Alan Karthikesalingam and
-                  Vivek Natarajan},
-  title        = {Large Language Models Encode Clinical Knowledge},
-  journal      = {CoRR},
-  volume       = {abs/2212.13138},
-  year         = {2022},
-  url          = {https://doi.org/10.48550/arXiv.2212.13138},
-  doi          = {10.48550/arXiv.2212.13138},
-  eprinttype    = {arXiv},
-  eprint       = {2212.13138},
-  timestamp    = {Mon, 26 Jun 2023 20:49:54 +0200},
-  biburl       = {https://dblp.org/rec/journals/corr/abs-2212-13138.bib},
-  bibsource    = {dblp computer science bibliography, https://dblp.org}
-}
-
-@misc{nori:2023,
-	title = {Capabilities of {GPT}-4 on {Medical} {Challenge} {Problems}},
-	url = {http://arxiv.org/abs/2303.13375},
-	abstract = {Large language models (LLMs) have demonstrated remarkable capabilities in natural language understanding and generation across various domains, including medicine. We present a comprehensive evaluation of GPT-4, a state-of-the-art LLM, on medical competency examinations and benchmark datasets. GPT-4 is a general-purpose model that is not specialized for medical problems through training or engineered to solve clinical tasks. Our analysis covers two sets of official practice materials for the USMLE, a three-step examination program used to assess clinical competency and grant licensure in the United States. We also evaluate performance on the MultiMedQA suite of benchmark datasets. Beyond measuring model performance, experiments were conducted to investigate the influence of test questions containing both text and images on model performance, probe for memorization of content during training, and study probability calibration, which is of critical importance in high-stakes applications like medicine. Our results show that GPT-4, without any specialized prompt crafting, exceeds the passing score on USMLE by over 20 points and outperforms earlier general-purpose models (GPT-3.5) as well as models specifically fine-tuned on medical knowledge (Med-PaLM, a prompt-tuned version of Flan-PaLM 540B). In addition, GPT-4 is significantly better calibrated than GPT-3.5, demonstrating a much-improved ability to predict the likelihood that its answers are correct. We also explore the behavior of the model qualitatively through a case study that shows the ability of GPT-4 to explain medical reasoning, personalize explanations to students, and interactively craft new counterfactual scenarios around a medical case. Implications of the findings are discussed for potential uses of GPT-4 in medical education, assessment, and clinical practice, with appropriate attention to challenges of accuracy and safety.},
-	urldate = {2023-06-29},
-	publisher = {arXiv},
-	author = {Nori, Harsha and King, Nicholas and McKinney, Scott Mayer and Carignan, Dean and Horvitz, Eric},
-	month = apr,
-	year = {2023},
-	note = {arXiv:2303.13375 [cs]},
-	keywords = {Computer Science - Artificial Intelligence, Computer Science - Computation and Language, notion},
-}
-
-@inproceedings{meel:2020,
-	title = {Web {Text} {Content} {Credibility} {Analysis} using {Max} {Voting} and {Stacking} {Ensemble} {Classifiers}},
-	doi = {10.1109/ACCTHPA49271.2020.9213234},
-	abstract = {The social media has become a great medium for people around the world to openly express their thoughts and views. But for all its advantages, it has also paved way for many people and organizations to intentionally spread fake news and misinform others. And the rate at which fake news is being currently generated, it has become critical to create a reliable mechanism that can efficiently classify a real news from a fake one. This research paper analyses the different approaches, involving ensemble learning, that can be used to accomplish the same by using only text features of the news data. We observe that a combination of three optimal ML algorithms, clubbed by an advanced ensemble learning technique, can give results with an accuracy of more than ninety eight percent.},
-	booktitle = {2020 {Advanced} {Computing} and {Communication} {Technologies} for {High} {Performance} {Applications} ({ACCTHPA})},
-	author = {Meel, Priyanka and Chawla, Puneet and Jain, Sahil and Rai, Utkarsh},
-	month = jul,
-	year = {2020},
-	keywords = {Analytical models, Logistics, Machine learning, Measurement, Radio frequency, Stacking, Support vector machines, bernoulli naïve bayes, ensemble, fake news detection, k-nearest neighbors, logistic regression, notion, random forest, svm},
-	pages = {157--161},
-}
-
-@misc{imperial:2021,
-	title = {{BERT} {Embeddings} for {Automatic} {Readability} {Assessment}},
-	url = {http://arxiv.org/abs/2106.07935},
-	abstract = {Automatic readability assessment (ARA) is the task of evaluating the level of ease or difficulty of text documents for a target audience. For researchers, one of the many open problems in the field is to make such models trained for the task show efficacy even for low-resource languages. In this study, we propose an alternative way of utilizing the information-rich embeddings of BERT models with handcrafted linguistic features through a combined method for readability assessment. Results show that the proposed method outperforms classical approaches in readability assessment using English and Filipino datasets, obtaining as high as 12.4\% increase in F1 performance. We also show that the general information encoded in BERT embeddings can be used as a substitute feature set for low-resource languages like Filipino with limited semantic and syntactic NLP tools to explicitly extract feature values for the task.},
-	urldate = {2023-06-17},
-	publisher = {arXiv},
-	author = {Imperial, Joseph Marvin},
-	month = jul,
-	year = {2021},
-	note = {arXiv:2106.07935 [cs]},
-	keywords = {Computer Science - Computation and Language, notion},
-}
-
-@article{mitra:2015,
-	title = {{CREDBANK}: {A} {Large}-{Scale} {Social} {Media} {Corpus} {With} {Associated} {Credibility} {Annotations}},
-	volume = {9},
-	copyright = {Copyright (c) 2021 Proceedings of the International AAAI Conference on Web and Social Media},
-	issn = {2334-0770},
-	shorttitle = {{CREDBANK}},
-	url = {https://ojs.aaai.org/index.php/ICWSM/article/view/14625},
-	doi = {10.1609/icwsm.v9i1.14625},
-	abstract = {Social media has quickly risen to prominence as a news source, yet lingering doubts remain about its ability to spread rumor and misinformation. Systematically studying this phenomenon, however, has been difficult due to the need to collect large-scale, unbiased data along with in-situ judgements of its accuracy. In this paper we present CREDBANK, a corpus designed to bridge this gap by systematically combining machine and human computation.  Specifically, CREDBANK is a corpus of tweets, topics, events and associated human credibility judgements. It is based on the real-time tracking of more than 1 billion streaming tweets over a period of more than three months, computational summarizations of those tweets, and intelligent routings of the tweet streams to human annotators — within a few hours of those events unfolding on Twitter. In total CREDBANK comprises more than 60 million tweets grouped into 1049 real-world events, each annotated by 30 human annotators. As an example, with CREDBANK one can quickly calculate that roughly 24\% of the events in the global tweet stream are not perceived as credible. We have made CREDBANK publicly available, and hope it will enable new research questions related to online information credibility in fields such as social science, data mining and health.},
-	language = {en},
-	number = {1},
-	urldate = {2023-06-17},
-	journal = {Proceedings of the International AAAI Conference on Web and Social Media},
-	author = {Mitra, Tanushree and Gilbert, Eric},
-	year = {2015},
-	note = {Number: 1},
-	keywords = {Micro labor annotations, notion},
-	pages = {258--267},
-}
-
-@inproceedings{tanaka:2010,
-	address = {New York, NY, USA},
-	series = {{ICUIMC} '10},
-	title = {Evaluating credibility of web information},
-	isbn = {978-1-60558-893-3},
-	url = {https://doi.org/10.1145/2108616.2108645},
-	doi = {10.1145/2108616.2108645},
-	abstract = {We describe a new concept and method for evaluating the Web information credibility. The quality control of information (text, image, video etc.) on the Web is generally insufficient due to low publishing barriers. As a result, there is a large amount of mistaken and unreliable information on the Web that can have detrimental effects on users. This calls for technology that facilitates the judging of the credibility (expertise and trustworthiness) of Web content and the accuracy of the information that users encounter on the Web. Such technology should be able to handle a wide range of tasks: extracting several credibility-related features from the target Web content, extracting reputation-related information for the target Web content, such as hyperlinks and social bookmarks and evaluating its distribution, and evaluating features of the target content authors. We propose and describe methodologies of analyzing information credibility of Web information: (1) content analysis, (2) social support analysis and (3) author analysis. We overview our recent research activities on Web information credibility evaluation based on this methodologies.},
-	urldate = {2023-06-17},
-	booktitle = {Proceedings of the 4th {International} {Conference} on {Uniquitous} {Information} {Management} and {Communication}},
-	publisher = {Association for Computing Machinery},
-	author = {Tanaka, Katsumi and Ohshima, Hiroaki and Jatowt, Adam and Nakamura, Satoshi and Yamamoto, Yusuke and Sumiya, Kazutoshi and Lee, Ryong and Kitayama, Daisuke and Yumoto, Takayuki and Kawai, Yukiko and Zhang, Jianwei and Nakajima, Shinsuke and Inagaki, Yoichi},
-	month = jan,
-	year = {2010},
-	keywords = {credibility, trustworthiness, web search},
-	pages = {1--10},
-}
-
-@article{ermakova:2022,
-	title = {Overview of the {CLEF} 2022 {SimpleText} {Task} 2: {Complexity} {Spotting} in {Scientific} {Abstracts}},
-	abstract = {This paper provides an overview of the Task 2: What is unclear? of the Automatic Simplification of Scientific Texts (SimpleText) lab, run as part of CLEF 2022. The main aim of the SimpleText lab is to promote a more open scientific information access via automatic text simplification. Task 2 focuses on complexity spotting within scientific texts (passage). Thus, the goal is to detect the terms/concepts that require specific background knowledge for understanding of the passage and to assess their complexity for non-experts. Overall, four runs from four different teams have been submitted to this task. In this paper, we describe the data collection, the task setup, and the evaluation procedure. We also give a brief overview of the participating approaches.},
-	language = {en},
-	author = {Ermakova, Liana and Ovchinnikov, Irina and Kamps, Jaap and Nurbakova, Diana and Araújo, Sílvia and Hannachi, Radia},
-	keywords = {notion},
-}
-
-@inproceedings{ranasinghe_transquest_2020,
-	address = {Barcelona, Spain (Online)},
-	title = {{TransQuest}: {Translation} {Quality} {Estimation} with {Cross}-lingual {Transformers}},
-	shorttitle = {{TransQuest}},
-	url = {https://aclanthology.org/2020.coling-main.445},
-	doi = {10.18653/v1/2020.coling-main.445},
-	abstract = {Recent years have seen big advances in the field of sentence-level quality estimation (QE), largely as a result of using neural-based architectures. However, the majority of these methods work only on the language pair they are trained on and need retraining for new language pairs. This process can prove difficult from a technical point of view and is usually computationally expensive. In this paper we propose a simple QE framework based on cross-lingual transformers, and we use it to implement and evaluate two different neural architectures. Our evaluation shows that the proposed methods achieve state-of-the-art results outperforming current open-source quality estimation frameworks when trained on datasets from WMT. In addition, the framework proves very useful in transfer learning settings, especially when dealing with low-resourced languages, allowing us to obtain very competitive results.},
-	urldate = {2023-06-17},
-	booktitle = {Proceedings of the 28th {International} {Conference} on {Computational} {Linguistics}},
-	publisher = {International Committee on Computational Linguistics},
-	author = {Ranasinghe, Tharindu and Orasan, Constantin and Mitkov, Ruslan},
-	month = dec,
-	year = {2020},
-	keywords = {notion},
-	pages = {5070--5081},
-}
-
-@inproceedings{goeuriot:2021,
-	title = {Consumer {Health} {Search} at {CLEF} {eHealth} 2021},
-	url = {https://www.semanticscholar.org/paper/Consumer-Health-Search-at-CLEF-eHealth-2021-Goeuriot-Suominen/49795bd68af14c6c6970ce68aafcfe9d61a076fa},
-	abstract = {This paper details materials, methods, results, and analyses of the Consumer Health Search Task of the CLEF eHealth 2021 Evaluation Lab. This task investigates the effectiveness of information retrieval (IR) approaches in providing access to medical information to laypeople. For this a TREC-style evaluation methodology was applied: a shared collection of documents and queries is distributed, participants’ runs received, relevance assessments generated, and participants’ submissions evaluated. The task generated a new representative web corpus including web pages acquired from a 2021 CommonCrawl and social media content from Twitter and Reddit, along with a new collection of 55 manually generated layperson medical queries and their respective credibility, understandability, and topicality assessments for returned documents. This year’s task focused on three subtask: (i) ad-hoc IR, (ii) weakly supervised IR, and (iii) document credibility prediction. In total, 15 runs were submitted to the three subtasks: eight addressed the ad-hoc IR task, three the weakly supervised IR challenge, and 4 the document credibility prediction challenge. As in previous years, the organizers have made data and tools associated with the task available for future research and development.},
-	urldate = {2023-06-15},
-	author = {Goeuriot, L. and Suominen, H. and Pasi, G. and Bassani, Elias and Brew-Sam, N. and Sáez, Gabriela Nicole González and Kelly, L. and Mulhem, P. and Seneviratne, Sandaru and Upadhyay, Rishabh and Viviani, Marco and Xu, Chenchen},
-	year = {2021},
-	keywords = {notion},
 }
