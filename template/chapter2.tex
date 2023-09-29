@@ -6,10 +6,80 @@ We start with a short introduction to Large Language Models, then present the cu
 Afterwards, the field of Information Retrieval is introduced.
 Different retrieval methods used in this thesis are presented, together with the evaluation metrics used to compare them.
 
-\section{Evaluation methods for Large Language Models}\label{evaluation-of-large-language-models}
+\section{Evaluation methods for Large Language Models for Question Answering}\label{evaluation-of-large-language-models}
 Language Models are usually defined as systems, that produce probability distributions over a set of tokens, given the preceding or surrounding context.
 The rise of Large Language Models (LLMs), started with the introduction of the new Transformer architecture~(\cite{vaswani:2017}), followed by the release of models like BERT~(\cite{devlin:2018}) and GPT-2~(\cite{radford:2018}).
 With the release of GPT-3~(\cite{brown:2020}), the size of datasets used to train LLMs, as well as the number of parameters in the models, increased to a point, where the models are able to produce coherent text on a wide range of tasks.
+This meant, that models had to be evaluated on all of those tasks, leading to the development of new evaluation benchmarks.
+In this section, we want to focus on the current evaluation methods of Question Answering capabilities of LLMs.
+
+The task of Question Answering (QA) is not clearly defined in the context of LLMs.
+In the beginning, for models like BERT and the first version of GPT, the task was to answer questions based on a given context, by selecting a span of text from the context.
+The next versions of models focused on answering multiple choice questions, where the model had to select the correct answer from a set of possible answers.
+This could be done either with context, or without.
+Additionally, models were evaluated on questions where the answers are single numbers, entities or other versions of "fill in the blank" questions.
+\\
+Those versions of QA all have in common, that they are relatively easy to evaluate.
+Overlap with the answer span can be calculated, or the correct answer can be compared to the predicted answer.
+However, with the capabilities of LLMs expanding version by version, the task of free form question answering gained more importance.
+Here, models are evaluated on their ability to answer questions in a free form manner, without any constraints on the answer.
+The evaluation of such answers is not as straightforward as for the other versions of QA, so human evaluation is the gold standard.
+\\
+In the following, different QA versions will be introduced, including popular datasets and evaluation metrics for them.
+
+\subsection{Extractive Question Answering}\label{extractive-qa}
+Extractive QA is the task of answering questios, given a context containing the answer.
+From this context, the correct answer span has to be selected.
+Some benchmarks include unanswerable questions, where the model has to predict, that the question cannot be answered from the given context.
+\\
+One of the most popular datasets for evaluating LLMs in this task is SQuAD~(\cite{rajpurkar:2016}), and its successor SQuAD 2.0~(\cite{rajpurkar:2018}), which includes unanswerable questions.
+Many other datasets like NarrativeQA~(\cite{kovcisky:2018}), QuAC~(\cite{choi:2018}) or Natural Questions~(\cite{kwiatkowski:2019}) are based on the same principle.
+They consist of questions written by crowdworkers or experts in the field, based on a Wikipedia article snippet or similar text passages.
+The exact constraints on the questions and the context vary between the datasets, but the general idea is the same.
+\\
+The evaluation metrics for tasks of this category are based on the overlap between the predicted answer span and the ground truth answer span.
+Specifically, this would be the exact match (EM) score, which measures the percentage of exact matches between the predicted and the ground truth answer span, or the F1 score, which measures the average overlap between the tokens in the two spans.
+\\
+For earlier LLMs like BERT, this meant that for each word in the context, the model had to predict the probability of it being the start or end of the answer token.~(\cite{devlin:2018})
+To achieve this, the model was fine-tuned on the SQuAD dataset. 
+\\
+Later models like GPT-3 were able directly generate the answer from the context and the questions without any fine-tuning, by using the zero-shot, single-shot or multi-shot capabilities of the model.~(\cite{brown:2020})
+In some settings of the datasets, the context can be completely omitted, forcing the model to directly answer the question.
+This means that the results of the two approaches are not directly comparable, because even tough the models were evaluated on the same dataset, the approaches are fundamentally different.
+
+\subsection{Multiple Choice Question Answering}\label{multiple-choice-qa}
+For multiple choice question answering, the model has to select the correct answer from a set of possible answers, which can be done with or without context.
+Some datasets include questions with multiple possible answers, so that the model has to check each answer for correctness, not only find the best fitting answer.
+Questions for these tasks often stem from official exams, like the MMLU dataset~(\cite{hendrycks:2020}), which combines question from many exams like the United States Medical Licensing Examination or the Examination for Professional Practice in Psychology.
+In other datasets, the questions are collected from crowdworkers and verified by experts~(\cite{clark:2018},~\cite{mihaylov:2018}).
+\\
+Evaluation in this task is straightforward, since the model has to select the correct answer from a set of possible answers, making accuracy the most common metric.
+For evaluating LLMs, that means selecting the answer option for which the model assigns the highest probability, after being primed with few-shot examples and prompted by \textit{'Answer: '} after the last question and answer options.
+
+\subsection{Long Form Question Answering}\label{free-form-qa}
+This task of freely answering complex questions, which can't be answered by one entity or number, but require a longer, more nuanced answer.
+Originally, this task stems from the Information Retrieval community, where the model has to retrieve a document or a set of documents, which contain the answer to the question.
+In some cases, those documents are then summarized to produce the final answer.
+With LLMs being deployed in chatbots and as such expected to deliver the answer without the context, the task of long form question answering was adapted to this setting.
+\\
+So far, only a handful of datasets is available for this task, with the first dataset in this category being the ELI5 dataset~(\cite{fan:2019}).
+It consists of questions and the corresponding highest voted answer from the "Explain Like I'm Five" subreddit, where users ask questions about complex topics, which are then answered by other users.
+They are accompanied by support documents, which are retrieved from web sources by querying for the original question.
+This dataset was used to by~\cite{nakano:2021} to fine-tune GPT-3 for the task of long form question answering, without using the context documents.
+The answers given by the fine-tuned model are evaluated by humans, by comparing them to the highest voted answer from the ELI5 dataset.
+\\ 
+An additional dataset for this task is the MultiMedQA~(\cite{singhal:2023}), which curates questions from multiple other datasets used previously. 
+Answers generated by physicians are used as ground truth answers.
+Those are then compared to the answers generated by the model by other physicians as well as laypeople.
+Additionally, the answers were individually rated in different rubrics, introduced in a previous work~(\cite{singhal:2022}).
+\\
+None of the release papers for current, main-stream LLMs like GPT-3~(\cite{brown:2020}), GPT-4~(\cite{openai:2023}) or Llama 2~(\cite{touvron:2023}) include evaluations on common benchmarks for this category.
+Even though the use human feedback in the process of training and fine-tuning the models, the models are not evaluated on the same tasks in this category, so they cannot be directly compared.
+
+\subsubsection{Difficulties of Long Form Question Answering}\label{free-form-qa-difficulties}
+
+
+
 
 
 \section{Retrieval Models}\label{retrieval-models}
@@ -18,11 +88,13 @@ Given a query, an IR system returns a ranked list of documents that are most rel
 To achieve this, IR systems estimate a usefulness score for each document in the collection with respect to the query.
 The documents are then ranked according to their usefulness scores, with the most relevant documents appearing at the top of the list.
 
+\subsection{History of Evaluation using Information Retrieval}\label{history-of-evaluation-using-information-retrieval}
+Information Retrieval (IR) is the process of retrieving relevant information from a collection of documents.
 
 
 \subsection{Baseline Retrieval Models}\label{baseline-retrieval-models}
 First, we will look at the basic retrieval models.
-Those are often used as baselines and in most use cases offer a good tradeoff between performance and computational complexity.
+Those are often used as baselines and in most use cases offer a good trade off between performance and computational complexity.
 
 \subsubsection{TF-IDF}\label{tf-idf}
 \subsubsection{BM25}\label{bm25}
