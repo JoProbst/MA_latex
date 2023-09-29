@@ -77,8 +77,18 @@ None of the release papers for current, main-stream LLMs like GPT-3~(\cite{brown
 Even though the use human feedback in the process of training and fine-tuning the models, the models are not evaluated on the same tasks in this category, so they cannot be directly compared.
 
 \subsubsection{Difficulties of Long Form Question Answering}\label{free-form-qa-difficulties}
-
-
+Recent works have shown multiple challenges in the task of long form question answering, independently of which model architecture is used to answer the questions.
+\cite{krishna:2021} show that automatic metrics like ROUGE-L are not enough to differentiate between valid and invalid answers. 
+Those metrics are also unable to capture answer components like examples, if those examples are not present in the ground truth answers. 
+Furthermore, they note that even human evaluation is limited in judging LFQA over different models.
+Some problems include the hiring process of experts, especially when datasets tackle multiple fields of expertise.
+Additionally, the evaluation process is more challenging when the answers get longer and more complex.
+\\
+\cite{xu:2023} focus more one the evaluation process of LFQA, comparing different automatic evaluation methods with human judgement.
+Evaluation methods are evaluated on the task of choosing the preferable answer given two long form answers to a question.
+The results are compared previous human judgement on the same task.
+They find that one of their baseline models, choosing always the longest answer, performs nearly as good as the GPT3 model fine-tuned to return the best fitting answer given the question and both answer options.
+Both variants are still outperformed by human agreement, which is used as the gold standard.
 
 
 
