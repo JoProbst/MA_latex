@@ -31,7 +31,9 @@
 
 \ThesisSetSubmissionDate{16}{1}{2024}
 
-%
+% Packages
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning}
 % Suggested Packages
 % ------------------
 \usepackage[sort&compress]{natbib}
@@ -41,13 +43,13 @@
 \usepackage{booktabs}
 %    For tables ``looking the right way''.
 %
-% \usepackage{tabularx}
+\usepackage{tabularx}
 %    Enables tables with columns that automatically fill the page width.
 %
 % \usepackage[ruled,algochapter]{algorithm2e}
 %    A package for pseudo code algorithms.
 %
-% \usepackage{amsmath}
+\usepackage{amsmath}
 %    For tabular-style formatting of mathematical environments.
 %
 
@@ -100,7 +102,7 @@
 \include{appendixA}
 
 % Bibliography
-\bibliographystyle{plainnat} % requires package natbib. An alternative is apalike
+\bibliographystyle{apalike} % requires package natbib. An alternative is apalike
 \bibliography{literature}    % load file literature.bib
 
 \end{document}

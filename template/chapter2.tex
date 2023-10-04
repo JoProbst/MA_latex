@@ -8,7 +8,7 @@ Different retrieval methods used in this thesis are presented, together with the
 
 \section{Evaluation methods for Large Language Models for Question Answering}\label{evaluation-of-large-language-models}
 Language Models are usually defined as systems, that produce probability distributions over a set of tokens, given the preceding or surrounding context.
-The rise of Large Language Models (LLMs), started with the introduction of the new Transformer architecture~(\cite{vaswani:2017}), followed by the release of models like BERT~(\cite{devlin:2018}) and GPT-2~(\cite{radford:2018}).
+The rise of Large Language Models (LLMs), started with the introduction of the new Transformer architecture~(\cite{vaswani_attention_2023}), followed by the release of models like BERT~(\cite{devlin:2018}) and GPT-2~(\cite{radford:2018}).
 With the release of GPT-3~(\cite{brown:2020}), the size of datasets used to train LLMs, as well as the number of parameters in the models, increased to a point, where the models are able to produce coherent text on a wide range of tasks.
 This meant, that models had to be evaluated on all of those tasks, leading to the development of new evaluation benchmarks.
 In this section, we want to focus on the current evaluation methods of Question Answering capabilities of LLMs.
@@ -110,28 +110,141 @@ Similar problems have previously been shown by \cite{akoury:2020} in the context
 They find that crowd workers have low agreement for different evaluation metrics when evaluating the same stories.
 They tackle this problem by using gamification techniques to activate online users of a story writing platform to evaluate and improve the generated stories.
 A similar approach is taken by \cite{dugan:2020}, who implement a website where users try to differentiate machine-generated text from human generated text.
-\\
+
+%------------------------------------------------------------------
+%------------------------------------------------------------------
+%------------------------------------------------------------------
 
 \section{Retrieval Models}\label{retrieval-models}
 Since we want to use retrieval methods to evaluate the performance of LLMs, we will give some background on  the field of Information Retrieval, and how it relates to long form question answering.
 Information retrieval (IR) is the process of retrieving relevant information from a collection of documents.
-Given a query, an IR system returns a ranked list of documents that are most relevant to the query.
+Usually, the document corpus is first indexed, transforming the documents into a form that is more suitable for retrieval.
+This includes tokenization, stemming, stop word removal and other preprocessing steps.
+Commonly, an inverted index is then created, which maps each term in the corpus to the documents that contain it.
+Now, given a query, an IR system returns a ranked list of documents that are most relevant to the query.
 To achieve this, IR systems estimate a usefulness score for each document in the collection with respect to the query.
 The documents are then ranked according to their usefulness scores, with the most relevant documents appearing at the top of the list.
+Some pipelines include a re-ranking step, in which the most relevant documents are re-ranked after the first retrieval, as shown in Figure~\ref{fig:reranking_pipeline}.
+\begin{figure}[tb]
+\centering
+\begin{tikzpicture}[node distance=0.8cm, auto]
 
+% Styles for boxes
+\tikzstyle{box} = [rectangle, draw, fill=blue!10, text width=4.5em, text centered, rounded corners, minimum height=3em]
+\tikzstyle{user} = [ellipse, draw, fill=blue!30, text width=4.5em, text centered, rounded corners, minimum height=3em]
 
+% Nodes
+\node [box, fill=blue!30] (corpus) {Document Corpus};
+\node [box, fill=blue!30, right=of corpus] (index) {Index};
+\node [box, fill=blue!30, right=of index] (model) {Retrieval Model};
+\node [user, above=of model] (query) {Queries};
+\node [box, fill=blue!5, right=of model] (rerank) {Re-ranking};
+\node [box, fill=blue!30, right=of rerank] (output) {Output};
+
+% Edges
+\draw[->] (corpus) -- (index);
+\draw[->] (query) -- (model);
+\draw[->] (index) -- (model);
+\draw[->] (model) -- (rerank);
+\draw[->] (rerank) -- (output);
+
+\end{tikzpicture}
+\caption{Depiction of a basic retrieval pipeline, with optional re-ranking step. The process begins with a document corpus, which is indexed to facilitate efficient retrieval. Given the information need of a user in the form of a query, the retrieval model returns the most relevant documents. Optionally, the documents can be re-ranked using a re-ranking model which is usually more resource intensive.}
+\label{fig:reranking_pipeline}
+\end{figure}
 
 \subsection{Baseline Retrieval Models}\label{baseline-retrieval-models}
 First, we will look at the basic retrieval models, which are used as baselines in this thesis.
+They have been chosen, because they were shown to be effective on the used dataset in previous work~(\cite{goeuriot:2021}).
+Both models use the implementation in the Terrier IR platform~(\cite{ounis:2005}).
 
 \subsubsection{TF-IDF}\label{tf-idf}
+Term Frequency-Inverse Document Frequency (TF-IDF) is one of the most prevalent weighting schemes in information retrieval.
+It aims to measure the importance of a term in a document relative to a collection of documents or corpus.
+The central intuition is that terms that appear frequently in a document but not in many other documents in the corpus are significant and thus should be given higher weight.
+\\\\
+Given a term \( t \) and a document \( d \) in a corpus \( D \):
+\[ \text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \text{IDF}(t, D) \]
+Where \( \text{TF}(t, d) \) is the term frequency of term \( t \) in document \( d \) and 
+\[ \text{IDF}(t, D) = \log \left( \frac{|D|}{1 + \text{df}(t, D)} \right) \]
+with \( |D| \) being the total number of documents in the corpus and \( \text{df}(t, D) \) is the number of documents containing term \( t \).
+\\
+In the Terrier IR platform, the implementation of TF-IDF uses variants of the TF and IDF components.
+For Term Frequency, the Robertson's TF formulation~(\cite{robertson:2004}) is used, which incorporates an additional parameter, that adds a saturation effect to the term frequency.
+For IDF, the original formulation by Sparck Jones~(\cite{sparck:1972}) is applied.
 
 \subsubsection{DPH}\label{dph}
+Divergence from Randomness (DFR) is a framework in information retrieval that assigns term weights based on the divergence of the actual within-document term frequency distribution from a random term frequency distribution~(\cite{amati:2006}).
+The DPH (Divergence from randomness using the Hyper-geometric distribution model) is one of the models derived from the DFR framework.
+\\
+The principle behind DFR is that terms that are informative in a document will have a distribution that deviates significantly from what would be expected if terms were distributed randomly.
+While TF-IDF emphasizes the importance of terms based on their frequency in a document and their inverse frequency in the corpus, DPH focuses on the divergence of a term's distribution from what would be expected under a random distribution.
+Specifically, DPH assesses the divergence using the hyper-geometric distribution.
+In essence, where TF-IDF weights terms based on their prominence and rarity, DPH weights them based on how much their occurrence pattern deviates from randomness.
+The implementation in the Terrier IR platform follows the original formulation by \cite{amati:2006}.
 
-\subsection{Neural Retrieval Models}\label{neural-retrieval-models}
+
+\subsection{Transformer-based Retrieval Models}\label{transformer-retrieval-models}
+As mentioned in earlier sections, transformer-based models have been shown to be effective on a variety of tasks, including information retrieval.
+There are different approaches of how transformers can be used for retrieval, a brief overview of methods used in this thesis is given here.
+\\\\
+Two of the most common transformer based architectures are cross-encoder and bi-encoder models.
+
+
+\subsubsection{Cross-Encoders vs. Bi-Encoders}\label{cross-encoders}
+\begin{table}[h]
+    \centering
+    
+    \begin{tabularx}{\textwidth}{l>{\centering\arraybackslash}X>{\centering\arraybackslash}X} % Center-align X columns
+        \toprule
+        \textbf{Aspect} & \textbf{Bi-Encoder} & \textbf{Cross-Encoder} \\
+        \midrule
+        Input & Separate embeddings & Combined input \\
+        \addlinespace
+        Embedding computation & Independent & Joint \\
+        \addlinespace
+        Output & Dense vector & Scalar score \\
+        \addlinespace
+        Retrieval stage & First-stage & Re-ranking \\
+        \addlinespace
+        Efficiency & High & Lower \\
+        \addlinespace
+        Interaction modeling & Limited & High \\
+        \addlinespace
+        Use-case & Large-scale & Re-ranking \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Comparison between Bi-Encoder and Cross-Encoder in the context of information retrieval.}
+    \label{tab:encoder_comparison}
+\end{table}
+
+Bi-Encoders independently embed queries and documents using transformer models like BERT~(\cite{devlin:2018}) or T5~(\cite{roberts:2019}).
+For the document collection, this can be done offline, since the embeddings are independent of the query.
+This separation allows them to efficiently process large datasets since the embeddings can be pre-computed and stored.
+It also enables rapid relatively quick retrieval, since only the embedding for the current query has to be calculated on the spot.
+The following retrieval step is then done by computing the similarity between the query and each document in the collection, which is a relatively fast operation.
+\\
+Cross-Encoders, on the other hand, take a combined input sequence of both query and document and produce a scalar relevance score.
+This joint modeling enables them to capture the interaction and nuances between a query and a document.
+Due to their fine-grained interaction modeling, Cross-Encoders outperform Bi-Encoders in terms of precision in retrieving relevant documents.
+However, the need to process each query-document pair individually makes them computationally demanding, especially for large datasets.
+As a result, they are typically only used in second-stage retrieval, where the objective is to re-rank the top results obtained from an initial retrieval method.
+\\
+The following sections describe the different transformer-based retrieval models used in this thesis.
+\subsubsection{MonoT5 + DuoT5}\label{monot5-duot5}
+MonoT5 and DuoT5~(\cite{roberts:2019}), are based on previous work by \cite{nogueira:2019}, who introduced monoBERT and duoBERT, first applying transformer module to the task of document ranking.
+The general idea is to first use a baseline retrieval model like BM25 to retrieve an initial set of relevant documents.
+Then, the query and each document in the initial set are concatenated and fed into the mono version of the transformer model, which produces a scalar score for each query-document pair.
+The documents with the highest scores get then fed into the duo model, which takes the query and each possible pair of documents as input, outputting a probability of one document being more relevant than the other.
+Given those scores, the documents are re-ranked another time, serving as the final output of the retrieval pipeline.
+MonoT5 and DuoT5 both belong to the family of cross-encoder models, as described in Section~\ref{cross-encoders}, sharing the general characteristics of those models.
+
+\subsubsection{ColBERT}\label{colbert}
+ColBERT~(\cite{khattab:2020}) is another BERT based model for document ranking.
+It shares similarities with the general Bi-Encoder architecture, but introduces some modifications to improve performance.
+Instead of representing each document and query as a single vector, ColBERT uses a set of vectors to represent contextualized embeddings for each token in the document or query.
+This means,
 
 \subsection{Evaluation of Retrieval Models}\label{evaluation-of-retrieval-models}
 
-
-\subsection{Evaluation using Information Retrieval}\label{history-of-evaluation-using-information-retrieval}
-Information Retrieval (IR) is the process of retrieving relevant information from a collection of documents.
+\section{Evaluation of NLP tasks using Information Retrieval}\label{eval-nlp-ir}
