@@ -6,7 +6,7 @@ We start with a short introduction to Large Language Models, then present the cu
 Afterwards, the field of Information Retrieval is introduced.
 Different retrieval methods used in this thesis are presented, together with the evaluation metrics used to compare them.
 
-\section{Evaluation methods for Large Language Models for Question Answering}\label{evaluation-of-large-language-models}
+\section{Evaluation of Large Language Models for Question Answering}\label{evaluation-of-large-language-models}
 Language Models are usually defined as systems, that produce probability distributions over a set of tokens, given the preceding or surrounding context.
 The rise of Large Language Models (LLMs), started with the introduction of the new Transformer architecture~(\cite{vaswani_attention_2023}), followed by the release of models like BERT~(\cite{devlin:2018}) and GPT-2~(\cite{radford:2018}).
 With the release of GPT-3~(\cite{brown:2020}), the size of datasets used to train LLMs, as well as the number of parameters in the models, increased to a point, where the models are able to produce coherent text on a wide range of tasks.
@@ -232,19 +232,68 @@ As a result, they are typically only used in second-stage retrieval, where the o
 \\
 The following sections describe the different transformer-based retrieval models used in this thesis.
 \subsubsection{MonoT5 + DuoT5}\label{monot5-duot5}
-MonoT5 and DuoT5~(\cite{roberts:2019}), are based on previous work by \cite{nogueira:2019}, who introduced monoBERT and duoBERT, first applying transformer module to the task of document ranking.
+MonoT5 and DuoT5~(\cite{roberts:2019}), are based on previous work by \cite{nogueira:2019}, who introduced monoBERT and duoBERT, first applying transformer architecture to the task of document ranking.
 The general idea is to first use a baseline retrieval model like BM25 to retrieve an initial set of relevant documents.
 Then, the query and each document in the initial set are concatenated and fed into the mono version of the transformer model, which produces a scalar score for each query-document pair.
 The documents with the highest scores get then fed into the duo model, which takes the query and each possible pair of documents as input, outputting a probability of one document being more relevant than the other.
 Given those scores, the documents are re-ranked another time, serving as the final output of the retrieval pipeline.
+The main difference between the BERT and T5 versions, is that for BERT the [CLS] token from embedding the query and the document can be used as input to a single layer neural network, to output a probability of the document being relevant.
+Since there is no [CLS] token for models in the T5 family, as they are sequence-to-sequence model, this part is done using an input template:
+\begin{equation}
+    \text{Query: \emph{q} Document: \emph{d} Relevant:}
+\end{equation} 
+where the model is fine-tuned to produce the token \emph{true} or \emph{false} given query \emph{q} and document \emph{d}.
+\\
+At inference, softmax is applied to the \emph{true} and \emph{false} tokens only, the scores are then calculated using the probability of the \emph{true} token.
+This works analogously for the Duo version of both models, by just adding the second document.
 MonoT5 and DuoT5 both belong to the family of cross-encoder models, as described in Section~\ref{cross-encoders}, sharing the general characteristics of those models.
+\\
+This model architecture allows for accurately tuning performance vs. accuracy, by parameterizing how many documents are filtered in each step, making the model suitable for different usecases.
+\\
+In this thesis, the retrieval dataset is small, so the first retrieval step using BM25 is omitted, directly feeding all documents to the monoT5 model.
 
 \subsubsection{ColBERT}\label{colbert}
 ColBERT~(\cite{khattab:2020}) is another BERT based model for document ranking.
 It shares similarities with the general Bi-Encoder architecture, but introduces some modifications to improve performance.
 Instead of representing each document and query as a single vector, ColBERT uses a set of vectors to represent contextualized embeddings for each token in the document or query.
-This means,
+For the documents, this can again be done offline, so that at the retrieval stage, only the embeddings for the query have to be generated and compared to the documents.
+The relevance score for document $d$ given query $q$ is estimated using their late interaction model, in which maximum cosine similarity between all query term embeddings and document term embeddings is calculated, and then summed over for all query terms.
+This allows for a more fine-grained mapping between query and document terms, also allowing for more fine-grained meaning of different terms.
+An efficient computation of the similarity calculation allows ColBERT to scale much better, compared to feeding BERT the query and each document as input.
+\\
+The ColBERT architecture can generally be used for re-ranking or for end-to-end retrieval.
+In the second case, an additional step is added in which the complete collection is filtered for relevant documents using similarity search for finding documents that contain similar terms as the query.
+Then in the second step, the remaining documents are re-ranked using the maximum similarity metrics.
+\\
+Since the dataset used in this thesis is relatively small, we can directly use the re-ranking approach on all documents.
+
 
 \subsection{Evaluation of Retrieval Models}\label{evaluation-of-retrieval-models}
+Evaluation metrics are important for the automatic assessment of retrieval model performance.
+They provide a quantitative measure of how well a system retrieves relevant documents in response to a user's query.
+Compared to other tasks like classification or regression, the evaluation of retrieval models is more challenging, since the evaluation metrics are not as intuitive.
+Instead of a single correct answer, there are multiple documents that could be considered relevant to a query, which can be retrieved in different permutatons.
+To be able to judge different retrieval methods, true relevance values for document-query pairs have to be defined by human assessors.
+\\
+There are multiple metrics which are widely used in information retrieval tasks:
+\begin{itemize}
+    \item \textbf{Precision}: Measures the fraction of retrieved documents that are relevant.
+    \item \textbf{Recall}: Captures the fraction of relevant documents that are retrieved.
+    \item \textbf{F1 Score}: The harmonic mean of precision and recall.
+    \item \textbf{Mean Average Precision (MAP)}: The average precision scores for each query, considering the ranking order.
+    \item \textbf{Mean Reciprocal Rank (MRR)}: The average of the reciprocal ranks of the first relevant document for each query.
+    \item \textbf{Normalized Discounted Cumulative Gain (nDCG)}: Considers both the ranking and the relevance grade of retrieved documents.
+\end{itemize}
+Given the context of our dataset, which contains multiple queries with documents ranked for relevance between 0 and 3, and has relevance ratings for each document in the dataset, the nDCG metric is the most suitable one.
+Specifically, nDCG@10 is used, setting a cutoff value after which additionally retrieved documents are not evaluated anymore.
+The formula for nDCG@k is as follows:
+\[ \text{nDCG@k} = \frac{\text{DCG@k}}{\text{Ideal DCG@k}} \]
+where DCG@10 is the discounted cumulative gain at position 10, and Ideal DCG@10 is the DCG@10 score for the ideal ranking.
+DCG@k is defined as:
+\[ \text{DCG@k} = \sum_{i=1}^{k} \frac{2^{r(d_i,q)} - 1}{\log_2(i + 1)} \]
+where $r(d_i,q)$ is the relevance rating of document $d_i$ for query $q$.
+The ideal ranking is the ranking of documents for a query, which maximizes the DCG@10 score.
+\\
 
-\section{Evaluation of NLP tasks using Information Retrieval}\label{eval-nlp-ir}
+
+\subsection{Evaluation of machine translation systems using Retrieval Models}\label{eval-mts-ir}
