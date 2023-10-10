@@ -6,9 +6,9 @@ We start with a short introduction to Large Language Models, then present the cu
 Afterwards, the field of Information Retrieval is introduced.
 Different retrieval methods used in this thesis are presented, together with the evaluation metrics used to compare them.
 
-\section{Evaluation of Large Language Models for Question Answering}\label{evaluation-of-large-language-models}
+\section{Evaluation of Large Language Models for Question Answering}\label{sec:evaluation-of-large-language-models}
 Language Models are usually defined as systems, that produce probability distributions over a set of tokens, given the preceding or surrounding context.
-The rise of Large Language Models (LLMs), started with the introduction of the new Transformer architecture~(\cite{vaswani_attention_2023}), followed by the release of models like BERT~(\cite{devlin:2018}) and GPT-2~(\cite{radford:2018}).
+The rise of Large Language Models (LLMs), started with the introduction of the new Transformer architecture~(\cite{vaswani:2017}), followed by the release of models like BERT~(\cite{devlin:2018}) and GPT-2~(\cite{radford:2018}).
 With the release of GPT-3~(\cite{brown:2020}), the size of datasets used to train LLMs, as well as the number of parameters in the models, increased to a point, where the models are able to produce coherent text on a wide range of tasks.
 This meant, that models had to be evaluated on all of those tasks, leading to the development of new evaluation benchmarks.
 In this section, we want to focus on the current evaluation methods of Question Answering capabilities of LLMs.
@@ -27,7 +27,7 @@ The evaluation of such answers is not as straightforward as for the other versio
 \\
 In the following, different QA versions will be introduced, including popular datasets and evaluation metrics for them.
 
-\subsection{Extractive Question Answering}\label{extractive-qa}
+\subsection{Extractive Question Answering}\label{sec:extractive-qa}
 Extractive QA is the task of answering questios, given a context containing the answer.
 From this context, the correct answer span has to be selected.
 Some benchmarks include unanswerable questions, where the model has to predict, that the question cannot be answered from the given context.
@@ -47,7 +47,7 @@ Later models like GPT-3 were able directly generate the answer from the context 
 In some settings of the datasets, the context can be completely omitted, forcing the model to directly answer the question.
 This means that the results of the two approaches are not directly comparable, because even tough the models were evaluated on the same dataset, the approaches are fundamentally different.
 
-\subsection{Multiple Choice Question Answering}\label{multiple-choice-qa}
+\subsection{Multiple Choice Question Answering}\label{sec:multiple-choice-qa}
 For multiple choice question answering, the model has to select the correct answer from a set of possible answers, which can be done with or without context.
 Some datasets include questions with multiple possible answers, so that the model has to check each answer for correctness, not only find the best fitting answer.
 Questions for these tasks often stem from official exams, like the MMLU dataset~(\cite{hendrycks:2020}), which combines question from many exams like the United States Medical Licensing Examination or the Examination for Professional Practice in Psychology.
@@ -56,7 +56,7 @@ In other datasets, the questions are collected from crowd workers and verified b
 Evaluation in this task is straightforward, since the model has to select the correct answer from a set of possible answers, making accuracy the most common metric.
 For evaluating LLMs, that means selecting the answer option for which the model assigns the highest probability, after being primed with few-shot examples and prompted by \emph{'Answer: '} after the last question and answer options.
 
-\subsection{Long Form Question Answering}\label{free-form-qa}
+\subsection{Long Form Question Answering}\label{sec:long-form-qa}
 This task of freely answering complex questions, which can't be answered by one entity or number, but require a longer, more nuanced answer.
 Originally, this task stems from the Information Retrieval community, where the model has to retrieve a document or a set of documents, which contain the answer to the question.
 In some cases, those documents are then summarized to produce the final answer.
@@ -75,7 +75,7 @@ Additionally, the answers were individually rated in different rubrics, introduc
 \\
 None of the release papers for current, main-stream LLMs like GPT-3~(\cite{brown:2020}), GPT-4~(\cite{openai:2023}) or Llama 2~(\cite{touvron:2023}) include evaluations on common benchmarks for this category.
 
-\subsubsection{Difficulties of Long Form Question Answering}\label{free-form-qa-difficulties}
+\subsubsection{Difficulties of Long Form Question Answering}\label{sec:long-form-qa-difficulties}
 
 Recent works have shown multiple challenges in the task of long form question answering, independently of which model architecture is used to answer the questions.
 Since the answers are free text, and not only a multiple choice options, one number or one entity, the quality of the model can't be measured using accuracy.
@@ -110,12 +110,14 @@ Similar problems have previously been shown by \cite{akoury:2020} in the context
 They find that crowd workers have low agreement for different evaluation metrics when evaluating the same stories.
 They tackle this problem by using gamification techniques to activate online users of a story writing platform to evaluate and improve the generated stories.
 A similar approach is taken by \cite{dugan:2020}, who implement a website where users try to differentiate machine-generated text from human generated text.
-
+\\\\
+This shows that there are still many obstacles to overcome in the task of evaluating long form question answering systems.
+Since our approach of tackling this problem uses concepts from the field of information retrieval, a short overview of relevant methods is given in the next section.
 %------------------------------------------------------------------
 %------------------------------------------------------------------
 %------------------------------------------------------------------
 
-\section{Retrieval Models}\label{retrieval-models}
+\section{Retrieval Models}\label{sec:retrieval-models}
 Since we want to use retrieval methods to evaluate the performance of LLMs, we will give some background on  the field of Information Retrieval, and how it relates to long form question answering.
 Information retrieval (IR) is the process of retrieving relevant information from a collection of documents.
 Usually, the document corpus is first indexed, transforming the documents into a form that is more suitable for retrieval.
@@ -153,12 +155,12 @@ Some pipelines include a re-ranking step, in which the most relevant documents a
 \label{fig:reranking_pipeline}
 \end{figure}
 
-\subsection{Baseline Retrieval Models}\label{baseline-retrieval-models}
+\subsection{Baseline Retrieval Models}\label{sec:baseline-retrieval-models}
 First, we will look at the basic retrieval models, which are used as baselines in this thesis.
 They have been chosen, because they were shown to be effective on the used dataset in previous work~(\cite{goeuriot:2021}).
 Both models use the implementation in the Terrier IR platform~(\cite{ounis:2005}).
 
-\subsubsection{TF-IDF}\label{tf-idf}
+\subsubsection{TF-IDF}\label{sec:tf-idf}
 Term Frequency-Inverse Document Frequency (TF-IDF) is one of the most prevalent weighting schemes in information retrieval.
 It aims to measure the importance of a term in a document relative to a collection of documents or corpus.
 The central intuition is that terms that appear frequently in a document but not in many other documents in the corpus are significant and thus should be given higher weight.
@@ -173,7 +175,7 @@ In the Terrier IR platform, the implementation of TF-IDF uses variants of the TF
 For Term Frequency, the Robertson's TF formulation~(\cite{robertson:2004}) is used, which incorporates an additional parameter, that adds a saturation effect to the term frequency.
 For IDF, the original formulation by Sparck Jones~(\cite{sparck:1972}) is applied.
 
-\subsubsection{DPH}\label{dph}
+\subsubsection{DPH}\label{sec:dph}
 Divergence from Randomness (DFR) is a framework in information retrieval that assigns term weights based on the divergence of the actual within-document term frequency distribution from a random term frequency distribution~(\cite{amati:2006}).
 The DPH (Divergence from randomness using the Hyper-geometric distribution model) is one of the models derived from the DFR framework.
 \\
@@ -184,14 +186,14 @@ In essence, where TF-IDF weights terms based on their prominence and rarity, DPH
 The implementation in the Terrier IR platform follows the original formulation by \cite{amati:2006}.
 
 
-\subsection{Transformer-based Retrieval Models}\label{transformer-retrieval-models}
+\subsection{Transformer-based Retrieval Models}\label{sec:transformer-retrieval-models}
 As mentioned in earlier sections, transformer-based models have been shown to be effective on a variety of tasks, including information retrieval.
 There are different approaches of how transformers can be used for retrieval, a brief overview of methods used in this thesis is given here.
 \\\\
 Two of the most common transformer based architectures are cross-encoder and bi-encoder models.
 
 
-\subsubsection{Cross-Encoders vs. Bi-Encoders}\label{cross-encoders}
+\subsubsection{Cross-Encoders vs. Bi-Encoders}\label{sec:cross-encoders}
 \begin{table}[h]
     \centering
     
@@ -231,7 +233,7 @@ However, the need to process each query-document pair individually makes them co
 As a result, they are typically only used in second-stage retrieval, where the objective is to re-rank the top results obtained from an initial retrieval method.
 \\
 The following sections describe the different transformer-based retrieval models used in this thesis.
-\subsubsection{MonoT5 + DuoT5}\label{monot5-duot5}
+\subsubsection{MonoT5 + DuoT5}\label{sec:monot5-duot5}
 MonoT5 and DuoT5~(\cite{roberts:2019}), are based on previous work by \cite{nogueira:2019}, who introduced monoBERT and duoBERT, first applying transformer architecture to the task of document ranking.
 The general idea is to first use a baseline retrieval model like BM25 to retrieve an initial set of relevant documents.
 Then, the query and each document in the initial set are concatenated and fed into the mono version of the transformer model, which produces a scalar score for each query-document pair.
@@ -246,13 +248,13 @@ where the model is fine-tuned to produce the token \emph{true} or \emph{false} g
 \\
 At inference, softmax is applied to the \emph{true} and \emph{false} tokens only, the scores are then calculated using the probability of the \emph{true} token.
 This works analogously for the Duo version of both models, by just adding the second document.
-MonoT5 and DuoT5 both belong to the family of cross-encoder models, as described in Section~\ref{cross-encoders}, sharing the general characteristics of those models.
+MonoT5 and DuoT5 both belong to the family of cross-encoder models, as described in Section~\ref{sec:cross-encoders}, sharing the general characteristics of those models.
 \\
 This model architecture allows for accurately tuning performance vs. accuracy, by parameterizing how many documents are filtered in each step, making the model suitable for different usecases.
 \\
 In this thesis, the retrieval dataset is small, so the first retrieval step using BM25 is omitted, directly feeding all documents to the monoT5 model.
 
-\subsubsection{ColBERT}\label{colbert}
+\subsubsection{ColBERT}\label{sec:colbert}
 ColBERT~(\cite{khattab:2020}) is another BERT based model for document ranking.
 It shares similarities with the general Bi-Encoder architecture, but introduces some modifications to improve performance.
 Instead of representing each document and query as a single vector, ColBERT uses a set of vectors to represent contextualized embeddings for each token in the document or query.
@@ -268,7 +270,7 @@ Then in the second step, the remaining documents are re-ranked using the maximum
 Since the dataset used in this thesis is relatively small, we can directly use the re-ranking approach on all documents.
 
 
-\subsection{Evaluation of Retrieval Models}\label{evaluation-of-retrieval-models}
+\subsection{Evaluation of Retrieval Models}\label{sec:evaluation-of-retrieval-models}
 Evaluation metrics are important for the automatic assessment of retrieval model performance.
 They provide a quantitative measure of how well a system retrieves relevant documents in response to a user's query.
 Compared to other tasks like classification or regression, the evaluation of retrieval models is more challenging, since the evaluation metrics are not as intuitive.
@@ -296,4 +298,51 @@ The ideal ranking is the ranking of documents for a query, which maximizes the D
 \\
 
 
-\subsection{Evaluation of machine translation systems using Retrieval Models}\label{eval-mts-ir}
+\subsection{Evaluation of machine translation systems using Retrieval Models}\label{sec:eval-mts-ir}
+In the field of evaluating NLP tasks, information retrieval techniques have been mainly used to evaluate machine translation systems.
+Since both question answering and machine translation are sequence-to-sequence tasks with multiple correct answers, there are similarities in the evaluation process.
+\\
+For machine translation, a model is given a source sentence, and has to produce a target sentence in another language.
+Those systems are usually evaluated given a ground truth reference sentence, which is compared to the predicted sentence.
+Traditionally, methods like BLEU~(\cite{papineni:2002}), ROUGE~(\cite{lin:2004}) or METEOR~(\cite{banerjee:2005}) are used to compare the predicted sentence to one or multiple reference sentences.
+There are multiple versions of those metrics with slightly different parameters, which mostly differ in what sequences of tokens are compared (1-gram, 2-gram, 3-gram, 4-gram, longest common sub-sequence), how precision and recall are weighted and how the results are smoothed.
+In the end, all of those metrics generate a similarity score between the predicted and the reference sentence, which can be used to compare different models.
+\\
+Alternative approaches incorporating ranking methods have been proposed as well.
+\cite{duh:2008} argue, that the final goal is to compare different ML systems, so why first predict the quality of the systems individually, when they could be compared directly.
+He shows that ranking methods like RankSVM~(\cite{joachims:2002}) and RankBoost~(\cite{freund:2003}) can be applied to rank different candidate translations against the reference, while generating similar scores to BLEU on the same feature set.
+When incorporating intra-set features, the ranking methods outperform BLEU and smoothed BLEU.
+\\
+Another approach, this time based on learning-to-rank methods, is proposed by \cite{li:2013}.
+Again, they compare multiple translation candidates to a reference sentence, but here they use listwise learning-to-rank methods to generate a ranking of the candidates.
+The objective of listwise ranking is to train a ranking function, which minimizes the loss between the predicted ranking and the ground truth human generated ranking on a training set.
+The trained model is then evaluated on a test set.
+Similar to \cite{duh:2008}, they show that the ranking based methods can outperform other automatic metrics in terms of correlation with human judgement.
+\\
+\cite{guzman:2019} use neural methods to incorporate syntactic and semantic information into the evaluation process.
+They train a pairwise ranking model, which compares to candidate sentences given the reference and returns which one is the better translation.
+Even tough they do not outperform other state of the art methods, they deliver competitive results while staying closer to the human evaluation framework.
+\\
+\\
+This overview shows, that information retrieval methods have successfully been applied to the task of evaluating machine translation systems.
+But those approaches are hard to transfer to the task of evaluating question answering systems, since the evaluation metrics are not directly applicable.
+All machine translation evaluation methods mentioned here, compare the set of candidate translations to a single reference translation.
+This is not applicable to long form question answering.
+Here, multiple different answers can be correct, but still very different from each other.
+So, even though information retrieval methods are applied here as well, the evaluation approach is fundamentally different.
+\\
+In this thesis, retrieval methods are used to rank generated answers for a given question against a set of rated reference answers which can differ from each other drastically.
+
+\section{Summary}
+In this chapter, we present an overview of the current state of research in the field of evaluating large language models for question answering.
+Additionally, concepts of information retrieval that are relevant for this thesis are introduced.
+\\
+Section~\ref{sec:long-form-qa-difficulties} shows, that the evaluation of long form question answering is challenging, since the answers are free form text, and not only a single entity, number or multiple choice option.
+This leads us to the investigation of how retrieval methods can be used to evaluate long form question answering.
+Since retrieval methods have already been used to evaluate machine translation systems, we give an overview of those methods in Section~\ref{sec:eval-mts-ir}.
+Even tough some similarities exist between the two tasks, the evaluation methods are not directly transferable.
+\\
+For this reason, we formulate the evaluation tasks differently.
+Instead of ranking multiple candidates against one reference text, we rank one candidate against multiple reference texts.
+\\
+In the following Section, we introduce the Experimental Setup, including the dataset collection, ranking pipeline construction and the generation of LLM answers.
