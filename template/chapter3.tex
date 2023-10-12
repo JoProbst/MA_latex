@@ -68,7 +68,7 @@ Those are easily accessible via the CommonCrawl archive.
 \\
 \\
 Before accessing all relevant documents from the CommonCrawl archives, the list of documents was filtered to only include documents which were annotated for at least one query.
-Discarding all documents from Reddit and Twitter, as well as web documents which were not assessed for any query, resulted in a total of $7400$ documents downloaded from the CommonCrawl archive using a slightly modified version of the provided script.
+Discarding all documents from Reddit and Twitter, as well as web documents which were not assessed for any query, resulted in a total of $6692$ documents downloaded from the CommonCrawl archive using a slightly modified version of the provided script.
 This provides us with WARC files for the relevant documents.
 
 \subsection{Preprocessing}
@@ -76,6 +76,7 @@ The files in the WARC format contain the full HTML of the web documents.
 Before being able to compare the content to the generated answers, the HTML is extracted from the documents.
 HTML elements containing fewer than 50 characters are discarded, assuming they are not relevant for the content of the document (e.g. navigation bars).
 Then, the plain text is extracted using the ChatNoir Resiliparse Library\footnote{\url{https://resiliparse.chatnoir.eu/en/stable/}}.
+
 
 \subsection{Dataset Statistics}
 
