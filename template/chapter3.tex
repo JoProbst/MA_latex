@@ -74,11 +74,8 @@ This provides us with WARC files for the relevant documents.
 \subsection{Preprocessing}
 The files in the WARC format contain the full HTML of the web documents.
 Before being able to compare the content to the generated answers, the HTML is extracted from the documents.
-HTML elements containing fewer than 50 characters are discarded, assuming they are not relevant for the content of the document (e.g. navigation bars).
+HTML elements containing fewer than 50 characters are discarded, assuming they are not relevant for the content of the document (e.g. fields of navigation bars).
 Then, the plain text is extracted using the ChatNoir Resiliparse Library\footnote{\url{https://resiliparse.chatnoir.eu/en/stable/}}.
-
-
-\subsection{Dataset Statistics}
 
 
 \section{Retrieval Pipeline Development}
@@ -86,6 +83,7 @@ In this section, the implementation of the different retrieval pipelines is disc
 All models are implemented in the PyTerrier Framework~(\cite{pyterrier:2020}), which is a Python API for the Terrier IR Platform~(\cite{macdonald:2012}).
 
 \subsection{Baseline Models}
+
 
 \subsection{Transformer Models}
 
