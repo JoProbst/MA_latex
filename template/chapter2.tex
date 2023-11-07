@@ -281,34 +281,75 @@ As mentioned in earlier sections, transformer-based models have been shown to be
 There are different approaches of how transformers can be used for retrieval, a brief overview of methods used in this thesis is given here.
 \\\\
 Two of the most common transformer based architectures are cross-encoder and bi-encoder models.
+\begin{figure}[h]
+  \centering
+  % Define colors
+  \definecolor{textcolor}{RGB}{255, 230, 204}
+  \definecolor{encodercolor}{RGB}{204, 229, 255}
+  \definecolor{embeddingcolor}{RGB}{217, 234, 211}
+  \definecolor{scorecolor}{RGB}{230, 204, 255} % New color for scores
 
+  % Bi-Encoder
+  \begin{minipage}{.48\textwidth}
+    \centering
+    \begin{tikzpicture}[node distance=0.7cm, auto, every node/.style={scale=0.8}]
+      \tikzstyle{text_in} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=textcolor]
+      \tikzstyle{encoder} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=encodercolor]
+      \tikzstyle{embedding} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=embeddingcolor]
+      \tikzstyle{score} = [ellipse, minimum width=2cm, minimum height=1cm, align=center, draw=black, fill=scorecolor]
 
-\subsubsection{Cross-Encoders vs. Bi-Encoders}\label{sec:cross-encoders}
-% \begin{table}[h]
-%     \centering
-%     \begin{tabularx}{\textwidth}{l>{\centering\arraybackslash}X>{\centering\arraybackslash}X} % Center-align X columns
-%         \toprule
-%         \textbf{Aspect} & \textbf{Bi-Encoder} & \textbf{Cross-Encoder} \\
-%         \midrule
-%         Input & Separate embeddings & Combined input \\
-%         \addlinespace
-%         Embedding computation & Independent & Joint \\
-%         \addlinespace
-%         Output & Dense vector & Scalar score \\
-%         \addlinespace
-%         Retrieval stage & First-stage & Re-ranking \\
-%         \addlinespace
-%         Efficiency & High & Lower \\
-%         \addlinespace
-%         Interaction modeling & Limited & High \\
-%         \addlinespace
-%         Use-case & Large-scale & Re-ranking \\
-%         \bottomrule
-%     \end{tabularx}
-%     \caption{Comparison between Bi-Encoder and Cross-Encoder in the context of information retrieval.}
-%     \label{tab:encoder_comparison}
-% \end{table}
+      % Nodes
+      \node[text_in] (query) {Query};
+      \node[encoder, below=of query] (qencoder) {Query Encoder};
+      \node[embedding, below=of qencoder] (qembed) {Query Embedding};
+      
+      \node[text_in, right=of query, xshift=1cm] (doc) {Document};
+      \node[encoder, below=of doc] (docencoder) {Doc Encoder};
+      \node[embedding, below=of docencoder] (docembed) {Doc Embedding};
 
+      \node[score, below=of qembed.south, xshift=2.5cm] (biScore) {Relevance Score}; % New node for relevance score
+
+      % Arrows
+      \draw[-{Latex[length=3mm]}] (query) -- (qencoder);
+      \draw[-{Latex[length=3mm]}] (qencoder) -- (qembed);
+      \draw[-{Latex[length=3mm]}] (qembed) -- (biScore);
+      \draw[-{Latex[length=3mm]}] (doc) -- (docencoder);
+      \draw[-{Latex[length=3mm]}] (docencoder) -- (docembed);
+      \draw[-{Latex[length=3mm]}] (docembed) -- (biScore);
+
+    \end{tikzpicture}
+    \caption{Bi-Encoder Architecture. Query and document are encoded separately, then the relevance is calculated based on similarity measures between the embeddings.}
+  \end{minipage}
+  \hfill
+  % Cross-Encoder
+  \begin{minipage}{.48\textwidth}
+    \centering
+    \begin{tikzpicture}[node distance=0.7cm, auto, every node/.style={scale=0.8}]
+      \tikzstyle{text_in} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=textcolor]
+      \tikzstyle{encoder} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=encodercolor]
+      \tikzstyle{embedding} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=embeddingcolor]
+      \tikzstyle{score} = [ellipse, minimum width=2cm, minimum height=1cm, align=center, draw=black, fill=scorecolor]
+
+      % Nodes
+      \node[text_in, right=] (query) {Query};
+
+      \node[text_in, right=of query, xshift=1cm] (doc) {Document};
+
+      \node[text_in, below=of query.south, xshift=2.5cm] (qdoc) {Query $+$ Document};
+
+      \node[encoder, below=of qdoc] (qencoder) {Cross-Encoder};
+
+      \node[score, below=of qencoder] (biScore) {Relevance Score};
+      % Arrows
+      \draw[-{Latex[length=3mm]}] (query) -- (qdoc);
+      \draw[-{Latex[length=3mm]}]  (doc) -- (qdoc);
+      \draw[-{Latex[length=3mm]}] (qdoc) -- (qencoder);
+      \draw[-{Latex[length=3mm]}] (qencoder) -- (biScore);
+
+    \end{tikzpicture}
+    \caption{Cross-Encoder Architecture. Query and document are first combined and then fed to the Cross-Encoder, the relevance is directly calculated by the encoder.}
+  \end{minipage}
+\end{figure}
 Bi-Encoders independently embed queries and documents using transformer models like BERT~(\cite{devlin:2018}) or T5~(\cite{roberts:2019}).
 For the document collection, this can be done offline, since the embeddings are independent of the query.
 This separation allows them to efficiently process large datasets since the embeddings can be pre-computed and stored.
@@ -337,7 +378,7 @@ where the model is fine-tuned to produce the token \emph{true} or \emph{false} g
 \\
 At inference, softmax is applied to the \emph{true} and \emph{false} tokens only, the scores are then calculated using the probability of the \emph{true} token.
 This works analogously for the Duo version of both models, by just adding the second document.
-MonoT5 and DuoT5 both belong to the family of cross-encoder models, as described in Section~\ref{sec:cross-encoders}, sharing the general characteristics of those models.
+MonoT5 and DuoT5 both belong to the family of cross-encoder models, sharing the general characteristics of those models.
 \\
 This model architecture allows for accurately tuning performance vs. accuracy, by parameterizing how many documents are filtered in each step, making the model suitable for different usecases.
 \\

@@ -22,7 +22,7 @@ The used dataset is based on the test set of the CLEF eHealth 2021 dataset \cite
 It was originally intended to evaluate the ability of retrieval systems to provide credible, readable and relevant answers to laypersons' health questions.
 
 \subsection{CLEF eHealth 2021 Dataset}
-The test set consists of 50 health related queries, which either stem from Reddit or Google search trends.
+The test set consists of 55 health related queries, which either stem from Reddit or Google search trends.
 While the Reddit-sourced queries are well-formulated questions about specific health topics, the queries from Google search trends are not necessarily phrased as questions but rather as classical search queries.
 \\
 In addition to the queries, the dataset includes a collection of web documents and social media content.
@@ -64,25 +64,50 @@ For Reddit, those API changes followed just a few months later, making it imposs
 Even tough we started downloading some Reddit content before those changes, the already slow access to the Reddit data did not allow for downloading all content in time.
 \\
 This was unfortunate timing, but since the organizers of the CLEF eHealth task reported in their paper that the human credibility assessments of social media documents were significantly lower than those of web documents, we decided to only use the web documents for our dataset.
-Those are easily accessible via the CommonCrawl archive.
+The web documents are easily accessible via the CommonCrawl archive.
 \\
 \\
 Before accessing all relevant documents from the CommonCrawl archives, the list of documents was filtered to only include documents which were annotated for at least one query.
 Discarding all documents from Reddit and Twitter, as well as web documents which were not assessed for any query, resulted in a total of $6692$ documents downloaded from the CommonCrawl archive using a slightly modified version of the provided script.
 This provides us with WARC files for the relevant documents.
+\\
+Since all social media content was discarded, the number of queries for which documents are available is reduced to 50, since of the total 55 queries, 5 queries only have social media content associated with them.
 
 \subsection{Preprocessing}
 The files in the WARC format contain the full HTML of the web documents.
 Before being able to compare the content to the generated answers, the HTML is extracted from the documents.
-HTML elements containing fewer than 50 characters are discarded, assuming they are not relevant for the content of the document (e.g. fields of navigation bars).
+HTML elements containing fewer than 50 characters in the elements body are discarded, assuming they are not relevant for the content of the document (e.g. fields of navigation bars).
 Then, the plain text is extracted using the ChatNoir Resiliparse Library\footnote{\url{https://resiliparse.chatnoir.eu/en/stable/}}.
+\\
+The final dataset now consists of 50 queries, each of which has between 39 and 249 documents associated with it.
 
 
 \section{Retrieval Pipeline Development}
 In this section, the implementation of the different retrieval pipelines is discussed.
-All models are implemented in the PyTerrier Framework~(\cite{pyterrier:2020}), which is a Python API for the Terrier IR Platform~(\cite{macdonald:2012}).
+The baseline models (DPH and TF-IDF), as well as the colbert version 1 and the monoT5/duoT5 based pipelines are implemented in the PyTerrier framework by \cite{pyterrier:2020}, which is a Python API for the Terrier IR Platform~(\cite{macdonald:2012}).
+The colbert version 2 pipeline is based on the original implementation provided by the authors\footnote{\url{https://github.com/stanford-futuredata/ColBERT}}.
+
+\subsection{Retrieval Setup}
+The retrieval setup in this work differs from the usual retrieval setup, in which a large document collection is indexed, and then multiple queries are run against the index using different retrieval models.
+In our case, we build separate indices for each query, containing only the documents that are evaluated for that query.
+This ensures that each document that is retrieved for a query is also evaluated for that query.
 
 \subsection{Baseline Models}
+This section describes the implementation of the baseline models, namely DPH and TF-IDF.
+For both models, the basic indexing function of PyTerrier is used, which indexes and preprocesses the documents.
+Preprocessing is done with the default values, which includes the following operations:
+\begin{itemize}
+    \item{\textbf{Tokenization}, using the default PyTerrier tokenizer, which splits on non-alphanumeric characters. Additional rules to discard tokens which are longer than 20 characters, contain more than 4 digits, or contain the same character more than 3 times in a row are applied. All tokens are also converted to lowercase.}
+    \item \textbf{Stopword removal}, using the default PyTerrier stopword list.
+    \item \textbf{Stemming}, using the Porter stemmer, a rule-based stemmer.
+\end{itemize}
+The resulting inverted index contains all remaining tokens, and a mapping from each token to the documents in which it occurs.
+\\
+The two retrieval models TF-IDF and DPH are then applied using the default parameters.
+More details about the models can be found in section \ref{sec:baseline-retrieval-models}.
+\\
+Both models are tested with and without query expansion.
+Here, BO1 query expansion is used, which is a query expansion method that uses the top 10 documents retrieved by the original query to expand the query.
 
 
 \subsection{Transformer Models}
