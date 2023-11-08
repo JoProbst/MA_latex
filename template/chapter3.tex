@@ -79,13 +79,18 @@ Before being able to compare the content to the generated answers, the HTML is e
 HTML elements containing fewer than 50 characters in the elements body are discarded, assuming they are not relevant for the content of the document (e.g. fields of navigation bars).
 Then, the plain text is extracted using the ChatNoir Resiliparse Library\footnote{\url{https://resiliparse.chatnoir.eu/en/stable/}}.
 \\
-The final dataset now consists of 50 queries, each of which has between 39 and 249 documents associated with it.
+The final dataset now consists of 50 queries, each of which has between 39 and 249 documents associated with it that are evaluated for relevance, readability and credibility.
 
 
 \section{Retrieval Pipeline Development}
 In this section, the implementation of the different retrieval pipelines is discussed.
-The baseline models (DPH and TF-IDF), as well as the colbert version 1 and the monoT5/duoT5 based pipelines are implemented in the PyTerrier framework by \cite{pyterrier:2020}, which is a Python API for the Terrier IR Platform~(\cite{macdonald:2012}).
-The colbert version 2 pipeline is based on the original implementation provided by the authors\footnote{\url{https://github.com/stanford-futuredata/ColBERT}}.
+The baseline models (DPH and TF-IDF), as well as the ColBERT version 1 and the monoT5/duoT5 based pipelines are implemented in the PyTerrier framework by \cite{pyterrier:2020}, which is a Python API for the Terrier IR Platform~(\cite{macdonald:2012}).
+The ColBERT version 2 pipeline is based on the original implementation provided by the authors\footnote{\url{https://github.com/stanford-futuredata/ColBERT}}.
+\\
+Those pipelines are all designed to retrieve the most relevant documents for a given query.
+Since our dataset also contains annotations for readability and credibility, we also want to be able to retrieve documents based on those criteria.
+To extend the retrieval pipelines for those metrics, we experiment with adding external scores to the retrieval process.
+This is described in section \ref{sec:external-scores}.
 
 \subsection{Retrieval Setup}
 The retrieval setup in this work differs from the usual retrieval setup, in which a large document collection is indexed, and then multiple queries are run against the index using different retrieval models.
@@ -93,6 +98,33 @@ In our case, we build separate indices for each query, containing only the docum
 This ensures that each document that is retrieved for a query is also evaluated for that query.
 
 \subsection{Baseline Models}
+\begin{figure}
+    \begin{tikzpicture}[node distance=3cm, every node/.style={scale=0.7}]
+    \tikzstyle{box} = [rectangle, draw, fill=blue!10,  text width=2cm, text centered, rounded corners, minimum height=3em]
+    \tikzstyle{process} = [rectangle, draw, fill=blue!30,  text width=2cm, text centered, rounded corners, minimum height=3em]
+    \node (docCol) [box] {Document Collection};
+    \node (preprocess) [process, right of=docCol] {Pre-\\processing};
+    \node (invertedindex) [process, right of=preprocess] {Inverted Index};
+    \node (retrieval) [process, right of=invertedindex] {Retrieval Model (TF-IDF / DPH)};
+    \node (qe) [process, right of=retrieval] {Query Expansion};
+    \node (reranking) [process, right of=qe] {Retrieval Model (TF-IDF / DPH)};
+    \node (ranked) [box, right of=reranking] {Ranked Documents};
+    \node (query) [box, above of=retrieval] {Query};
+
+    \draw [->] (docCol) -- (preprocess);
+    \draw [->] (preprocess) -- (invertedindex);
+    \draw [->] (invertedindex) -- (retrieval);
+    \draw [->] (retrieval) -- (qe);
+    \draw [->] (qe) -- (reranking);
+    \draw [->] (reranking) -- (ranked);
+    \draw [->] (query) -- (retrieval);
+
+    \end{tikzpicture}
+\caption{Baseline retrieval pipeline, using either TF-IDF or DPH as retrieval model as well as query expansion.}
+\label{fig:baseline-pipeline}
+\end{figure}
+
+
 This section describes the implementation of the baseline models, namely DPH and TF-IDF.
 For both models, the basic indexing function of PyTerrier is used, which indexes and preprocesses the documents.
 Preprocessing is done with the default values, which includes the following operations:
@@ -106,13 +138,65 @@ The resulting inverted index contains all remaining tokens, and a mapping from e
 The two retrieval models TF-IDF and DPH are then applied using the default parameters.
 More details about the models can be found in section \ref{sec:baseline-retrieval-models}.
 \\
+\\
 Both models are tested with and without query expansion.
-Here, BO1 query expansion is used, which is a query expansion method that uses the top 10 documents retrieved by the original query to expand the query.
-
+We use BO1 query expansion, which is a query expansion method that uses the documents retrieved by the original query to expand the query.
+It adds terms from the retrieved documents to the original query based on informativeness, which is a measure of how frequently the term occurs in the documents compared to how frequently it occurs in the whole collection.
+Terms that occur more frequently in the retrieved documents than in the collection are added to the query.
+Afterwards, the expanded query is run against the index again, and the documents are ranked according to the new query.
+\\
+\\
+The resulting pipeline is shown in figure \ref{fig:baseline-pipeline}.
+This produces a ranked list of documents for each query, which can then be compared to the order of documents according to the human annotations.
 
 \subsection{Transformer Models}
+In addition to the baseline models, we also implement the transformer based models ColBERT version 1 and 2, as well as the monoT5 and duoT5 based models.
+The implementation of ColBERT version 1 and the MonoT5/DuoT5 based models is done in PyTerrier, while the implementation of ColBERT version 2 is done in the original implementation provided by the authors.
+\\\\
+Since all of those models relay on a pre-trained model, the first step is to select the model to use.
+The most commonly found pre-trained models are trained on the MS MARCO passage ranking dataset~(\cite{bajaj:2016}), a large scale dataset for passage retrieval.
+This is the dataset on which ColBERT version 1 and the MonoT5/DuoT5 based models are trained.
+For ColBERT version 2, two different pre-trained models are evaluated, one trained on the MS MARCO passage ranking dataset, and one trained on the p
 
-\subsection{Addition of external scores}
+\subsubsection{ColBERT Version 1}
+Using the ColBERT implementation for PyTerrier\footnote{\url{https://github.com/terrierteam/pyterrier_colbert}}, an end-to-end pipeline can be constructed from a pre-trained ColBERT model and a document collection.
+In our testing, we use the pre-trained ColBERT checkpoint provided by the authors.
+\\
+The checkpoint can directly be loaded in the PyTerrier framework, and then used to retrieve documents from the collection.
+All settings are left at their default values.
+
+\subsubsection{MonoT5 and DuoT5}
+Like the ColBERT implementation, the MonoT5 and DuoT5 implementations are also available in PyTerrier\footnote{\url{https://github.com/terrierteam/pyterrier_t5}}.
+Pre-trained checkpoints based on the MS MARCO dataset are provided by the authors.
+\\
+The MonoT5 pipeline directly uses the pre-trained checkpoint to rank the documents for each query.
+\\
+The DuoT5 pipeline is based on the MonoT5 pipeline, but uses the DuoT5 reranker to rerank the top 10 documents retrieved by the MonoT5 pipeline.
+\\
+Again, all parameters are left at their default values.
+
+\subsubsection{ColBERT Version 2}
+Unlike the other transformer based models, ColBERT version 2 is not available in PyTerrier.
+Instead, we use the implementation provided by the authors of the model\footnote{\url{https://github.com/stanford-futuredata/ColBERT/tree/main}}.
+\\
+The implementation works with any pre-trained checkpoint for the ColBERT version 2 model, with the MS MARCO checkpoint being downloaded by default.
+
+\subsection{External scores for Understandability}\label{sec:external-scores}
+To improve retrieval performance for the understandability, we experiment with adding pre-computed external scores to the retrieval process.
+
+To estimate understandability of the documents in the dataset, different scores are calculated for each document.
+\\
+The first score is the Flesch Reading Ease(FRE) score devised by \cite{kincaid:1975}, which is a score between 0 and 100, with higher scores indicating easier to read text.
+It is calculated using the following formula, based on average sentence length(ASL) and average number of syllables per word(ASW):
+\begin{equation}
+    FRE = 206.835 - (1.015 \times ASL) - (84.6 \times ASW)
+\end{equation}
+We use the implementation provided by the textstat library\footnote{\url{https://pypi.org/project/textstat/}}.
+\\
+This library also provides the second score, which is an aggregate of multiple similar scores, like the FOG score, the SMOG score and the Coleman-Liau Index.
+Those scores are all based on different text statistics, like the number of syllables per word, the number of words per sentence or the number of characters per word.
+More details about the different scores can be found in the documentation of the textstat library.
+\\
 
 \section{Generation of LLM Responses}
 

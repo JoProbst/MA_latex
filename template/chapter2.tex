@@ -281,7 +281,7 @@ As mentioned in earlier sections, transformer-based models have been shown to be
 There are different approaches of how transformers can be used for retrieval, a brief overview of methods used in this thesis is given here.
 \\\\
 Two of the most common transformer based architectures are cross-encoder and bi-encoder models.
-\begin{figure}[h]
+\begin{figure}[tb]
   \centering
   % Define colors
   \definecolor{textcolor}{RGB}{255, 230, 204}
@@ -319,6 +319,7 @@ Two of the most common transformer based architectures are cross-encoder and bi-
 
     \end{tikzpicture}
     \caption{Bi-Encoder Architecture. Query and document are encoded separately, then the relevance is calculated based on similarity measures between the embeddings.}
+    \label{fig:bi-encoder}
   \end{minipage}
   \hfill
   % Cross-Encoder
@@ -348,6 +349,7 @@ Two of the most common transformer based architectures are cross-encoder and bi-
 
     \end{tikzpicture}
     \caption{Cross-Encoder Architecture. Query and document are first combined and then fed to the Cross-Encoder, the relevance is directly calculated by the encoder.}
+    \label{fig:cross-encoder}
   \end{minipage}
 \end{figure}
 Bi-Encoders independently embed queries and documents using transformer models like BERT~(\cite{devlin:2018}) or T5~(\cite{roberts:2019}).
@@ -398,6 +400,9 @@ In the second case, an additional step is added in which the complete collection
 Then in the second step, the remaining documents are re-ranked using the maximum similarity metrics.
 \\
 Since the dataset used in this thesis is relatively small, we can directly use the re-ranking approach on all documents.
+
+\subsubsection{ColBERT V2}\label{sec:colbert-v2}
+
 
 
 \subsection{Evaluation of Retrieval Models}\label{sec:evaluation-of-retrieval-models}
