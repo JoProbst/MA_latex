@@ -216,14 +216,72 @@ Other than this pre-training, the models are not fine-tuned to any specific task
 
 \subsubsection{Models optimized for dialog}
 Dialog optimized models are fine-tuned for the task of interacting with a human in a dialog, usually as a chatbot.
+This is currently the use case of LLMs that comes closest to the task of long form question answering, so including models optimized for dialog is a natural choice.
 To make a model suitable for directly interacting with humans, different fine-tuning objectives are used in which the behavior of the model is aligned with the expectations of the human.
 \\
-The importance of this alignment is shown by \cite{ouyang:2022}, who show that answers of their insturction-tuned model InstructGPT are prefered by humans compared to outputs by a model with over 100 times the number of parameters, but without any fine-tuning.
-The authors apply multiple fine-tuneing techniques:
-\begin{itemize}
-    \item \textbf{Supervised fine-tuning:} The model is fine-tuned on a dataset of prompts and responses, both being written by humans. The fine-tuning objective is to minimize the difference between the model's output and the human response.
-    \item \textbf{Reinforcement Learning with Human Feedback:} A reward model is trained to predict the quality of a response given a prompt and response pair, based on training data provided by human annotators. The original model is then fine-tuned to maximize the reward given by the reward model.
-\end{itemize}
+The importance of this alignment is shown by \cite{ouyang:2022}, who show that answers of their instruction-tuned model InstructGPT are prefered by humans compared to outputs by a model with over 100 times the number of parameters, but without any fine-tuning.
+\\
+We select the following models:
+\\
+The \textbf{Falcon} family of models, which was released in 2023 on HuggingFace\footnote{\url{https://huggingface.co/blog/falcon}}.
+At time of writing, there are three models sizes available, 7B, 40B and 180B parameters, each as a foundation model or as a instruction-tuned model.
+For our testing, we only use the small 7B chat model.
+\\
+According to the HuggingFace model card, the model was fine-tuned on the GPTeacher\footnote{\url{https://github.com/teknium1/GPTeacher}}, GPT4All\footnote{\url{https://github.com/nomic-ai/gpt4all}} and Baize\footnote{\url{https://github.com/project-baize/baize-chatbot}} datasets.
+GPTeach and GPT4All are both datasets of prompt-response pairs, while Baize is a dataset based on self-chats by ChatGPT, which have been seeded by questions from Quora, StackOverflow and MedQuAD.
+\\
+Unfortunately, the authors do not detail how exactly how the data was used to fine-tune the model, as a scientific paper is still yet to be released.
+\\
+\\
+\textbf{Llama 2}, a model introduced in 2023 by \cite{touvron:2023}.
+It is available through the HuggingFace library, after agreeing to the terms of use posed by Meta.
+It comes in three sizes, 7B, 13B and 70B parameters.
+For each of the sizes, the base language model, and a fine-tuned version for chat is available.
+In our testing, we use the fine-tuned version in both the 7B and 13B sizes, since the 70B parameter model is too large to fit on the available hardware.
+\\
+To create the chat model, the base model is first tuned using supervised fine-tuning, where the model is trained on a dataset of prompt-response pairs, which are all written by humans.
+The model is then tuned to generate the response, provided the prompt.
+\\
+The next step is Reinforcement Learning with Human Feedback (RLHF), by which the model is aligned to human preferences. 
+To generate a training set, humans are tasked to evaluate which of two generated responses to a given prompt they prefer.
+Based on that data, a reward model is trained, which can then evaluate generated responses on a large scale.
+The model is then fine-tuned to maximize the reward given by the reward model.
+\\
+The RLHF training is done over multiple iterations, continuously improving the reward model and the chat model based on human feedback.
+Additionally, they not only optimize for helpfulness of the generated response, but also evaluate for safety, instructing the model not to provide harmful content in that way.
+\\
+\\
+\textbf{ChatGPT}, is the largest model we used, with 175B parameters. 
+It was introduced by OpenAI in the end of 2022\footnote{\url{https://openai.com/blog/chatgpt/}}.
+As a commercial product, it can only be accessed through the OpenAI API, which we did using the provided Python library.
+\\
+With OpenAI becoming more secretive about their models since starting to monetize them, the exact training data and fine-tuning procedure is not known.
+In their blog post, they state that the model is a close sibling to the InstructGPT model mentioned above, but with a larger model size.
+This means the fine-tuning procedure is likely similar to the one described by \cite{ouyang:2022}, but with a larger model size.
+The methods applied are similar to the ones used for the Llama 2 model, first using supervised fine-tuning, and then using RLHF to align the model with human preferences.
+
+\begin{table}[tb]
+\centering
+\begin{tabularx}{\textwidth}{lllXXX}
+\hline
+\textbf{Model} & \textbf{Params} & \textbf{Release} & \textbf{Pre-train Data} & \textbf{Fine-tune Data} & \textbf{Fine-tune Methods} \\
+\hline
+GPT-2 Base    & 124M & \multirow{4}{*}{2019} & \multirow{4}{*}{WebText} & \multirow{4}{*}{-} & \multirow{4}{*}{-} \\
+GPT-2 Medium  & 355M &                      &                          &  &  \\
+GPT-2 Large   & 774M &                      &                          &  &  \\
+GPT-2 XL      & 1.5B &                      &                          &  &  \\
+\hline
+Falcon 7B              & 7B      & 2023 & RefinedWeb           & GPTeacher, GPT4All, Baize & SFT \\
+\hline
+Llama 2 7B & 7B    & \multirow{2}{*}{2023} & \multirow{2}{*}{Custom} & \multirow{2}{*}{Custom} & \multirow{2}{*}{SFT, RLHF} \\
+Llama 2 13B   & 13B   &  &                        &                         &  \\
+\hline
+ChatGPT                & 175B   & 2022 & Custom                & Custom & Custom \\
+\hline
+\end{tabularx}
+\caption{Comparison of Language Models}\label{tab:language-models}
+\end{table}
+
 
 
 \subsection{Prompting approaches}
