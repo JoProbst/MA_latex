@@ -184,10 +184,10 @@ Instead, we use the implementation provided by the authors of the model\footnote
 \\
 The implementation works with any pre-trained checkpoint for the ColBERT version 2 model, with the MS MARCO checkpoint being downloaded by default.
 
-\subsection{External scores for Understandability}\label{sec:external-scores}
-To improve retrieval performance for the understandability, we experiment with adding pre-computed external scores to the retrieval process.
+\subsection{External scores for Readability}\label{sec:external-scores}
+To improve retrieval performance for the readability, we experiment with adding pre-computed external scores to the retrieval process.
 
-To estimate understandability of the documents in the dataset, different scores are calculated for each document.
+To estimate readability of the documents in the dataset, different scores are calculated for each document.
 \\
 The first score is the Flesch Reading Ease (FRE) score devised by \cite{kincaid:1975}, which is a score between 0 and 100, with higher scores indicating easier to read text.
 It is calculated using the following formula, based on average sentence length (ASL) and average number of syllables per word (ASW):
@@ -259,12 +259,15 @@ With OpenAI becoming more secretive about their models since starting to monetiz
 In their blog post, they state that the model is a close sibling to the InstructGPT model mentioned above, but with a larger model size.
 This means the fine-tuning procedure is likely similar to the one described by \cite{ouyang:2022}, but with a larger model size.
 The methods applied are similar to the ones used for the Llama 2 model, first using supervised fine-tuning, and then using RLHF to align the model with human preferences.
-
+\\
+\\
+Table \ref{tab:language-models} gives an overview of all the used models, comparing parameter size pre-training and fine-tuning data, as well as fine-tuning methods.
+In total, we use 8 different models, 4 of which are variants of GPT-2, while the others a different fine-tuned models for chat.
 \begin{table}[tb]
 \centering
 \begin{tabularx}{\textwidth}{lllXXX}
 \hline
-\textbf{Model} & \textbf{Params} & \textbf{Release} & \textbf{Pre-train Data} & \textbf{Fine-tune Data} & \textbf{Fine-tune Methods} \\
+\textbf{Model} & \textbf{Params} & \textbf{Release} & \textbf{Pre-training Data} & \textbf{Fine-tuneing Data} & \textbf{Fine-tuneing Methods} \\
 \hline
 GPT-2 Base    & 124M & \multirow{4}{*}{2019} & \multirow{4}{*}{WebText} & \multirow{4}{*}{-} & \multirow{4}{*}{-} \\
 GPT-2 Medium  & 355M &                      &                          &  &  \\
@@ -279,9 +282,7 @@ Llama 2 13B   & 13B   &  &                        &                         &  \
 ChatGPT                & 175B   & 2022 & Custom                & Custom & Custom \\
 \hline
 \end{tabularx}
-\caption{Comparison of Language Models}\label{tab:language-models}
+\caption{Comparison of evaluated Language Models. SFT = Supervised Fine-Tuning, RLHF = Reinforcement Learning with Human Feedback}\label{tab:language-models}
 \end{table}
-
-
 
 \subsection{Prompting approaches}

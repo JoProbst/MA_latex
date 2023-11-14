@@ -1,5 +1,5 @@
 \chapter{Related Work}\label{related-work}
-The work presented in this thesis is based on two main areas of research: evaluation of LLMs(LLMs) and Information Retrieval(IR).
+The work presented in this thesis is based on two main areas of research: the evaluation of LLMs(LLMs) and Information Retrieval(IR).
 In this chapter, the current state of research in those areas is presented, as it relates to this thesis.
 We start with a short introduction to LLMs, then present the current evaluation methods for those models in the field of question answering, since the different versions of question answering tasks, especially long form question answering are most similar to our evaluation setup.
 \\
@@ -13,140 +13,170 @@ The rise of LLMs started with the introduction of the transformer architecture b
 The transformer architecture allowed the models to process more context than previous models, such as LSTM-based methods like ELMo~(\cite{peters:2018}), or static word embeddings based on statistical co-occurrences like GloVe~(\cite{pennington:2014}).
 This led to improvements in many NLP tasks over earlier methods, as shown by \cite{radford:2018}, who compare the base GPT performance against multiple then state-of-the-art models on different tasks, improving or performing at least competitively on all of them.
 \\
-With the release of GPT-3~(\cite{brown:2020}), the size of datasets used to train LLMs, as well as the number of parameters in the models, increased to a point where the models are able to produce coherent text on a wide range of tasks.
-
-This meant, that models had to be evaluated on all of those tasks, leading to the development of new evaluation benchmarks.
-In this section, we want to focus on the current evaluation methods of Question Answering capabilities of LLMs.
+With the release of GPT-3~(\cite{brown:2020}), the size of datasets used to train LLMs, as well as the number of parameters in the models increased significantly.
+While GPT-2 in its largest version has a total of 1.5 billion parameters, GPT-3 has 175 billion parameters.
+As \cite{wei:2022} show, this scale not only leads to improvements over previously used benchmark compared to smaller models, but also to what they call \textit{emergent abilities}.
+\textit{Emergent abilities} are abilities that are not present in smaller models.
+Those include generating long coherent stories or poems, translating between languages and answering long form questions.
+None of those capabilities are present in smaller models, with e.g. the largest version of GPT-2 performing poorly on translation and summarization, as shown in the original paper~(\cite{radford:2018}).
 \\
-The task of Question Answering (QA) is not clearly defined in the context of LLMs.
-In the beginning, for models like BERT and the first version of GPT, the task was to answer questions based on a given context, by selecting a span of text from the context.
-The next versions of models focused on answering multiple choice questions, where the model had to select the correct answer from a set of possible answers.
-This could be done either with context, or without.
-Additionally, models were evaluated on questions where the answers are single numbers, entities or other versions of "fill in the blank" questions.
+With the capabilities of LLMs expanding, the task of evaluating them becomes more challenging.
+\\\\
+In this section, we focus on the current evaluation methods of Question Answering (QA) capabilities of LLMs and how the task of long form question answering is evaluated.
 \\
-Those versions of QA all have in common, that they are relatively easy to evaluate.
-Overlap with the answer span can be calculated, or the correct answer can be compared to the predicted answer.
-However, with the capabilities of LLMs expanding version by version, the task of free form question answering gained more importance.
-Here, models are evaluated on their ability to answer questions in a free form manner, without any constraints on the answer.
+The field of QA in NLP contains multiple different tasks, which can be grouped into extractive QA, single/multiple choice QA and long form QA.
+Those tasks vary in their complexity, with earlier models like BERT and GPT-2 already being benchmarked on extractive QA and single choice QA.
+% For early models like BERT and the first version of GPT, extractive QA is the most prominent form of QA tasks.
+% Here, the task is to answer questions based on a given context, by selecting a span of text from the context, e.g. using the SQuAD dataset by \cite{rajpurkar:2016}.
+% The next versions of models are additionally benchmarked on answering single choice questions, where the model has to select the correct answer from a set of possible answers.
+% This can be done either with context, or without.
+% Additionally, models are evaluated on questions where the answers are single numbers, entities or other versions of "fill in the blank" questions.
+\\
+Extractive QA and single/multiple choice QA have in common that they are relatively easy to evaluate.
+When evaluating extractive QA the overlap of the predicted tokens with the answer span can be calculated, and for single choice QA the predicted answer option can be compared to the ground truth answer.
+\\
+This changes when evaluating long form QA.
+Here, models are evaluated on their ability to answer questions in a free form manner, without constraining the length of the answer.
 Answers can get long and complex, branching out in different directions by including examples or other information.
 The evaluation of such answers is not as straightforward as for the other versions of QA, so human evaluation is the gold standard.
 \\
-In the following, the different QA versions will be introduced, including popular datasets and evaluation metrics for them.
+In the following, the different QA evaluation tasks are introduced, including popular datasets and evaluation metrics for them.
 
 \subsection{Extractive Question Answering}\label{sec:extractive-qa}
-\begin{figure}[h]
-    \centering
-    \begin{tikzpicture}
-        % Draw paper background
-        \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,5);
-        % Draw text
-        \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,5.0) {
-            Donald Duck is a cartoon character created in 1934 by Walt Disney Productions. He is an anthropomorphic white duck with a yellow-orange bill, legs, and feet. He typically wears a \textcolor{red}{sailor suit with a bow tie and a hat}.
-        };
-        % Draw vertical line
-        \draw[thick] (0,1.8) -- (10,1.8);
-        % Draw question
-        \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,1.8) {
-            Question: In which outfit is Donald Duck typically protrayed?
-        };
-    \end{tikzpicture}
-    \caption{Example of a typical extractive question answering task: The answer span "sailor suit with a bow tie and a hat" is highlighted in red in the paragraph.}
-    \label{fig:extractive_qa_example}
-\end{figure}
-Extractive QA is the task of answering questions, given a context containing the answer.
+Extractive QA is the task of answering questions given a context containing the answer.
 In this context, which can be a short paragraph or entire Wikipedia article, the correct answer span has to be selected by the model.
-Some benchmarks include unanswerable questions, where the model has to predict, that the question cannot be answered from the given context.
 \\
 One of the most popular datasets for evaluating LLMs in this task is SQuAD~(\cite{rajpurkar:2016}), and its successor SQuAD 2.0~(\cite{rajpurkar:2018}), which includes unanswerable questions.
+Adding unanswerable questions to the dataset is a way to test the model's ability to detect when a question can not be answered by the given context.
 Many other datasets like NarrativeQA~(\cite{kovcisky:2018}), QuAC~(\cite{choi:2018}) or Natural Questions~(\cite{kwiatkowski:2019}) are based on the same principle.
 They consist of questions written by crowd workers or experts in the field, based on a Wikipedia article snippet or similar text passages.
 The exact constraints on the questions and the context vary between the datasets, but the general idea is the same.
-A typical example is shown in Figure~\ref{fig:extractive_qa_example}.
-\\
-The evaluation metrics for tasks of this category are based on the overlap between the predicted answer span and the ground truth answer span.
-Specifically, this would be the exact match (EM) score, which measures the percentage of exact matches between the predicted and the ground truth answer span, or the F1 score, which measures the average overlap between the tokens in the two spans.
-\\
-For earlier LLMs like BERT, this meant that for each word in the context, the model had to predict the probability of it being the start or end of the answer token.~(\cite{devlin:2018})
-To achieve this, the model was fine-tuned on the SQuAD dataset. 
-\\
-Later models like GPT-3 were able directly generate the answer from the context and the questions without any fine-tuning, by using the zero-shot, single-shot or multi-shot capabilities of the model.~(\cite{brown:2020})
-In some settings of the datasets, the context can be completely omitted, forcing the model to directly answer the question.
-This means that the results of the two approaches are not directly comparable, because even tough the models were evaluated on the same dataset, the approaches are fundamentally different.
-
-\subsection{Multiple Choice Question Answering}\label{sec:multiple-choice-qa}
-\begin{figure}[h]
+Figure~\ref{fig:extractive_qa_example} shows a generic example of a question from an extractive QA dataset.
+\begin{figure}[tb]
     \centering
     \begin{tikzpicture}
         % Draw paper background
         \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,8);
         % Draw text
-        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,8.0) {
+        \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,8.0) {
+            \textbf{Context:}\\
+            Donald Duck is a cartoon character created in 1934 by Walt Disney Productions. He is an anthropomorphic white duck with a yellow-orange bill, legs, and feet. He typically wears a \textcolor{red}{sailor suit with a bow tie and a hat}.
+        };
+        % Draw vertical line
+        \draw[thick] (0,4.5) -- (10,4.5);
+        % Draw question
+        \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,4.5) {
+            \textbf{Question:}\\
+            In which outfit is Donald Duck typically protrayed?
+        };
+        % Draw vertical line
+        \draw[thick] (0,2.0) -- (10,2.0);
+        % Draw question
+        \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,2.0) {
+            \textbf{Answer:}\\
+            \textcolor{red}{sailor suit with a bow tie and a hat}
+        };
+    \end{tikzpicture}
+    \caption{Example of a typical extractive question answering task: The answer span ``sailor suit with a bow tie and a hat'' is highlighted in red in the paragraph.}
+    \label{fig:extractive_qa_example}
+\end{figure}
+\\
+The evaluation metrics for tasks of this category are based on the overlap between the predicted answer span and the ground truth answer span.
+Specifically, this would be the exact match (EM) score, which measures the percentage of exact matches between the predicted and the ground truth answer span.
+Alternatively, the F1 score as the harmonic mean of precision and recall can be used, with precision being defined as
+\[ \text{precision} = \frac{\text{number of correct tokens in prediction}}{\text{total number of tokens in the prediction}} \]
+and recall as
+\[ \text{recall} = \frac{\text{number of correct tokens in prediction}}{\text{total number of tokens in the ground truth}} \]
+with a correct token being a predicted token that overlaps with the ground truth answer.
+The F1 score is then calculated as
+\[ \text{F1} = 2 \times \frac{\text{precision} \times \text{recall}}{\text{precision} + \text{recall}} \]
+which is the harmonic mean of precision and recall.
+\\\\
+Earlier LLMs like BERT have to be specifically fine-tuned for the task of extractive QA.
+For each token in the provided context, the model assigns a probability of the token being the starting or ending token of the answer span~(\cite{devlin:2018}).
+\\
+Later models like GPT-3 are able to directly generate the answer from the context and the questions without any fine-tuning, by using the zero-shot, single-shot or multi-shot capabilities of the model~(\cite{brown:2020}).
+In some settings of the datasets, the context can be completely omitted, forcing the model to directly answer the question.
+This means that the results of the two approaches are not directly comparable, because even though the models were evaluated on the same dataset, the approaches are fundamentally different.
+
+\subsection{Single and Multiple Choice Question Answering}\label{sec:multiple-choice-qa}
+For single and multiple choice question answering, the model has to select the correct answer from a set of possible answers, which can be done with or without context.
+While most datasets are single choice datasets, some datasets (like MultiRC by \cite{khashabi:2018}) are multiple choice, so that the model has to check each answer for correctness, instead of just selecting the best fitting one.
+Questions for single and multiple choice QA often stem from official exams, like the MMLU dataset~(\cite{hendrycks:2020}), which combines question from many exams like the United States Medical Licensing Examination or the Examination for Professional Practice in Psychology.
+In other datasets, the questions are collected from crowd workers and verified by experts~(\cite{clark:2018},~\cite{mihaylov:2018}).
+\\
+\begin{figure}[tb]
+    \centering
+    \begin{tikzpicture}
+        % Draw paper background
+        \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,10);
+        % Draw text
+        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,10.0) {
+            \textbf{Context:}\\
             Donald Duck is a cartoon character created in 1934 by Walt Disney Productions. He is an anthropomorphic white duck with a yellow-orange bill, legs, and feet. He typically wears a sailor suit with a bow tie and a hat.
         };
         % Draw vertical line
-        \draw[thick] (0,5) -- (10,5);
+        \draw[thick] (0,6) -- (10,6);
         % Draw question
-        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,5) {
-            Question: What does Donald Duck typically wear?
+        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,6) {
+            \textbf{Question:}\\
+            What does Donald Duck typically wear?
         };
         % Draw multiple-choice options
-        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,3.8) {
+        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,4.8) {
             \textbf{(A)} T-shirt and jeans \\
             \textbf{(B)} \textcolor{red}{Sailor suit with a bow tie and a hat} \\
             \textbf{(C)} Business suit \\
             \textbf{(D)} Basketball jersey
         };
-        \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,1.5) {
-            Answer: \textcolor{blue}{B}
+        \draw[thick] (0,2) -- (10,2);
+        \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,2) {
+            \textbf{Answer:}\\
+            \textcolor{blue}{B}
         };
     \end{tikzpicture}
-    \caption{Example of a Multiple Choice with context: The correct multiple-choice option is highlighted in red.
+    \caption{Example of a single choice question with context: The correct option is highlighted in red.
     The blue B would be a possible answer generated by the LLM, after being primed with the context and the question.
-    }
-    \label{fig:mc_example}
+    }\label{fig:mc_example}
 \end{figure}
-For multiple choice question answering, the model has to select the correct answer from a set of possible answers, which can be done with or without context.
-A multple choice sample including context is shown in Figure~\ref{fig:mc_example}.
-Some datasets include questions with multiple possible answers, so that the model has to check each answer for correctness, not only find the best fitting answer.
-Questions for these tasks often stem from official exams, like the MMLU dataset~(\cite{hendrycks:2020}), which combines question from many exams like the United States Medical Licensing Examination or the Examination for Professional Practice in Psychology.
-In other datasets, the questions are collected from crowd workers and verified by experts~(\cite{clark:2018},~\cite{mihaylov:2018}).
+Figure \ref{fig:mc_example} shows an example of a single choice question with context.
+The LLM is provided with the context, the question and the answer options and a ``Answer: '' prefix.
+Based on this, the model has to select one of the given options.
 \\
-Evaluation in this task is straightforward, since the model has to select the correct answer from a set of possible answers, making accuracy the most common metric.
-For evaluating LLMs, that means selecting the answer option for which the model assigns the highest probability, after being primed with few-shot examples and prompted by \emph{'Answer: '} after the last question and answer options.
+Evaluation is straightforward in this case, the model's generated answer option is compared to the ground truth answer and accuracy over all questions is calculated.
 
 \subsection{Long Form Question Answering}\label{sec:long-form-qa}
-\begin{figure}[h]
+\begin{figure}[tb]
     \centering
     \begin{tikzpicture}
         % Draw paper background for question
-        \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,7);
+        \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,10);
         % Draw question
-        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,7) {
-            Question: Describe the evolution of Donald Duck's character design and attire over the years, focusing on any major changes and the reasons behind them?
+        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,10) {
+            \textbf{Question:}\\
+            Describe the evolution of Donald Duck's character design and attire over the years, focusing on any major changes and the reasons behind them?
         };
         % Draw vertical line
-        \draw[thick] (0,4.5) -- (10,4.5);
+        \draw[thick] (0,6.5) -- (10,6.5);
         % Draw sample answer
-        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,4.5) {
-            Answer: \textcolor{blue}{The evolution of Donald Duck's character design and attire has seen several notable changes since his creation by Walt Disney and Dick Lundy in 1934. Here is an overview of the major changes and the reasons behind them:}
+        \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,6.5) {
+            \textbf{Answer:}\\
+            \textcolor{blue}{The evolution of Donald Duck's character design and attire has seen several notable changes since his creation by Walt Disney and Dick Lundy in 1934. Here is an overview of the major changes and the reasons behind them:}
             \\
-            (continues)
+            \centerline{\Huge [\vdots]}
         };
     \end{tikzpicture}
-    \caption{Example of Long-Form QA without Context: The question prompts for a detailed answer about Donald Duck's character evolution and attire. The prompt given to the model is written in black, the sample answer (generated by ChatGPT-3.5) is written in blue.}
+    \caption{Example of Long-Form QA without Context: The question prompts for a detailed answer about Donald Duck's character evolution and attire. The prompt given to the model is written in black, the sample answer (generated by ChatGPT-3.5) is written in blue. The generated answer continues for multiple paragraphs.}
     \label{fig:long_form_qa_example_with_answer}
 \end{figure}
-
-This task of freely answering complex questions, which can't be answered by one entity or number, but require a longer, more nuanced answer.
-Originally, this task stems from the IR community, where the model has to retrieve a document or a set of documents, which contain the answer to the question.
-
-In some cases, those documents are then summarized to produce the final answer.
-With LLMs being deployed in chatbots and as such expected to deliver answers mostly without context, the task of long form question answering was adapted to this setting.
+Long form QA refers to the task of answering open-ended questions, which can usually not be answered by simply providing one entity or number, but require an in-depth answer.
+% Similar tasks exist in the IR community, e.g. generating query biased summaries as described by \cite{tombros:1998}, in which a retrieval model retrieves and summarizes documents given a user query.
+With LLMs being deployed in chatbots and as such expected to deliver answers mostly without context, evaluating the models on long form QA is important.
 \\
 So far, only a handful of datasets are available for this task, with the first dataset in this category being the ELI5 dataset~(\cite{fan:2019}).
 It consists of questions and the corresponding highest voted answer from the "Explain Like I'm Five" subreddit, where users ask questions about complex topics, which are then answered by other users.
 They are accompanied by support documents, which are retrieved from web sources by querying for the original question.
-This dataset was used to by~\cite{nakano:2021} to fine-tune GPT-3 for the task of long form question answering, without using the context documents.
+This dataset was used to by~\cite{nakano:2021} to fine-tune GPT-3 for the task of long form QA without using the context documents.
 The answers given by the fine-tuned model are evaluated by humans, by comparing them to the highest voted answer from the ELI5 dataset.
 \\ 
 An additional dataset for this task is the MultiMedQA~(\cite{singhal:2023}), which curates questions from multiple other datasets used previously. 
@@ -154,51 +184,56 @@ Answers generated by physicians are used as ground truth answers.
 Those are then compared to the model generated answers by other physicians, as well as by laypeople.
 Additionally, the answers were individually rated in different rubrics, introduced in a previous work~(\cite{singhal:2022}).
 \\
-None of the release papers for current, main-stream LLMs like GPT-3~(\cite{brown:2020}), GPT-4~(\cite{openai:2023}) or Llama 2~(\cite{touvron:2023}) include evaluations on common benchmarks for this category.
-This shows, that long form question answering is still a relatively new task, lacking academic benchmarks.
+None of the papers for current, main-stream LLMs like GPT-3~(\cite{brown:2020}), GPT-4~(\cite{openai:2023}) or Llama 2~(\cite{touvron:2023}) include evaluations on common benchmarks for this category.
+This shows that long form QA is still a relatively new task, lacking sufficient academic benchmarks.
 
-\subsubsection{Difficulties of Long Form Question Answering}\label{sec:long-form-qa-difficulties}
-
+\subsection{Difficulties of Long Form Question Answering}\label{sec:long-form-qa-difficulties}
 Recent works have shown multiple challenges in the task of long form question answering, independently of which model architecture is used to answer the questions.
-Since the answers are free form text, and not just a multiple choice option, one number or one entity, the quality of the model can't be measured using accuracy or similar metrics.
-Multiple evaluation dimensions are of interest, adding for example relevance and understandability to the correctness dimension of other question answering tasks.
-\\\\  
-
+Since the answers are free form text, and not just a multiple choice option, one number or one entity, the quality of the model can't be measured using accuracy or similar metrics that require static ground truth information.
+Multiple evaluation dimensions are of interest, for example:
+\begin{itemize}
+    \item \textbf{Relevance:} Are the most important aspects of the query answered?
+    \item \textbf{Readability:} How easy is the answer to read and understand?
+    \item \textbf{Credibility:} Are there any references provided and are they of high quality?
+\end{itemize}
+This adds additional complexity to the evaluation process, compared to other QA tasks which only measure correctness of the answer.
+\\
+\\
 \cite{xu:2023} focus on the evaluation process of LFQA, comparing different automatic evaluation methods to human judgement.
 They differentiate between general-purpose generation evaluation metrics, which were originally designed for other NLP tasks like summarization or translation, and fine-tuned metrics, which are fine-tuned to LFQA.
 The following types of metrics are considered general-purpose metrics, used in the same way in different NLP tasks:
 \begin{itemize}
-\item \textbf{Answer-reference metrics:} Include like ROUGE or BERTScore. These metrics compare generated answers to reference answers, focusing on aspects like lexical overlap and semantic similarity.
-\item \textbf{Answer-only metrics:} Such as Self-BLEU measure the fluency and diversity of generated text. These are intrinsic metrics of the generated text and do not need a reference answer for evaluation.
+\item \textbf{Answer-reference metrics:} Include metrics like ROUGE or BERTScore. These metrics compare generated answers to reference answers, focusing on aspects like lexical overlap and semantic similarity.
+\item \textbf{Answer-only metrics:} Such as Self-BLEU which measure the fluency and diversity of generated text. These are intrinsic metrics of the generated text and do not need a reference answer for evaluation.
 \item \textbf{Question-answer metrics:} Score answers given the question in one of two ways: either by calculating the likelihood of questions given an answer, or by using an encoder model to score sequences given a prefix.
 \item \textbf{Answer-evidence metrics:} Judge the given answer by the evidence documents used to generate it. This method indirectly assesses the answer's credibility and factual accuracy.
 \end{itemize}
-In addition to those general metrics, \cite{xu:2023} evaluate two different versions of fine-tuned metrics.
+In addition to these metrics, \cite{xu:2023} evaluate two different versions of fine-tuned metrics.
 The first one is based on Longformer~(\cite{beltagy:2020}), in which the model is fine-tuned to produce a score given a question and an answer, optionally combined with evidence documents.
 The second model is a fine-tuned version of GPT-3, which is trained to output either \emph{Answer1} or \emph{Answer2} given a question and two answer options.
 Both fine-tuned models are trained on the dataset generated by \cite{nakano:2021}, which contains human preference labels for different answer pairs.
 \\
 All automatic evaluation methods are evaluated on the task of choosing the preferable answer given two long form answers to a question.
 The results are compared to previous human judgement on the same task.
-They find that one of their baseline models, choosing always the longest answer, performs nearly as good as the fine-tuned GPT3 model, which outperformed all other methods.
-Both variants are still outperformed by human agreement, which is the gold standard.
+They find that one of their baseline models, choosing always the longest answer, performs almost as good as the fine-tuned GPT-3 model, which outperformed all other methods.
+Both variants are still outperformed by human annotations, which is the gold standard.
 \\\\
-\cite{krishna:2021} investigate in more detail the problems of reference based evaluation metrics like ROUGE-L. 
-They highlight, that those metrics are unable to capture answer components like examples, if those examples are not present in the ground truth answers. 
+\cite{krishna:2021} investigates in more detail the problems of reference based evaluation metrics like ROUGE-L. 
+They highlight that those metrics are unable to capture answer components like examples if those examples are not present in the ground truth answers. 
 \\
-Furthermore, they note that even human evaluation is limited in judging LFQA over different models.
+Furthermore, they note that even human evaluation is limited in judging long form QA over different models.
 Some problems include the hiring process of experts, especially when datasets tackle multiple fields of expertise.
-Finding experts of similar education and background is challenging, when doing evaluations of different models over a span of time.
+Finding experts of similar education and background is challenging when doing evaluations of different models over a span of time.
 Additionally, the evaluation process is more mentally challenging for the individual annotator the longer the answers get.
 Similar problems have previously been shown by \cite{akoury:2020} in the context of machine generated stories.
 They find that crowd workers have low agreement for different evaluation metrics when evaluating the same stories.
 They tackle this problem by using gamification techniques to activate online users of a story writing platform to evaluate and improve the generated stories.
 A similar approach is taken by \cite{dugan:2020}, who implement a website where users try to differentiate machine-generated text from human generated text.
 \\\\
-This shows that there are still many obstacles to overcome in the task of evaluating long form question answering systems.
+This shows that there are still many obstacles to overcome in the task of evaluating long form QA systems.
+\\
 Since our approach of tackling this problem uses concepts from the field of information retrieval, a short overview of relevant methods is given in the next section.
 \\
-TODO More precise summary and better transition to next section
 %------------------------------------------------------------------
 %------------------------------------------------------------------
 %------------------------------------------------------------------
