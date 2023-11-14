@@ -166,14 +166,15 @@ The checkpoint can directly be loaded in the PyTerrier framework, and then used 
 All settings are left at their default values.
 
 \subsubsection{MonoT5 and DuoT5}
-Like the ColBERT implementation, the MonoT5 and DuoT5 implementations are also available in PyTerrier\footnote{\url{https://github.com/terrierteam/pyterrier_t5}}.
+Like the ColBERT implementation, the monoT5 and duoT5 implementations are also available in PyTerrier\footnote{\url{https://github.com/terrierteam/pyterrier_t5}}.
 Pre-trained checkpoints based on the MS MARCO dataset are provided by the authors.
 \\
-The MonoT5 pipeline directly uses the pre-trained checkpoint to encode each query with each of the associated documents.
+In this thesis, the retrieval dataset is small, so the first retrieval step using BM25 is omitted(see section \ref(sec:monoT5-duoT5)), directly feeding all documents to the monoT5 model.
+The monoT5 pipeline uses the pre-trained checkpoint to encode each query with each of the associated documents.
 From this encoding a score is calculated for each query-document pair, and the documents are ranked according to this score.
 \\
-The DuoT5 pipeline is based on the MonoT5 pipeline, but uses the DuoT5 re-ranker to re-rank the top 10 documents retrieved by the MonoT5 pipeline.
-Here, the pre-trained DuoT5 checkpoint is used to encode the query and each possible pair of the top 10 documents, to determine which of the two documents is more relevant to the query.
+The duoT5 pipeline is based on the monoT5 pipeline, but uses the duoT5 re-ranker to re-rank the top 10 documents retrieved by the MonoT5 pipeline.
+Here, the pre-trained duoT5 checkpoint is used to encode the query and each possible pair of the top 10 documents, to determine which of the two documents is more relevant to the query.
 Based on this order, the documents are re-ranked.
 \\
 Again, all parameters are left at their default values.

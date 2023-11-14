@@ -231,6 +231,10 @@ They tackle this problem by using gamification techniques to activate online use
 A similar approach is taken by \cite{dugan:2020}, who implement a website where users try to differentiate machine-generated text from human generated text.
 \\\\
 This shows that there are still many obstacles to overcome in the task of evaluating long form QA systems.
+We try to tackle some of those problems with the approach presented in this thesis.
+To incorporate multiple metrics, we first compare and evaluate multiple retrieval methods on the previously mentioned metrics of relevance, readability and credibility.
+This ensures that the document ranking is optimized for multiple dimensions, instead of just one.
+Based on the findings by \cite{xu:2023} how shows that of the automated metrics the transformer-based models perform best, we compare multiple transformer-based model for the retrieval step.
 \\
 Since our approach of tackling this problem uses concepts from the field of information retrieval, a short overview of relevant methods is given in the next section.
 \\
@@ -239,16 +243,19 @@ Since our approach of tackling this problem uses concepts from the field of info
 %------------------------------------------------------------------
 
 \section{Retrieval Models}\label{sec:retrieval-models}
-Since we want to use retrieval methods to evaluate the performance of LLMs, we will give some background on  the field of IR, and how it relates to long form question answering.
-Information retrieval (IR) is the process of retrieving relevant information from a collection of documents.
-This can be in the form of whole documents, passages or single sentences.
-Usually, the document corpus is first indexed, transforming the documents into a form that is more suitable for retrieval.
-This includes tokenization, stemming, stop word removal and other preprocessing steps.
-Commonly, an inverted index is then created, which maps each term in the corpus to the documents that contain it.
+Since we want to use retrieval methods to evaluate the performance of LLMs, we will give some background on the field of Information Retrieval(IR), and how it relates to long form QA.
+IR is the process of retrieving relevant information based on an information need, from a collection of documents, usually in the form of whole documents, passages or single sentences.
+A brief overview of a retrieval pipeline based on ``An introduction to information retrieval'' by \cite{manning:2009} is provided now.
+\\
+In most IR systems, the document corpus first has to be brought into a form that is more suitable for retrieval.
+This process usually starts with a step to reduce to total size of the vocabulary, using tokenization, stemming, stop word removal and other techniques.
+This removes unnecessary information from the documents, which would otherwise increase the size of the index, which is created in the next step.
+Commonly, this is an inverted index, which maps each term in the corpus to the documents that contain it.
 Now, given a query, an IR system returns a ranked list of documents that are most relevant to the query.
-To achieve this, IR systems estimate a usefulness score for each document in the collection with respect to the query.
-The documents are then ranked according to their usefulness scores, with the most relevant documents appearing at the top of the list.
-Some pipelines include a re-ranking step, in which the most relevant documents are re-ranked after the first retrieval, as shown in Figure~\ref{fig:reranking_pipeline}.
+To achieve this, IR systems estimate a relevance score for each document in the collection with respect to the query.
+The documents are then ranked according to their relevance scores, with the most relevant documents appearing at the top of the list.
+Some pipelines include a re-ranking step, in which the most relevant documents are re-ranked after the first retrieval using a more expensive (and hopefully more effective) retrieval model.
+Figure \ref{fig:reranking_pipeline} shows a basic retrieval pipeline, in which the re-ranking step is optional.
 \begin{figure}[tb]
 \centering
 \begin{tikzpicture}[node distance=0.8cm, auto]
@@ -263,7 +270,7 @@ Some pipelines include a re-ranking step, in which the most relevant documents a
 \node [box, fill=blue!30, right=of index] (model) {Retrieval Model};
 \node [user, above=of model] (query) {Queries};
 \node [box, fill=blue!5, right=of model] (rerank) {Re-ranking};
-\node [box, fill=blue!30, right=of rerank] (output) {Output};
+\node [box, fill=blue!30, right=of rerank] (output) {Ranked Documents};
 
 % Edges
 \draw[->] (corpus) -- (index);
@@ -279,30 +286,30 @@ Some pipelines include a re-ranking step, in which the most relevant documents a
 
 \subsection{Baseline Retrieval Models}\label{sec:baseline-retrieval-models}
 First, we will look at the basic retrieval models, which are used as baselines in this thesis.
-They have been chosen, because they were shown to be effective on the used dataset in previous work~(\cite{goeuriot:2021}).
+They have been chosen because they were shown to be effective on the used dataset in previous work~(\cite{goeuriot:2021}).
 Both models use the implementation in the Terrier IR platform~(\cite{ounis:2005}).
 
 \subsubsection{TF-IDF}\label{sec:tf-idf}
-Term Frequency-Inverse Document Frequency (TF-IDF) is one of the most prevalent weighting schemes in information retrieval.
-It aims to measure the importance of a term in a document relative to a collection of documents or corpus.
+Term Frequency-Inverse Document Frequency (tf-idf) is one of the most commonly used models in information retrieval.
+It measures the importance of a term in a document relative to a collection of documents or corpus.
 The central intuition is that terms that appear frequently in a document but not in many other documents in the corpus are significant and thus should be given higher weight.
 \\\\
-Given a term \( t \) and a document \( d \) in a corpus \( D \):
-\[ \text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \text{IDF}(t, D) \]
-Where \( \text{TF}(t, d) \) is the term frequency of term \( t \) in document \( d \) and 
-\[ \text{IDF}(t, D) = \log \left( \frac{|D|}{1 + \text{df}(t, D)} \right) \]
-with \( |D| \) being the total number of documents in the corpus and \( \text{df}(t, D) \) is the number of documents containing term \( t \).
+Given a query \( q \) consisting of terms \( t_1,t_2,\cdots,t_n \) and a document corpus \( D \) of size \( N \) we calculate the score of \( q \) given document \( d \) by first calculating the tf-idf of each term  in \( q \) given \( d \) and then summing them up.
+\[ \text{tf-idf}(t, d) = \text{tf}(t, d) \times \text{idf}(t) \]
+Where \( \text{tf}(t, d) \) is the frequency of term \( t \) in document \( d \) and 
+\[ \text{idf}(t) = \log \left( \frac{N}{1 + \text{df}(t)} \right) \]
+where document frequency \( \text{df}(t) \) is the number of documents containing term \( t \).
+The final score of the query given the document is then calculated as
+\[ \text{score}(q, d) = \sum_{t \in q} \text{tf-idf}(t, d) \]
+For retrieval given a query \( q \) tf-idf scores are calculated for all documents, which are then ranked according to their score.
 \\
-In the actual retrieval step, a similarity score between the terms in the query and the documents is calculated based on all terms TF-IDF scores.
-The documents are then ranked according to their similarity to the query.
-\\
-In the Terrier IR platform, the implementation of TF-IDF uses variants of the TF and IDF components.
-For Term Frequency, the Robertson's TF formulation~(\cite{robertson:2004}) is used, which incorporates an additional parameter, that adds a saturation effect to the term frequency.
-For IDF, the original formulation by Sparck Jones~(\cite{sparck:1972}) is applied.
+In the Terrier IR platform, the implementation of tf-idf uses variants of the tf and idf components.
+For Term Frequency, the Robertson's tf formulation~(\cite{robertson:2004}) is used, which incorporates an additional parameter that adds a saturation effect to the term frequency.
+For idf, the original formulation by Sparck Jones~(\cite{sparck:1972}) is applied.
 
 \subsubsection{DPH}\label{sec:dph}
-Divergence from Randomness (DFR) is a framework in information retrieval that assigns term weights based on the divergence of the actual within-document term frequency distribution from a random term frequency distribution~(\cite{amati:2006}).
-The DPH (Divergence from randomness using the Hyper-geometric distribution model) is one of the models derived from the DFR framework.
+Divergence from Randomness (DFR) is a framework in IR that assigns term weights based on the divergence of the actual within-document term frequency distribution from a random term frequency distribution~(\cite{amati:2006}).
+The divergence from randomness using the hyper-geometric distribution model(DPH) is one of the models derived from the DFR framework.
 \\
 The principle behind DFR is that terms that are informative in a document will have a distribution that deviates significantly from what would be expected if terms were distributed randomly.
 While TF-IDF emphasizes the importance of terms based on their frequency in a document and their inverse frequency in the corpus, DPH focuses on the divergence of a term's distribution from what would be expected under a random distribution.
@@ -312,7 +319,7 @@ The implementation in the Terrier IR platform follows the original formulation b
 
 
 \subsection{Transformer-based Retrieval Models}\label{sec:transformer-retrieval-models}
-As mentioned in earlier sections, transformer-based models have been shown to be effective on a variety of tasks, including information retrieval.
+As mentioned in earlier sections, transformer-based models have been shown to be effective on a variety of tasks, including IR.
 There are different approaches of how transformers can be used for retrieval, a brief overview of methods used in this thesis is given here.
 \\\\
 Two of the most common transformer based architectures are cross-encoder and bi-encoder models.
@@ -387,15 +394,15 @@ Two of the most common transformer based architectures are cross-encoder and bi-
     \label{fig:cross-encoder}
   \end{minipage}
 \end{figure}
-Bi-Encoders independently embed queries and documents using transformer models like BERT~(\cite{devlin:2018}) or T5~(\cite{roberts:2019}).
-For the document collection, this can be done offline, since the embeddings are independent of the query.
-This separation allows them to efficiently process large datasets since the embeddings can be pre-computed and stored.
-It also enables rapid relatively quick retrieval, since only the embedding for the current query has to be calculated on the spot.
-The following retrieval step is then done by computing the similarity between the query and each document in the collection, which is a relatively fast operation.
+Bi-encoders independently embed queries and documents using transformer models like BERT~(\cite{devlin:2018}) or T5~(\cite{roberts:2019}).
+For the document collection, this can be done offline since the embeddings are independent of the query.
+This separation allows them to efficiently process large datasets as the embeddings can be pre-computed and stored.
+It also enables rapid retrieval, since at inference time only the embedding for the current query has to be calculated and compared to the pre-computed document embeddings.
+The documents are then ranked according to their embedding similarity to the query.
 \\
-Cross-Encoders, on the other hand, take a combined input sequence of both query and document and produce a scalar relevance score.
-This joint modeling enables them to capture the interaction and nuances between a query and a document.
-Due to their fine-grained interaction modeling, Cross-Encoders outperform Bi-Encoders in terms of precision in retrieving relevant documents.
+Cross-encoders, on the other hand, take a combined input sequence of both query and document and produce a scalar relevance score.
+This joint modeling enables them to better capture the interaction and nuances between a query and a document.
+Due to their fine-grained interaction modeling, cross-encoders outperform bi-encoders in terms of precision in retrieving relevant documents as shown by \cite{thakur:2020} and \cite{rosa:2022}.
 However, the need to process each query-document pair individually makes them computationally demanding, especially for large datasets.
 As a result, they are typically only used in second-stage retrieval, where the objective is to re-rank the top results obtained from an initial retrieval method.
 \\
@@ -403,8 +410,8 @@ The following sections describe the different transformer-based retrieval models
 \subsubsection{MonoT5 + DuoT5}\label{sec:monot5-duot5}
 MonoT5 and DuoT5~(\cite{roberts:2019}), are based on previous work by \cite{nogueira:2019}, who introduced monoBERT and duoBERT, first applying transformer architecture to the task of document ranking.
 The general idea is to first use a baseline retrieval model like BM25 to retrieve an initial set of relevant documents.
-Then, the query and each document in the initial set are concatenated and fed into the mono version of the transformer model, which produces a scalar score for each query-document pair.
-The documents with the highest scores get then fed into the duo model, which takes the query and each possible pair of documents as input, outputting a probability of one document being more relevant than the other.
+Then, pairs of the query and each document in the initial set are concatenated and fed into the mono version of the transformer model, which produces a scalar score for each query-document pair.
+The documents with the highest scores are then fed into the duo model, which takes the query and each possible pair of documents as input, outputting a probability of one document being more relevant than the other.
 Given those scores, the documents are re-ranked another time, serving as the final output of the retrieval pipeline.
 The main difference between the BERT and T5 versions, is that for BERT the [CLS] token from embedding the query and the document can be used as input to a single layer neural network, to output a probability of the document being relevant.
 Since there is no [CLS] token for models in the T5 family, as they are sequence-to-sequence model, this part is done using an input template:
@@ -417,13 +424,91 @@ At inference, softmax is applied to the \emph{true} and \emph{false} tokens only
 This works analogously for the Duo version of both models, by just adding the second document.
 MonoT5 and DuoT5 both belong to the family of cross-encoder models, sharing the general characteristics of those models.
 \\
-This model architecture allows for accurately tuning performance vs. accuracy, by parameterizing how many documents are filtered in each step, making the model suitable for different usecases.
+This model architecture allows for precisely tuning retrieval efficiency vs. effectiveness, by parameterizing how many documents are filtered in each step, making the model suitable for different usecases.
 \\
-In this thesis, the retrieval dataset is small, so the first retrieval step using BM25 is omitted, directly feeding all documents to the monoT5 model.
 
 \subsubsection{ColBERT}\label{sec:colbert}
+\begin{figure}[tb]
+\centering
+% Define colors
+\definecolor{textcolor}{RGB}{255, 230, 204}
+\definecolor{encodercolor}{RGB}{204, 229, 255}
+\definecolor{embeddingcolor}{RGB}{217, 234, 211}
+\definecolor{similaritycolor}{RGB}{255, 204, 204} % New color for similarity scores
+\definecolor{scorecolor}{RGB}{230, 204, 255} % New color for scores
+% ColBERT Retrieval Model
+\begin{tikzpicture}[node distance=0.7cm, auto, every node/.style={scale=0.8}]
+\tikzstyle{text_in} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=textcolor]
+\tikzstyle{token} = [rectangle, rounded corners, minimum width=0.5cm, minimum height=1cm, align=center, draw=black, fill=textcolor]
+\tikzstyle{encoder} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=encodercolor]
+\tikzstyle{embedding} = [rectangle, rounded corners, minimum width=0.5cm, minimum height=1cm, align=center, draw=black, fill=embeddingcolor]
+\tikzstyle{similarity} = [ellipse, minimum width=1cm, minimum height=1cm, align=center, draw=black, fill=similaritycolor]
+\tikzstyle{score} = [ellipse, minimum width=2cm, minimum height=1cm, align=center, draw=black, fill=scorecolor]
+
+\node[text_in] (query) {Query};
+\node[token, below=of query, xshift=-1cm] (q1) {};
+\node[token, below=of query] (q2) {};
+\node[token, below=of query, xshift=1cm] (q3) {};
+\node[encoder, below=of q2] (qencoder) {Query Encoder};
+\node[embedding, below=of qencoder, xshift=-1cm] (qe1) {};
+\node[embedding, below=of qencoder] (qe2) {};
+\node[embedding, below=of qencoder, xshift=1cm] (qe3) {};
+
+\node[text_in, right=of query, xshift=3cm] (doc) {Document};
+\node[token, below=of doc, xshift=-1cm] (d1) {};
+\node[token, below=of doc] (d2) {};
+\node[token, below=of doc, xshift=1cm] (d3) {};
+\node[encoder, below=of d2] (docencoder) {Doc Encoder};
+\node[embedding, below=of docencoder, xshift=-1cm] (de1) {};
+\node[embedding, below=of docencoder] (de2) {};
+\node[embedding, below=of docencoder, xshift=1cm] (de3) {};
+
+\node[similarity, below=of qe2.south] (maxSim1) {MaxSim};
+\node[similarity, below=of qe2.south, xshift=3.5cm] (maxSim2) {MaxSim};
+\node[similarity, below=of de2.south] (maxSim3) {MaxSim};
+
+\node[score, below=of maxSim2] (score1) {Sum};
+
+% Arrows
+\draw[-{Latex[length=3mm]}] (query) -- (q1);
+\draw[-{Latex[length=3mm]}] (query) -- (q2);
+\draw[-{Latex[length=3mm]}] (query) -- (q3);
+\draw[-{Latex[length=3mm]}] (q1) -- (qencoder);
+\draw[-{Latex[length=3mm]}] (q2) -- (qencoder);
+\draw[-{Latex[length=3mm]}] (q3) -- (qencoder);
+\draw[-{Latex[length=3mm]}] (qencoder) -- (qe1);
+\draw[-{Latex[length=3mm]}] (qencoder) -- (qe2);
+\draw[-{Latex[length=3mm]}] (qencoder) -- (qe3);
+\draw[-{Latex[length=3mm]}] (doc) -- (d1);
+\draw[-{Latex[length=3mm]}] (doc) -- (d2);
+\draw[-{Latex[length=3mm]}] (doc) -- (d3);
+\draw[-{Latex[length=3mm]}] (d1) -- (docencoder);
+\draw[-{Latex[length=3mm]}] (d2) -- (docencoder);
+\draw[-{Latex[length=3mm]}] (d3) -- (docencoder);
+\draw[-{Latex[length=3mm]}] (docencoder) -- (de1);
+\draw[-{Latex[length=3mm]}] (docencoder) -- (de2);
+\draw[-{Latex[length=3mm]}] (docencoder) -- (de3);
+\draw[-{Latex[length=3mm]}] (qe1.south) -- (maxSim1);
+\draw[-{Latex[length=3mm]}] (qe2.south) -- (maxSim2);
+\draw[-{Latex[length=3mm]}] (qe3.south) -- (maxSim3);
+\draw[-{Latex[length=3mm]}] (de1.south) -- (maxSim1);
+\draw[-{Latex[length=3mm]}] (de1.south) -- (maxSim2);
+\draw[-{Latex[length=3mm]}] (de1.south) -- (maxSim3);
+\draw[-{Latex[length=3mm]}] (de2.south) -- (maxSim1);
+\draw[-{Latex[length=3mm]}] (de2.south) -- (maxSim1);
+\draw[-{Latex[length=3mm]}] (de2.south) -- (maxSim2);
+\draw[-{Latex[length=3mm]}] (de3.south) -- (maxSim3);
+\draw[-{Latex[length=3mm]}] (de3.south) -- (maxSim2);
+\draw[-{Latex[length=3mm]}] (de3.south) -- (maxSim3);
+\draw[-{Latex[length=3mm]}] (maxSim1.south) -- (score1);
+\draw[-{Latex[length=3mm]}] (maxSim2.south) -- (score1);
+\draw[-{Latex[length=3mm]}] (maxSim3.south) -- (score1);
+\end{tikzpicture}
+\caption{ColBERT Retrieval Model. The query and document are processed separately to generate token embeddings. The maximum cosine similarity between all token embeddings of the query and document is calculated and summed over all query tokens, the sum of which is the relevance score.}
+\label{fig:colbert}
+\end{figure}
 ColBERT~(\cite{khattab:2020}) is another BERT based model for document ranking.
-It shares similarities with the general Bi-Encoder architecture, but introduces some modifications to improve performance.
+It shares similarities with the general bi-encoder architecture, but introduces some modifications to improve effectiveness.
 Instead of representing each document and query as a single vector, ColBERT uses a set of vectors to represent contextualized embeddings for each token in the document or query.
 For the documents, this can again be done offline, so that at the retrieval stage, only the embeddings for the query have to be generated and compared to the documents.
 The relevance score for document $d$ given query $q$ is estimated using their late interaction model, in which maximum cosine similarity between all query term embeddings and document term embeddings is calculated, and then summed over for all query terms.
