@@ -91,6 +91,8 @@ Those pipelines are all designed to retrieve the most relevant documents for a g
 Since our dataset also contains annotations for readability and credibility, we also want to be able to retrieve documents based on those criteria.
 To extend the retrieval pipelines for those metrics, we experiment with adding external scores to the retrieval process.
 This is described in section \ref{sec:external-scores}.
+\\
+All pipelines are evaluated using nDCG@10. %TODO: Why @10?
 
 \subsection{Retrieval Setup}
 The retrieval setup in this work differs from the usual retrieval setup, in which a large document collection is indexed, and then multiple queries are run against the index using different retrieval models.
@@ -157,6 +159,9 @@ Since all of those models relay on a pre-trained model, the first step is to sel
 The most commonly found pre-trained models are trained on the MS MARCO passage ranking dataset~(\cite{bajaj:2016}), a large scale dataset for passage retrieval.
 This is the dataset on which ColBERT version 1 and the MonoT5/DuoT5 based models are trained.
 For ColBERT version 2, two different pre-trained models are evaluated, one trained on the MS MARCO passage ranking dataset, and one trained on the p
+\\
+Transformer-based retrieval models usually require a first retrieval step using a less computationally expensive model like tf-idf, to reduce the number of documents that are fed to the transformer model.
+Because in this thesis the retrieval dataset is relatively small, the first retrieval step is omitted for all transformer-based models.
 
 \subsubsection{ColBERT Version 1}
 Using the ColBERT implementation for PyTerrier\footnote{\url{https://github.com/terrierteam/pyterrier_colbert}}, an end-to-end pipeline can be constructed from a pre-trained ColBERT model and a document collection.
@@ -169,7 +174,6 @@ All settings are left at their default values.
 Like the ColBERT implementation, the monoT5 and duoT5 implementations are also available in PyTerrier\footnote{\url{https://github.com/terrierteam/pyterrier_t5}}.
 Pre-trained checkpoints based on the MS MARCO dataset are provided by the authors.
 \\
-In this thesis, the retrieval dataset is small, so the first retrieval step using BM25 is omitted(see section \ref(sec:monoT5-duoT5)), directly feeding all documents to the monoT5 model.
 The monoT5 pipeline uses the pre-trained checkpoint to encode each query with each of the associated documents.
 From this encoding a score is calculated for each query-document pair, and the documents are ranked according to this score.
 \\

@@ -125,7 +125,7 @@ In other datasets, the questions are collected from crowd workers and verified b
         % Draw multiple-choice options
         \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,4.8) {
             \textbf{(A)} T-shirt and jeans \\
-            \textbf{(B)} \textcolor{red}{Sailor suit with a bow tie and a hat} \\
+            \textcolor{red}{\textbf{(B)} Sailor suit with a bow tie and a hat} \\
             \textbf{(C)} Business suit \\
             \textbf{(D)} Basketball jersey
         };
@@ -444,6 +444,8 @@ This model architecture allows for precisely tuning retrieval efficiency vs. eff
 \tikzstyle{embedding} = [rectangle, rounded corners, minimum width=0.5cm, minimum height=1cm, align=center, draw=black, fill=embeddingcolor]
 \tikzstyle{similarity} = [ellipse, minimum width=1cm, minimum height=1cm, align=center, draw=black, fill=similaritycolor]
 \tikzstyle{score} = [ellipse, minimum width=2cm, minimum height=1cm, align=center, draw=black, fill=scorecolor]
+% black thick dotted border around document, doc encoder and doc embeddings
+\tikzstyle{highlight}= [draw=black, rounded corners, inner sep=1cm, dashed, thick]
 
 \node[text_in] (query) {Query};
 \node[token, below=of query, xshift=-1cm] (q1) {};
@@ -469,42 +471,46 @@ This model architecture allows for precisely tuning retrieval efficiency vs. eff
 
 \node[score, below=of maxSim2] (score1) {Sum};
 
+% draw highlight box around document, doc encoder and doc embeddings. Label above the box says "Offline"
+\node[highlight, fit=(doc) (docencoder) (de1) (de2) (de3), label={[align=center]above:Offline}] (docbox) {};
+
 % Arrows
-\draw[-{Latex[length=3mm]}] (query) -- (q1);
-\draw[-{Latex[length=3mm]}] (query) -- (q2);
-\draw[-{Latex[length=3mm]}] (query) -- (q3);
-\draw[-{Latex[length=3mm]}] (q1) -- (qencoder);
-\draw[-{Latex[length=3mm]}] (q2) -- (qencoder);
-\draw[-{Latex[length=3mm]}] (q3) -- (qencoder);
-\draw[-{Latex[length=3mm]}] (qencoder) -- (qe1);
-\draw[-{Latex[length=3mm]}] (qencoder) -- (qe2);
-\draw[-{Latex[length=3mm]}] (qencoder) -- (qe3);
-\draw[-{Latex[length=3mm]}] (doc) -- (d1);
-\draw[-{Latex[length=3mm]}] (doc) -- (d2);
-\draw[-{Latex[length=3mm]}] (doc) -- (d3);
-\draw[-{Latex[length=3mm]}] (d1) -- (docencoder);
-\draw[-{Latex[length=3mm]}] (d2) -- (docencoder);
-\draw[-{Latex[length=3mm]}] (d3) -- (docencoder);
-\draw[-{Latex[length=3mm]}] (docencoder) -- (de1);
-\draw[-{Latex[length=3mm]}] (docencoder) -- (de2);
-\draw[-{Latex[length=3mm]}] (docencoder) -- (de3);
+\draw[-{Latex[length=3mm]}] ([xshift=-0.8cm]query.south) -- (q1.north);
+\draw[-{Latex[length=3mm]}] (query.south) -- (q2.north);
+\draw[-{Latex[length=3mm]}] ([xshift=0.8cm]query.south) -- (q3.north);
+\draw[-{Latex[length=3mm]}] (q1.south) -- ([xshift=-0.8cm]qencoder.north);
+\draw[-{Latex[length=3mm]}] (q2.south) -- (qencoder.north);
+\draw[-{Latex[length=3mm]}] (q3.south) -- ([xshift=0.8cm]qencoder.north);
+\draw[-{Latex[length=3mm]}] ([xshift=-0.8cm]qencoder.south) -- (qe1.north);
+\draw[-{Latex[length=3mm]}] (qencoder.south) -- (qe2.north);
+\draw[-{Latex[length=3mm]}] ([xshift=0.8cm]qencoder.south) -- (qe3.north);
+\draw[-{Latex[length=3mm]}] ([xshift=-0.8cm]doc.south) -- (d1.north);
+\draw[-{Latex[length=3mm]}] (doc.south) -- (d2.north);
+\draw[-{Latex[length=3mm]}] ([xshift=0.8cm]doc.south) -- (d3.north);
+\draw[-{Latex[length=3mm]}] (d1.south) -- ([xshift=-0.8cm]docencoder.north);
+\draw[-{Latex[length=3mm]}] (d2.south) -- (docencoder.north);
+\draw[-{Latex[length=3mm]}] (d3.south) -- ([xshift=0.8cm]docencoder.north);
+\draw[-{Latex[length=3mm]}] ([xshift=-0.8cm]docencoder.south) -- (de1.north);
+\draw[-{Latex[length=3mm]}] (docencoder.south) -- (de2.north);
+\draw[-{Latex[length=3mm]}] ([xshift=0.8cm]docencoder.south) -- (de3.north);
+% draw dotted arrows from query and document to maxSim1, maxSim2 and maxSim3
 \draw[-{Latex[length=3mm]}] (qe1.south) -- (maxSim1);
 \draw[-{Latex[length=3mm]}] (qe2.south) -- (maxSim2);
 \draw[-{Latex[length=3mm]}] (qe3.south) -- (maxSim3);
-\draw[-{Latex[length=3mm]}] (de1.south) -- (maxSim1);
-\draw[-{Latex[length=3mm]}] (de1.south) -- (maxSim2);
-\draw[-{Latex[length=3mm]}] (de1.south) -- (maxSim3);
-\draw[-{Latex[length=3mm]}] (de2.south) -- (maxSim1);
-\draw[-{Latex[length=3mm]}] (de2.south) -- (maxSim1);
-\draw[-{Latex[length=3mm]}] (de2.south) -- (maxSim2);
-\draw[-{Latex[length=3mm]}] (de3.south) -- (maxSim3);
-\draw[-{Latex[length=3mm]}] (de3.south) -- (maxSim2);
-\draw[-{Latex[length=3mm]}] (de3.south) -- (maxSim3);
+\draw[-{Latex[length=3mm]}, dashed] (de1.south) -- (maxSim1);
+\draw[-{Latex[length=3mm]}, dashed] (de1.south) -- (maxSim2);
+\draw[-{Latex[length=3mm]}, dashed] (de1.south) -- (maxSim3);
+\draw[-{Latex[length=3mm]}, dashed] (de2.south) -- (maxSim1);
+\draw[-{Latex[length=3mm]}, dashed] (de2.south) -- (maxSim2);
+\draw[-{Latex[length=3mm]}, dashed] (de2.south) -- (maxSim3);
+\draw[-{Latex[length=3mm]}, dashed] (de3.south) -- (maxSim1);
+\draw[-{Latex[length=3mm]}, dashed] (de3.south) -- (maxSim2);
+\draw[-{Latex[length=3mm]}, dashed] (de3.south) -- (maxSim3);
 \draw[-{Latex[length=3mm]}] (maxSim1.south) -- (score1);
 \draw[-{Latex[length=3mm]}] (maxSim2.south) -- (score1);
 \draw[-{Latex[length=3mm]}] (maxSim3.south) -- (score1);
 \end{tikzpicture}
-\caption{ColBERT Retrieval Model. The query and document are processed separately to generate token embeddings. The maximum cosine similarity between all token embeddings of the query and document is calculated and summed over all query tokens, the sum of which is the relevance score.}
+\caption{ColBERT Retrieval Model. The query and document are processed separately to generate token embeddings. The maximum cosine similarity between all token embeddings of the query and document is calculated and summed over all query tokens, which is the relevance score of the document given the query.}
 \label{fig:colbert}
 \end{figure}
 ColBERT~(\cite{khattab:2020}) is another BERT based model for document ranking.
@@ -517,41 +523,50 @@ An efficient computation of the similarity calculation allows ColBERT to scale m
 \\
 The ColBERT architecture can generally be used for re-ranking or for end-to-end retrieval.
 In the second case, an additional step is added in which the complete collection is filtered for relevant documents using similarity search for finding documents that contain similar terms as the query.
-Then in the second step, the remaining documents are re-ranked using the maximum similarity metrics.
+In the second step, the remaining documents are re-ranked using the maximum similarity metrics.
 \\
-Since the dataset used in this thesis is relatively small, we can directly use the re-ranking approach on all documents.
-
-\subsubsection{ColBERT V2}\label{sec:colbert-v2}
-
-
+\subsubsection{ColBERTv2}\label{sec:colbertv2}
+ColBERTv2~\citep{santhanam:2021} is directly based on the late-interaction architecture of ColBERT, but adds improvements to the architecture and the training process.
+\\
+To improve the training process, a new process of generating hard negatives is applied, in which a cross-encoder model is used to first rank passages given a query.
+From the ranked passages a highly ranked one is selected as the positive passage and a low ranked one as the negative passage.
+\\
+Improvements to the architecture are made by incorporating a residual compression technique.
+While for ColBERTv1 each token embedding is saved separately in its original state, ColBERTv2 represents each token embedding as its nearest neighboring centroid embedding and a residual.
+The centroids are calculated using k-means clustering on the token embeddings of a sample of all passages at indexing time. 
+This allows for a more compact representation of the token embeddings, since only the centroid embedding has to be stored.
+\\
+As shown by the authors, ColBERTv2 outperforms ColBERTv1 on all evaluated datasets, while also being more efficient
 
 \subsection{Evaluation of Retrieval Models}\label{sec:evaluation-of-retrieval-models}
-Evaluation metrics are important for the automatic assessment of retrieval model performance.
+Evaluation metrics are important for the automatic assessment of retrieval model effectiveness.
 They provide a quantitative measure of how well a system retrieves relevant documents in response to a user's query.
 Compared to other tasks like classification or regression, the evaluation of retrieval models is more challenging, since the evaluation metrics are not as intuitive.
 Instead of a single correct answer, there are multiple documents that could be considered relevant to a query, which can be retrieved in different permutations.
-To be able to judge different retrieval methods, true relevance values for document-query pairs have to be defined by human assessors.
+To be able to judge different retrieval methods, relevance assessments for document-query pairs have to be defined by human assessors.
 \\
-There are multiple metrics which are widely used in information retrieval tasks:
+There are multiple metrics which can be used in information retrieval tasks:
 \begin{itemize}
     \item \textbf{Precision}: Measures the fraction of retrieved documents that are relevant.
     \item \textbf{Recall}: Captures the fraction of relevant documents that are retrieved.
     \item \textbf{F1 Score}: The harmonic mean of precision and recall.
-    \item \textbf{Mean Average Precision (MAP)}: The average precision scores for each query, considering the ranking order.
-    \item \textbf{Mean Reciprocal Rank (MRR)}: The average of the reciprocal ranks of the first relevant document for each query.
-    \item \textbf{Normalized Discounted Cumulative Gain (nDCG)}: Considers both the ranking and the relevance grade of retrieved documents.
+    \item \textbf{Mean Average Precision (MAP)}: The arithmetic mean of each query's average precision at each document position.
+    \item \textbf{Normalized Discounted Cumulative Gain (nDCG)}: Considers both the ranking and the relevance grade of retrieved documents, weighting highly relevant documents higher than less relevant ones.
 \end{itemize}
 Given the context of our dataset, which contains multiple queries with documents ranked for relevance between 0 and 3, and has relevance ratings for each document in the dataset, the nDCG metric is the most suitable one.
-Specifically, nDCG@10 is used, setting a cutoff value after which additionally retrieved documents are not evaluated anymore.
-The formula for nDCG@k is as follows:
-\[ \text{nDCG@k} = \frac{\text{DCG@k}}{\text{Ideal DCG@k}} \]
-where DCG@10 is the discounted cumulative gain at position 10, and Ideal DCG@10 is the DCG@10 score for the ideal ranking.
-DCG@k is defined as:
-\[ \text{DCG@k} = \sum_{i=1}^{k} \frac{2^{r(d_i,q)} - 1}{\log_2(i + 1)} \]
-where $r(d_i,q)$ is the relevance rating of document $d_i$ for query $q$.
-The ideal ranking is the ranking of documents for a query, which maximizes the DCG@10 score.
 \\
-
+The formula for nDCG@k is as follows is based on the concept of cumulative gain (CG), which is the sum of the relevance ratings of all documents up until position k:
+\[ \text{CG@k} = \sum_{i=1}^{k} r(d_i,q) \]
+where $r(d_i,q)$ is the relevance rating of document $d_i$ for query $q$.
+Based on that, the discounted cumulative gain (DCG) is defined as
+\[ \text{DCG@k} = \sum_{i=1}^{k} \frac{r(d_i,q)}{\log_2(i+1)} \]
+where the relevance ratings are discounted by the logarithm of the rank of the document, to weight documents that are ranked higher more than lower ranked ones.
+The ideal DCG (IDCG) is the DCG of the ideal ranking, which is the ranking of documents sorted descending by their relevance rating.
+This produces the highest possible DCG for a set of retrieved documents.
+Finally, the normalized DCG is calculated as
+\[ \text{nDCG@k} = \frac{\text{DCG@k}}{\text{IDCG@k}} \]
+which normalizes the DCG by the IDCG, producing a score between 0 and 1.
+The cutoff value of $k$ is set depending on how many of the ranked documents should be considered for each query.
 
 \subsection{Evaluation of machine translation systems using Retrieval Models}\label{sec:eval-mts-ir}
 In the field of evaluating NLP tasks, information retrieval techniques have been mainly used to evaluate machine translation systems.
@@ -576,7 +591,7 @@ Similar to \cite{duh:2008}, they show that the ranking based methods can outperf
 \\
 \cite{guzman:2019} use neural methods to incorporate syntactic and semantic information into the evaluation process.
 They train a pairwise ranking model, which compares to candidate sentences given the reference and returns which one is the better translation.
-Even tough they do not outperform other state of the art methods, they deliver competitive results while staying closer to the human evaluation framework.
+Even tough they do not outperform other state-of-the-art methods, they deliver competitive results while staying closer to the human evaluation framework.
 \\
 \\
 This overview shows, that information retrieval methods have successfully been applied to the task of evaluating machine translation systems.
