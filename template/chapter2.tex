@@ -321,6 +321,8 @@ The implementation in the Terrier IR platform follows the original formulation b
 \subsection{Transformer-based Retrieval Models}\label{sec:transformer-retrieval-models}
 As mentioned in earlier sections, transformer-based models have been shown to be effective on a variety of tasks, including IR.
 There are different approaches of how transformers can be used for retrieval, a brief overview of methods used in this thesis is given here.
+All transformer models are a form of learning-to-rank, in which the model is trained on a dataset to predict which documents are relevant to a query.
+This differentiates them from our baseline models, which rule-based and do not require training.
 \\\\
 Two of the most common transformer based architectures are cross-encoder and bi-encoder models.
 \begin{figure}[tb]
@@ -568,8 +570,8 @@ Finally, the normalized DCG is calculated as
 which normalizes the DCG by the IDCG, producing a score between 0 and 1.
 The cutoff value of $k$ is set depending on how many of the ranked documents should be considered for each query.
 
-\subsection{Evaluation of machine translation systems using Retrieval Models}\label{sec:eval-mts-ir}
-In the field of evaluating NLP tasks, information retrieval techniques have been mainly used to evaluate machine translation systems.
+\subsection{Evaluation of Machine Translation Systems using Retrieval Models}\label{sec:eval-mts-ir}
+In the field of evaluating Natural Language Processing(NLP) tasks, IR techniques have been mainly used to evaluate machine translation systems.
 Since both question answering and machine translation are sequence-to-sequence tasks with multiple correct answers, there are similarities in the evaluation process.
 \\
 For machine translation, a model is given a source sentence, and has to produce a target sentence in another language.
@@ -579,39 +581,44 @@ There are multiple versions of those metrics with slightly different parameters,
 In the end, all of those metrics generate a similarity score between the predicted and the reference sentence, which can be used to compare different models.
 \\
 Alternative approaches incorporating ranking methods have been proposed as well.
-\cite{duh:2008} argue, that the final goal is to compare different ML systems, so why first predict the quality of the systems individually, when they could be compared directly.
-He shows that ranking methods like RankSVM~(\cite{joachims:2002}) and RankBoost~(\cite{freund:2003}) can be applied to rank different candidate translations against the reference, while generating similar scores to BLEU on the same feature set.
-When incorporating intra-set features, the ranking methods outperform BLEU and smoothed BLEU.
+\cite{duh:2008} argues that, considering the final goal is to compare different translation systems, a direct comparison between the systems is preferable to evaluating their quality individually.
+He shows that ranking methods like RankSVM~(\cite{joachims:2002}) and RankBoost~(\cite{freund:2003}) can be applied to rank different candidate translations against the reference, generating similar scores to BLEU on the same feature set.
+When incorporating intra-set features which can not easily be incorporated to BLEU-like scores, the ranking methods achieve higher similarities to human rankings compared to BLEU and smoothed BLEU.
 \\
-Another approach, this time based on learning-to-rank methods, is proposed by \cite{li:2013}.
+Another approach based on learning-to-rank methods is proposed by \cite{li:2013}.
 Again, they compare multiple translation candidates to a reference sentence, but here they use listwise learning-to-rank methods to generate a ranking of the candidates.
-The objective of listwise ranking is to train a ranking function, which minimizes the loss between the predicted ranking and the ground truth human generated ranking on a training set.
-The trained model is then evaluated on a test set.
-Similar to \cite{duh:2008}, they show that the ranking based methods can outperform other automatic metrics in terms of correlation with human judgement.
+The objective of listwise ranking is to train a ranking function that minimizes the loss between the predicted ranking and the ground truth human generated ranking on a training set.
+Similar to \cite{duh:2008}, they show that the ranking based methods correlate stronger with human judgement, compared to BLEU-like metrics.
 \\
 \cite{guzman:2019} use neural methods to incorporate syntactic and semantic information into the evaluation process.
 They train a pairwise ranking model, which compares to candidate sentences given the reference and returns which one is the better translation.
 Even tough they do not outperform other state-of-the-art methods, they deliver competitive results while staying closer to the human evaluation framework.
 \\
 \\
-This overview shows, that information retrieval methods have successfully been applied to the task of evaluating machine translation systems.
-But those approaches are hard to transfer to the task of evaluating question answering systems, since the evaluation metrics are not directly applicable.
-All ranking based machine translation evaluation methods mentioned here, compare the set of candidate translations to a single reference translation, trying to rank the candidate translations amongst each other.
-Since the space of "correct" answers given a long form question is generally much higher in comparison to translating a sentence, this evaluation setup can't be directly applied here.
+This overview shows that information retrieval methods have successfully been applied to the task of evaluating machine translation systems.
+But those approaches are hard to transfer to the task of evaluating long form question answering systems, since the evaluation metrics are not directly applicable.
+All ranking based machine translation evaluation methods mentioned here compare the set of candidate translations to a single reference translation, trying to rank the candidate translations amongst each other.
+Since the space of correct answers given a long form question is generally much higher in comparison to translating a sentence, this evaluation setup can not be directly applied here.
 So, even though information retrieval methods are applied here as well, the evaluation approach is formulated differently.
-\\
-In this thesis, retrieval methods are used to rank generated answers for a given question against a set of rated reference answers which can differ from each other drastically.
 
 \section{Summary}
-In this chapter, we present an overview of the current state of research in the field of evaluating large language models for question answering.
-Additionally, concepts of information retrieval that are relevant for this thesis are introduced.
+In this chapter we presented an overview of the current state of research in the field of evaluating large language models for question answering.
+We highlighted that the evaluation of long form question answering is challenging, since the answers are free form text and not only a single entity, number or multiple choice option.
+Additionally, we show that evaluating long form answers in one single dimension of correctness is not sufficient, as other aspects like readability and credibility are important as well.
+In this thesis, we try to tackle both of the mentioned challenges.
 \\
-Section~\ref{sec:long-form-qa-difficulties} shows, that the evaluation of long form question answering is challenging, since the answers are free form text, and not only a single entity, number or multiple choice option.
-This leads us to the investigation of how retrieval methods can be used to evaluate long form question answering.
-Since retrieval methods have already been used to evaluate machine translation systems, we give an overview of those methods in Section~\ref{sec:eval-mts-ir}.
-Even tough some similarities exist between the two tasks, the evaluation methods are not directly transferable.
+Based on the assumption that if we develop a ranking model that is able to effectively rank human-generated documents in the dimensions of relevance, readability and credibility in a way that is similar to human judgement, we can use it to evaluate long form question answering systems.
+The evaluation of new documents generated by LLMs can be done by ranking them with the previously validated retrieval model and using the achieved rank of the new document as a proxy for the quality of the generated answer.
+We formalize this approach as follows:
+\begin{enumerate}
+    \item \textbf{Dataset acquisition:} Collect a dataset of queries \( q_1, q_2, \cdots, q_n \) with associated human-generated documents for each query \( d_{i,1}, d_{i,2}, \cdots d_{i,j} \forall i \in \{1, \cdots, n\} \). Each document has a relevance rating \( r_{rel}(d_{i,j}, q_i) \), a readability rating \( r_{read}(d_{i,j}, q_i) \) and a credibility rating \( r_{cred}(d_{i,j}, q_i) \) for the query.
+    \item \textbf{Retrieval Model Evaluation:} Evaluate a set of retrieval models \( \mathcal{M}\) on the dataset, using the nDCG metric for relevance, readability and credibility.
+    \item \textbf{Generate LLM Answers:} Use a set LLMs \( \mathcal{L} \) to generate answers \( a_{l,i} \) for all queries \( q_i \).
+    \item \textbf{Rank Answers:} Add the generated answers \( a_{l,i} \) to the documents \(d_{1,i}, d_{2,i}, \cdots, d_{n,i} \) for each query \( q_i \) and rank them using the best of the previously evaluated retrieval model \( \mathcal{M} \).
+\end{enumerate}
+This approach allows us to evaluate the capabilities of multiple LLMs in long form QA, by comparing the ranks of the generated answers as a proxy for their quality.
+By evaluating the retrieval models on multiple evaluation criteria, we tackle the problem of evaluating the answers in multiple dimensions.
+Furthermore, the diversity of possible answers can be better captured because multiple different answers in the dataset can be ranked highly, instead of only having one reference answer.
+We hope that the retrieval models can capture this diversity in their ranking, especially when using transfomer-based models.
 \\
-For this reason, we formulate the evaluation tasks differently.
-Instead of ranking multiple candidates against one reference text, we rank one candidate against multiple reference texts.
-\\
-In the following Section, we introduce the Experimental Setup, including the dataset collection, ranking pipeline construction and the generation of LLM answers.
+In the following chapter, the experimental setup is described, with the results being presented in chapter~\ref{chapter:results}.
