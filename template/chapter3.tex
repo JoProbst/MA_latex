@@ -291,3 +291,43 @@ ChatGPT                & 175B   & 2022 & Custom                & Custom & Custom
 \end{table}
 
 \subsection{Prompting approaches}
+How a LLM is prompted to complete a task has a large impact on the quality of the generated response.
+\cite{reynolds:2021} shows this in the context of translating French to English.
+They compare the effect of three different prompting strategies on the 6.7B and 13B parameters models of GPT-3:
+\begin{enumerate}
+    \item \textbf{Strategy 1}\\Q: What is the English translation of \textit{french\_sentence} A: \textit{translation}
+    \item \textbf{Strategy 2}\\French: \textit{french\_sentence}\\English: \textit{translation}
+    \item \textbf{Strategy 3}\\A French phrase is provided: \textit{french\_sentence}\\
+    The masterful French translator flawlessly translates the phrase
+into English: \textit{translation}
+\end{enumerate}
+where \textit{french\_sentence} is replaced by the sentence to be translated before prompting the model, which then generates the \textit{translation}.
+According to their results in the BLEU metric, the first prompting strategy is outperformed by the other two.
+Of those two, the third one performs better on the smaller 6.7B model, while on the 13B model, they perform equally well.
+Table \ref{tab:fr-en-prompting} shows the large differences in the BLEU score between the different prompting strategies.
+\begin{table}[tb]
+\centering
+\begin{tabularx}{\textwidth}{lXXX}
+\hline
+\textbf{Model} & \textbf{Strategy 1} & \textbf{Strategy 2} & \textbf{Strategy 3} \\
+\hline
+6.7B & 15.9 & 23.5 & 26.5 \\
+13B & 18.7 & 33.3 & 32.9 \\
+\hline
+\end{tabularx}
+\caption{BLEU scores for different prompting strategies for the 6.7B and 13B models of GPT-3, as reported by \cite{reynolds:2021}}\label{tab:fr-en-prompting}
+\end{table}
+\\
+Based on those results we use a similar approach of different prompting strategies for our experiments.
+We use the following four strategies:
+\begin{enumerate}
+    \item \textbf{No Prompt:}\\ \textit{query}
+    \item \textbf{QA Prompt:}\\ Q: \textit{query}\\A:
+    \item \textbf{QuestionAnswer Prompt:}\\ Question: \textit{query}\\Answer:
+    \item \textbf{MultiMedQA Promp:}\\ You are a helpful medical knowledge assistant. Provide useful, complete, and scientifically-grounded answers to common consumer search queries about health.\\Question: \textit{query}\\Complete Answer:
+\end{enumerate}
+where \textit{query} is replaced by the query to be answered.
+Based on the results of \cite{reynolds:2021}, we expect the MultiMedQA prompt to perform best, followed by the QuestionAnswer prompt.
+To restrict the influence of random variations in the generated responses, we generate 10 responses for each query and model.
+\\
+\section{Ranking LLM Responses}
