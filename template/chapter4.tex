@@ -45,6 +45,7 @@ In total, we identify 17 question-style queries and 33 keyword-style queries.
 Figure \ref{fig:num_words_per_query} shows the number of words per query for both query types.
 As expected, the keyword queries are shorter than the question queries, with a median of 4 words compared to 7 words for the question queries.
 The shortest query is only two words long, while the longest query is 20 words long.
+In a later section, we investigate the differences in the performance of the different models depending on the two query types.
 \subsection{Documents}
 \begin{table}[tb]
 \centering
@@ -83,11 +84,93 @@ After preprocessing, the documents are cleaned of all HTML tags and of HTML elem
 Figure \ref{fig:num_words_per_document} shows that the number of words per document is very high, with a median of 1354 words and a mean of 2901 words.
 This is natural for documents scraped from the web, which do not only contain the main text, but also navigation bars, footers, sidebars and other elements.
 Those can not be fully removed with our trivial preprocessing methods.
-\subsection{Document Metrics}
-The document metrics in the dimensions of readability, credibility and relevance are based on the human annotations from \cite{goeuriot:2021}.
-In general, a surprisingly high number of documents are rated as not relevant to the given query.
+\subsection{Document Ratings}
+The document metrics in the dimensions of readability, credibility and relevance are the human annotations from \cite{goeuriot:2021}.
+Documents can have multiple ratings for each dimension, if they are annotated for multiple queries.
+This means that the total number of ratings per dimension (8902) is higher than the number of documents in the dataset (6692).
+\\
 
+In general, a surprisingly high number of documents are rated as not relevant to the given query.
+Figure \ref{fig:heatmap_rel_cred_read} shows three heatmaps, with each relevance category being displayed in its own heatmap.
+Documents rated with 0 relevance make up nearly half of the dataset and generally have lower credibility and readability scores.
+The most relevant documents are generally also the most credible and readable ones.
+The correlation between relevance and credibility is only 0.08, so while it is slightly positive, it is not very strong.
+For readability and relevance, the correlation is 0.22, which is slightly stronger, but still does not show a strong connection.
+This can be interpreted as the relevance of a document being independent of its credibility and readability, which shows that the annotators were able to judge the relevance of a document independently of its credibility and readability.
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{images/heatmap_qrels.png}
+\caption{Three heatmaps, one for each relevance category, plotting credibility against readability.
+The total number of documents with the given relevance ranking is in the title of the heatmap.
+In all three heatmaps, the highest number of documents is concentrated in the range between 1 and 2 for both credibility and readability, with 2 credibility and 2 readability being the most common combination.
+}
+\label{fig:heatmap_rel_cred_read}
+\end{figure}
+
+\subsection{Documents with Ratings for Multiple Queries}
+As mentioned previously, some documents have multiple ratings for different queries.
+In total 875 documents are rated for multiple queries, with the highest number of individual annotations for a single document being 18.
+Documents with multiple ratings are often general articles about a certain topic, e.g. ``What is Multiple Sclerosis?''.
+Those are then retrieved for multiple queries that focus on different aspects of the topic, e.g. ``List of multiple sclerosis symptoms'' and ``Can I pass multiple sclerosis to other family members?''.
+As expected, the different relevance ratings for the same document are often different, since the relevance of a document depends on the query.
+Interestingly, we also find that the credibility and readability ratings for the same document can be different.
+In Appendix \ref{appendix:dataset}, we show an example of a document with multiple ratings for different queries.
+The 15 different ratings cover nearly all possible combinations of relevance, credibility and readability.
+\\
+As all documents for one query are annotated by the same person according to \cite{goeuriot:2021}, we assume that the annotators were consistent in their ratings for the same query.
+Because we are only interested in the ranking of the documents for one query at a time, we do not remove or aggregate the scores, as this could alter the ranking of the documents compared to documents that were only ranked for this specific query.
 
 \section{Retrieval Pipelines}
+In this section, we present the results of the different retrieval pipelines.
+We chose to evaluate the pipelines using nDCG@10, which was explained in section \ref{sec:evaluation-of-retrieval-models}.
+nDCG is a suitable metric for our task, as it takes into account multiple different relevance/credibility/readability levels instead of only the binary relevant/not relevant distinction.
+Furthermore, it emphasizes the importance of the top results, which we expect to be the most competitive ones against the LLM answers, so it is important to be able to distinguish between at the top level.
+We chose a cutoff of 10, because even tough the minimum available number of answers per query is 39, the number of relevant results is much lower.
+\\
+\subsection{Baseline Pipelines}
+Our baseline retrieval pipelines are the TF-IDF and BM25 pipelines, each once with and once without query expansion.
+\begin{table}
+\centering
+\begin{tabularx}{\textwidth}{lXXX}
+Pipeline    & Relevance          & Readability        & Credibility        \\ \hline
+DPH         & \textbf{0.643} & 0.742 & 0.539 \\
+DPH\_qe     & 0.637 & \textbf{0.751} & 0.51  \\
+TF\_IDF     & 0.64  & 0.746 & 0.551 \\
+TF\_IDF\_qe & 0.636 & \textbf{0.751} & \textbf{0.557}
+\end{tabularx}
+\caption{Results of the baseline pipelines, shown as nDCG@10. Query expansion is denoted by \_qe.
+All pipelines perform similarly, the influence of query expansion is small.}
+\label{tab:baseline_pipelines}
+\end{table}
+Table \ref{tab:baseline_pipelines} shows the results of the baseline pipelines.
+Performance on all three metrics is similar for all pipelines.
+The rankings seem to be closest to the human readability ranking, scoring around 0.75 for all pipelines.
+Relevance is interestingly lower than that, with scores around 0.64.
+Since those models are designed to retrieve relevant documents, we would expect the relevance scores to be higher.
+The credibility scores are the lowest, with scores around 0.55.
+The models do not have any mechanics for assessing credibility, so this is not surprising.
+
+\subsection{Transformer Pipelines}
+text
+\begin{table}
+\centering
+\begin{tabularx}{\textwidth}{lXXX}
+Pipeline    & Relevance          & Readability        & Credibility        \\ \hline
+Best baseline    & 0.643 & 0.751 & 0.557 \\
+colbert\_v1      & 0.626 & 0.774 & 0.633 \\
+colbertv2        & 0.634 & 0.799 & 0.65  \\
+colbertv2-pubmed & 0.62  & 0.783 & 0.606 \\
+duoT5            & 0.64  & 0.805 & 0.714 \\
+monoT5           & \textbf{0.645} & \textbf{0.813} & \textbf{0.722}
+\end{tabularx}
+\caption{Results of the transformer pipelines, shown as nDCG@10. The best baseline pipeline is the TF-IDF pipeline with query expansion.}
+\label{tab:transformer_pipelines}
+\end{table}
+text
+
+
+
+
 
 \section{Ranking of Generated Answers}
+
