@@ -129,16 +129,16 @@ We chose a cutoff of 10, because even tough the minimum available number of answ
 \\
 \subsection{Baseline Pipelines}
 Our baseline retrieval pipelines are the TF-IDF and BM25 pipelines, each once with and once without query expansion.
-\begin{table}
+\begin{table}[tb]
 \centering
 \begin{tabularx}{\textwidth}{lXXX}
 Pipeline    & Relevance          & Readability        & Credibility        \\ \hline
 DPH         & \textbf{0.643} & 0.742 & 0.539 \\
-DPH\_qe     & 0.637 & \textbf{0.751} & 0.51  \\
-TF\_IDF     & 0.64  & 0.746 & 0.551 \\
-TF\_IDF\_qe & 0.636 & \textbf{0.751} & \textbf{0.557}
+DPH\ (qe)     & 0.637 & \textbf{0.751} & 0.51  \\
+TF-IDF     & 0.64  & 0.746 & 0.551 \\
+TF-IDF (qe) & 0.636 & \textbf{0.751} & \textbf{0.557}
 \end{tabularx}
-\caption{Results of the baseline pipelines, shown as nDCG@10. Query expansion is denoted by \_qe.
+\caption{Results of the baseline pipelines, shown as nDCG@10. Query expansion is denoted by qe.
 All pipelines perform similarly, the influence of query expansion is small.}
 \label{tab:baseline_pipelines}
 \end{table}
@@ -151,26 +151,76 @@ The credibility scores are the lowest, with scores around 0.55.
 The models do not have any mechanics for assessing credibility, so this is not surprising.
 
 \subsection{Transformer Pipelines}
-text
-\begin{table}
+\begin{table}[tb]
 \centering
 \begin{tabularx}{\textwidth}{lXXX}
 Pipeline    & Relevance          & Readability        & Credibility        \\ \hline
 Best baseline    & 0.643 & 0.751 & 0.557 \\
-colbert\_v1      & 0.626 & 0.774 & 0.633 \\
-colbertv2        & 0.634 & 0.799 & 0.65  \\
-colbertv2-pubmed & 0.62  & 0.783 & 0.606 \\
+colbertv1      & 0.626 & 0.774 & 0.633 \\
+colbertv2       & 0.634 & 0.799 & 0.65  \\
 duoT5            & 0.64  & 0.805 & 0.714 \\
 monoT5           & \textbf{0.645} & \textbf{0.813} & \textbf{0.722}
 \end{tabularx}
-\caption{Results of the transformer pipelines, shown as nDCG@10. The best baseline pipeline is the TF-IDF pipeline with query expansion.}
+\caption{Results of the transformer pipelines, shown as nDCG@10. Best results of the baseline pipelines are shown for comparison. All models are trained on the MS MARCO passage ranking dataset(\cite{bajaj:2016}).}
 \label{tab:transformer_pipelines}
 \end{table}
-text
+Table \ref{tab:transformer_pipelines} shows the nDCG@10 scores for the different transformer-based pipelines, compared to the best baseline results.
+The monoT5 pipeline performs best on all three metrics, with scores of 0.645 for relevance, 0.813 for readability and 0.722 for credibility.
+Re-ranking the top 10 results using duoT5 made the results slightly worse.
+ColBERTv2 shows a slight improvement over ColBERTv1, but is still worse in relevance, while being better in readability and credibility.
+\\\\
+In general, the transformer-based models perform very similar to the baseline models in terms of relevance, but all transformer-based models achieve higher scores on readability and credibility.
+We attribute this to the fact that the transfomer-based models do not consider the documents as bags of words, but instead use the full text of the documents.
+This is especially important for readability, as the models can now take into account the structure of the text, including stopwords, punctuation and other elements that are removed for the baseline models.
+Even tough the transformer models are not specifically trained to consider readability and credibility, the relevant passages in the MS MARCO corpus seem to reflect those properties.
 
-
-
-
+\subsection{External Document Scores}
+Because ranking models that consider readability the main ranking dimension are not available, we investigate adding external scores to the ranking process.
+First, the statistical scores described in Section \ref{sec:external-scores} are calculated for all documents in the dataset.
+We then compare the calculated scores to the readability scores assigned by the human annotators.
+Unfortunately, for our dataset we do not find a strong correlation between the readability scores and the statistical scores.
+The Flesch Reading Ease score has a correlation of 0.177 with the readability scores, while the full textstat score has a slightly negative correlation of -0.147.
+Those correlations are not strong enough to justify using the statistical scores as a proxy for readability.
+\\
+This probably is connected to the fact that the documents in our dataset are scraped from the web, which means that even after preprocessing they still contain noise, which is not accounted for by the statistical scores.
 
 \section{Ranking of Generated Answers}
+We now present the results of ranking the LLM answers using the best performing pipeline, the monoT5 pipeline.
+Since monoT5 performs best on all three metrics, we use it for all further experiments and only evaluate the one ranking produced by this pipeline.
+\\
+In total, we rank 16000 generated answers, with each of the 8 models generating 10 answers for each of the 4 different prompting strategies for all 50 queries.
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{images/weighted_position_boxplot.png}
+\caption{Boxplot of the weighted position of the LLM answers, by model. The weighted position is the position of the answer in the ranking, weighted by the total number of documents for the query.}
+\label{fig:weighted_position_boxplot}
+\end{figure}
+Figure \ref{fig:weighted_position_boxplot} shows the weighted position of the LLM answers in the ranking.
+The weighted position is the position of the answer in the ranking, divided by the total number of documents for the query.
+\\
+The GPT-2 models generally perform worse which was expected, as they are not fine-tuned for the task of question answering and are generally much smaller than the other models.
+Interestingly, even those models have a significant number of first place rankings.
+The four different sizes of GPT-2 nicely show the effect of model size on the performance, with the median ranking position improving with each bigger model.
+\\
+For the fine-tuned models, ChatGPT performs best with a median position of 0.006, scoring the best or second-best answer at nearly all queries.
+Falcon 7B is the worst of the fine-tuned models with the Llama models performing slightly better.
+Between the two Llama models, the smaller one is slightly better, but they perform very similar.
+\\
+ChatGPT is also the most consistent model, with the smallest standard deviation of 0.05.
+The other models have much higher standard deviations, with the Llama models both being around 0.2 and the other models between 0.3 and 0.35.
+\\
 
+\subsection{Influence of Prompting Strategy}
+
+
+\subsection{Keyword vs Question Queries}
+
+\subsection{Model Answer Consistency}
+
+\subsection{ChatGPT Outlier Analysis}
+
+
+
+
+
+\subsection{Comparison to other Benchmarks}

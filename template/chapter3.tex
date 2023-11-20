@@ -189,6 +189,7 @@ Instead, we use the implementation provided by the authors of the model\footnote
 The implementation works with any pre-trained checkpoint for the ColBERT version 2 model, with the MS MARCO checkpoint being downloaded by default.
 
 \subsection{External scores for Readability}\label{sec:external-scores}
+% TODO: Add readability and credibility from Huggingface?
 To improve retrieval performance for the readability, we experiment with adding pre-computed external scores to the retrieval process.
 
 To estimate readability of the documents in the dataset, different scores are calculated for each document.
@@ -203,7 +204,6 @@ We use the implementation provided by the textstat library\footnote{\url{https:/
 This library also provides the second score, which is an aggregate of multiple similar scores, like the FOG score, the SMOG score and the Coleman-Liau Index.
 Those scores are all based on different text statistics, like the number of syllables per word, the number of words per sentence or the number of characters per word.
 More details about the different scores can be found in the documentation of the textstat library.
-\\
 
 \section{Generating LLM Responses}
 This section details which LLMs are selected for the experiments, and how the responses are generated.
@@ -356,7 +356,7 @@ Any additional parameters that are available for a model are left at their defau
 \\
 \\
 The generating of the answers is done in two different ways.
-For ChatGPT, we use the OpenAI API to generate the answers.
+For ChatGPT, we use the OpenAI API to generate the answers, specifically using the model version ``GPT-3.5-turbo-0613''.
 Since they do not provide any parameters apart from temperature and number of tokens, we only set those to our chosen values.
 \\
 For all other models, we use the HuggingFace library to generate the answers.
