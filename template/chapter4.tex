@@ -211,11 +211,41 @@ The other models have much higher standard deviations, with the Llama models bot
 \\
 
 \subsection{Influence of Prompting Strategy}
-
+The different prompting strategies strongly influence the final rankings of the LLM answers.
+\begin{table}[tb]
+\centering
+\begin{tabular}{lcccc}
+\textbf{Model}        & \textbf{No Prompt} & \textbf{QA}     & \textbf{QuestionAnswer} & \textbf{MultiMedQA} \\\hline
+GPT-2        & 0.763      & 0.663 & 0.614    & 0.603      \\
+GPT-2 Medium & 0.675      & 0.524 & 0.544    & 0.618      \\
+GPT-2 Large  & 0.496      & 0.393 & 0.336    & 0.374      \\
+GPT-2 XL     & 0.509      & 0.336 & 0.327    & 0.292      \\
+Falcon 7B    & 0.324      & 0.133 & 0.118    & 0.012      \\
+Llama-2 7B   & 0.211      & 0.073 & 0.027    & 0.005      \\
+Llama-2 13B  & 0.218      & 0.068 & 0.032    & 0.01       \\
+ChatGPT      & 0.006      & 0.01  & 0.007    & 0.001     
+\end{tabular}
+\caption{Mean weighted position of the LLM answers, by prompting strategy.
+The prompting strategies are described in section \ref{sec:prompting-approaches}, order here from least to most complex.
+Increasing prompting complexity generally improves the ranking of the LLM answers for most models, with exception of GPT-2 Medium and GPT-2 Large.
+}
+\label{tab:prompting_strategy}
+\end{table}
+Table \ref{tab:prompting_strategy} shows the mean weighted position of the LLM answers for the different prompting strategies.
+Starting with no prompt produces the worst ranking results for all models, except for ChatGPT where the QuestionAnswer prompt performs slightly worse.
+The rankings improve with each more complex prompting strategy, except for GPT-2 Medium and GPT-2 Large, where the rankings are worse for the QuestionAnswer prompt than for the QA prompt.
+Even the three smaller instruction tuned models (Falcon and Llama) show strong improvements when going from no prompt at all to the simple QA prompt.
+The biggest model, ChatGPT, shows the smallest differences in scores between the different prompting strategies, but still performs best with the MultiMedQA prompt.
 
 \subsection{Keyword vs Question Queries}
-
-\subsection{Model Answer Consistency}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/weighted_position_boxplot_by_model_and_question.png}
+    \caption{Boxplot of the weighted position of the LLM answers, by model and query type.}
+    \label{fig:weighted_position_boxplot_by_model_and_question}
+\end{figure}
+Figure \ref{fig:weighted_position_boxplot_by_model_and_question} shows the weighted position of the LLM answers, split by query type and model.
+The answers generated for the properly phrased question-type queries are ranked higher than the answers generated for the keyword queries.
 
 \subsection{ChatGPT Outlier Analysis}
 
