@@ -218,7 +218,7 @@ Those models only differ in the number of parameters, which are 124M, 355M, 774M
 The dataset used for pre-training is the WebText dataset, which consists 40GB of web text, which is scraped from URLs shared on Reddit that received at least 3 upvotes.
 Other than this pre-training, the models are not fine-tuned to any specific task.
 
-\subsubsection{Models optimized for dialog}
+\subsubsection{Models optimized for dialog}\label{sec:dialog-models}
 Dialog optimized models are fine-tuned for the task of interacting with a human in a dialog, usually as a chatbot.
 This is currently the use case of LLMs that comes closest to the task of long form question answering, so including models optimized for dialog is a natural choice.
 To make a model suitable for directly interacting with humans, different fine-tuning objectives are used in which the behavior of the model is aligned with the expectations of the human.
