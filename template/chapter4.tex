@@ -2,14 +2,14 @@
 In this chapter, we present the results of our experiments.
 First, the properties of the generated dataset are presented and visualized.
 Then, the results of the different retrieval methods are presented and compared.
-Finally, the results of ranking the LLM answers are presented and the influence of the different prompting strategies, model sizes, pre training methods and question types are discussed.
+Finally, the results of ranking the LLM answers are presented and the influence of the different prompting strategies, model sizes and question types are discussed.
 
 \section{Dataset}
 Our dataset is constructed according to the procedure described in section \ref{sec:dataset}.
 We now go more in depth on the properties of the final dataset, considering the type of queries, the number of answers per query and the length of the answers.
 \\
 The total number of queries in the final dataset is 50, each of which is accompanied by between 39 and 249 answers.
-The number of answers depends on how many of the given answer in the base dataset by \cite{goeuriot:2021} were, still available, i.e. not from Reddit or Twitter.
+The number of answers depends on how many of the given answer in the base dataset by \cite{goeuriot:2021:Consumer} were, still available, i.e. not from Reddit or Twitter.
 Since this was not the same for all queries, the number of answers per query varies.
 On average, there are about 178 evaluated documents per query available.
 
@@ -45,7 +45,7 @@ In total, we identify 17 question-style queries and 33 keyword-style queries.
 Figure \ref{fig:num_words_per_query} shows the number of words per query for both query types.
 As expected, the keyword queries are shorter than the question queries, with a median of 4 words compared to 7 words for the question queries.
 The shortest query is only two words long, while the longest query is 20 words long.
-In a later section, we investigate the differences in the performance of the different models depending on the two query types.
+In a later section, we investigate the differences in answer ranking of the different models depending on the two query types.
 \subsection{Documents}
 \begin{table}[tb]
 \centering
@@ -85,11 +85,11 @@ Figure \ref{fig:num_words_per_document} shows that the number of words per docum
 This is natural for documents scraped from the web, which do not only contain the main text, but also navigation bars, footers, sidebars and other elements.
 Those can not be fully removed with our trivial preprocessing methods.
 \subsection{Document Ratings}
-The document metrics in the dimensions of readability, credibility and relevance are the human annotations from \cite{goeuriot:2021}.
+The document metrics in the dimensions of readability, credibility and relevance are the human annotations from \cite{goeuriot:2021:Consumer}.
 Documents can have multiple ratings for each dimension, if they are annotated for multiple queries.
 This means that the total number of ratings per dimension (8902) is higher than the number of documents in the dataset (6692).
 \\
-
+\\
 In general, a surprisingly high number of documents are rated as not relevant to the given query.
 Figure \ref{fig:heatmap_rel_cred_read} shows three heatmaps, with each relevance category being displayed in its own heatmap.
 Documents rated with 0 relevance make up nearly half of the dataset and generally have lower credibility and readability scores.
@@ -117,14 +117,14 @@ Interestingly, we also find that the credibility and readability ratings for the
 In Appendix \ref{appendix:dataset}, we show an example of a document with multiple ratings for different queries.
 The 15 different ratings cover nearly all possible combinations of relevance, credibility and readability.
 \\
-As all documents for one query are annotated by the same person according to \cite{goeuriot:2021}, we assume that the annotators were consistent in their ratings for the same query.
+As all documents for one query are annotated by the same person according to \cite{goeuriot:2021:Consumer}, we assume that the annotators were consistent in their ratings for the same query.
 Because we are only interested in the ranking of the documents for one query at a time, we do not remove or aggregate the scores, as this could alter the ranking of the documents compared to documents that were only ranked for this specific query.
 
 \section{Retrieval Pipelines}
 In this section, we present the results of the different retrieval pipelines.
 We chose to evaluate the pipelines using nDCG@10, which was explained in section \ref{sec:evaluation-of-retrieval-models}.
 nDCG is a suitable metric for our task, as it takes into account multiple different relevance/credibility/readability levels instead of only the binary relevant/not relevant distinction.
-Furthermore, it emphasizes the importance of the top results, which we expect to be the most competitive ones against the LLM answers, so it is important to be able to distinguish between at the top level.
+Furthermore, it emphasizes the importance of the top results, which we expect to be the most competitive ones against the LLM answers, so it is important to be able to distinguish between answers at the top level.
 We chose a cutoff of 10, because even tough the minimum available number of answers per query is 39, the number of relevant results is much lower.
 \\
 \subsection{Baseline Pipelines}
@@ -161,7 +161,7 @@ colbertv2       & 0.634 & 0.799 & 0.65  \\
 duoT5            & 0.64  & 0.805 & 0.714 \\
 monoT5           & \textbf{0.645} & \textbf{0.813} & \textbf{0.722}
 \end{tabularx}
-\caption{Results of the transformer pipelines, shown as nDCG@10. Best results of the baseline pipelines are shown for comparison. All models are trained on the MS MARCO passage ranking dataset(\cite{bajaj:2016}).}
+\caption{Results of the transformer pipelines, shown as nDCG@10. Best results of the baseline pipelines are shown for comparison. All models are trained on the MS MARCO passage ranking dataset(\cite{bajaj:2016:MSMARCO}).}
 \label{tab:transformer_pipelines}
 \end{table}
 Table \ref{tab:transformer_pipelines} shows the nDCG@10 scores for the different transformer-based pipelines, compared to the best baseline results.
@@ -178,11 +178,11 @@ Even tough the transformer models are not specifically trained to consider reada
 Because ranking models that consider readability the main ranking dimension are not available, we investigate adding external scores to the ranking process.
 First, the statistical scores described in Section \ref{sec:external-scores} are calculated for all documents in the dataset.
 We then compare the calculated scores to the readability scores assigned by the human annotators.
-Unfortunately, for our dataset we do not find a strong correlation between the readability scores and the statistical scores.
+Unfortunately, for our dataset we do not find a strong correlation between the human annotated readability scores and the statistical scores.
 The Flesch Reading Ease score has a correlation of 0.177 with the readability scores, while the full textstat score has a slightly negative correlation of -0.147.
 Those correlations are not strong enough to justify using the statistical scores as a proxy for readability.
 \\
-This probably is connected to the fact that the documents in our dataset are scraped from the web, which means that even after preprocessing they still contain noise, which is not accounted for by the statistical scores.
+This probably is connected to the fact that the documents in our dataset are scraped from the web, which means that even after preprocessing they still contain noise, which is not accounted for by the statistical scores, which are intended for use one clean text.
 
 \section{Ranking of Generated Answers}
 We now present the results of ranking the LLM answers using the best performing pipeline, the monoT5 pipeline.
@@ -240,7 +240,7 @@ Even the three smaller instruction tuned models (Falcon and Llama) show strong i
 As those models are already fine-tuned on the task of question answering, we could have expected them to perform better on the no prompt strategy.
 The biggest model, ChatGPT, shows the smallest differences in scores between the different prompting strategies, but still performs best with the MultiMedQA prompt.
 \\
-The results are consistent with the findings by \cite{reynolds:2021} that more complex prompting strategies improve the performance of LLMs.
+The results are consistent with the findings by \cite{reynolds:2021:Prompt} that more complex prompting strategies improve the performance of LLMs.
 
 \subsection{Keyword vs Question Queries}
 \begin{figure}
@@ -259,8 +259,8 @@ This also holds true for ChatGPT, which is the most consistent model overall.
 \subsection{Comparison to other Benchmarks}\label{sec:benchmark_comparison}
 We compare the median normalized ranking position of the LLM answers to the results of other benchmarks.
 To our knowledge, there are currently no benchmarks available that evaluate the performance of LLMs for long form question answering and provide results for the same models that we use.
-The HuggingFace Open LLM Leaderboard by \cite{beeching:2023} provides results for many models hosted on the HuggingFace hub, over multiple different benchmarks.
-From here, we select the ARC~(\cite{clark:2018}), the HellaSwag~(\cite{zellers:2019}) and the MMLU~(\cite{hendrycks:2020}) benchmarks, which are all single choice question answering benchmarks.
+The HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open} provides results for many models hosted on the HuggingFace hub, over multiple different benchmarks.
+From here, we select the ARC~(\cite{clark:2018:Think}), the HellaSwag~(\cite{zellers:2019:HellaSwag}) and the MMLU~(\cite{hendrycks:2020:Measuring}) benchmarks, which are all single choice question answering benchmarks.
 \begin{table}[tb]
     \centering
     \begin{tabularx}{\textwidth}{lcccc}
@@ -275,8 +275,8 @@ From here, we select the ARC~(\cite{clark:2018}), the HellaSwag~(\cite{zellers:2
     ChatGPT        & \textbf{0.006}                    & \textbf{85.2} & \textbf{85.5}      & \textbf{70.0}
     \end{tabularx}
     \caption{Comparison of the mean normalized ranking position of the LLM answers to the results of other benchmarks.
-    For the HuggingFace models, those scores are taken from the HuggingFace Open LLM Leaderboard by \cite{beeching:2023}.
-    For ChatGPT, we estimate the score from the GPT-4 Technical Report~(\cite{openai:2023}), which provides scores for GPT-3.5, the underlying model of ChatGPT.
+    For the HuggingFace models, those scores are taken from the HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open}.
+    For ChatGPT, we estimate the score from the GPT-4 Technical Report~(\cite{openai:2023:GPT}), which provides scores for GPT-3.5, the underlying model of ChatGPT.
     This is not the exact model we use in out testing, but we assume that the performance is similar.
     Mean Ranking is the mean normalized ranking position over all generated answers for the model.
     }
