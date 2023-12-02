@@ -216,7 +216,7 @@ The other models have much higher standard deviations, with the Llama models bot
 The different prompting strategies strongly influence the final rankings of the LLM answers.
 \begin{table}[tb]
 \centering
-\begin{tabular}{lcccc}
+\begin{tabular}{lllll}
 \textbf{Model}        & \textbf{No Prompt} & \textbf{QA}     & \textbf{QuestionAnswer} & \textbf{MultiMedQA} \\\hline
 GPT-2        & 0.763      & 0.663 & 0.614    & 0.603      \\
 GPT-2 Medium & 0.675      & 0.524 & 0.544    & 0.618      \\
@@ -253,14 +253,12 @@ Figure \ref{fig:weighted_position_boxplot_by_model_and_question} shows the norma
 Answers generated for the properly phrased question-type queries achieve higher median rankings than the answers generated for the keyword queries.
 The spread of the rankings is also smaller for the question-type queries, with the keyword queries having more outliers at the bottom of the ranking.
 This also holds true for ChatGPT, which is the most consistent model overall.
-\\
-
 
 \subsection{Comparison to other Benchmarks}\label{sec:benchmark_comparison}
 We compare the median normalized ranking position of the LLM answers to the results of other benchmarks.
 To our knowledge, there are currently no benchmarks available that evaluate the performance of LLMs for long form question answering and provide results for the same models that we use.
-The HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open} provides results for many models hosted on the HuggingFace hub, over multiple different benchmarks.
-From here, we select the ARC~(\cite{clark:2018:Think}), the HellaSwag~(\cite{zellers:2019:HellaSwag}) and the MMLU~(\cite{hendrycks:2020:Measuring}) benchmarks, which are all single choice question answering benchmarks.
+The HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open} provides results on multiple different benchmarks for many models hosted on the HuggingFace hub.
+From here, we select the ARC~(\cite{clark:2018:Think}), the HellaSwag~(\cite{zellers:2019:HellaSwag}) and the MMLU~(\cite{hendrycks:2020:Measuring}) datasets, all of which are single choice question answering benchmarks.
 \begin{table}[tb]
     \centering
     \begin{tabularx}{\textwidth}{lcccc}
@@ -285,5 +283,34 @@ From here, we select the ARC~(\cite{clark:2018:Think}), the HellaSwag~(\cite{zel
 Table \ref{tab:benchmark_comparison} shows the scores over those benchmarks, as well as the mean normalized ranking position of the LLM answers.
 On all benchmarks, there is the general trend of higher number of model parameters leading to better scores.
 For our dataset this trend is only broken for the two Llama versions, with the 7B model ranking slightly better than the 13B model.
-Other than that, our results are consistent with the results of the other benchmarks.
+Other than that, our results are consistent with the results of the traditional benchmarks.
 
+\subsection{Evaluation of Badly Ranked ChatGPT Answers}
+While ChatGPT generally performs best, there are still some answers that are ranked badly.
+We manually inspect each of the ChatGPT generated answers with a normalized ranking position of 0.1 or higher, meaning if there are 100 documents for the query, the answer is ranked 10 or lower.
+All answers stem from four different queries, namely ``hypothyroidism symptoms'', ``List of multiple sclerosis symptoms'',  ``exercises for better posture'' and ``my risk for developing type 2 diabetes''.
+The badly ranked answers for the first three queries all have in common that they are formatted as lists, either enumerated or starting each item with a dash.
+From a layperson's perspective, those answers are readable, relevant and credible, generally seeming to answer the question well.
+We identify all answers that are formatted as lists by searching for generated answers containing more than five lines, of which at least four start with either a dash or a number.
+Table \ref{tab:badly_ranked_answers} shows the mean normalized ranking position of the LLM answers, split by whether the answer is formatted as a list or not.
+
+
+\begin{table}[tb]
+    \centering
+    \begin{tabularx}{\textwidth}{lXXXX}
+    \hline
+    \textbf{Models} & \multicolumn{2}{c}{\textbf{``As an AI...''}} & \multicolumn{2}{c}{\textbf{List Style}} \\
+    \cline{2-5} 
+    & \textbf{Yes} & \textbf{No} & \textbf{Yes} & \textbf{No} \\
+    \hline
+    GPT-2        & N/A (0)          & 0.6608 (2000) & N/A (0)          & 0.6608 (2000) \\
+    GPT-2 Medium & N/A (0)          & 0.5902 (2000) & N/A (0)          & 0.5902 (2000) \\
+    GPT-2 Large  & N/A (0)          & 0.3999 (2000) & 0.4521 (27)      & 0.3992 (1973) \\
+    GPT-2 XL     & N/A (0)          & 0.3662 (2000) & 0.2414 (14)      & 0.367 (1986)  \\
+    Falcon 7B    & 0.191 (30)       & 0.1461 (1970) & 0.4169 (27)      & 0.1431 (1973) \\
+    Llama-2 7B   & 0.0 (1)          & 0.0792 (1999) & 0.0566 (112)     & 0.0805 (1888) \\
+    Llama-2 13B  & N/A (0)          & 0.0818 (2000) & 0.07 (206)       & 0.0831 (1794) \\
+    ChatGPT      & 0.0578 (20)      & 0.0056 (1980) & 0.0941 (94)      & 0.0017 (1906) \\
+    \hline
+    \end{tabularx}
+\end{table}

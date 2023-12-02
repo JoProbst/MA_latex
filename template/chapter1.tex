@@ -13,27 +13,50 @@
 % We show that our metric is able to capture the number of model parameters.
 
 
-Recent advancements in Large Language Models (LLMs) have significantly impacted the landscape of Natural Language Processing (NLP), particularly in the realm of information retrieval (IR) and question answering (QA).
-The transformative potential of LLMs, especially those based on the transformer architecture introduced by Vaswani et al. (2017), is evident in their ability to comprehend and generate human-like textual responses.
-Seminal models like BERT (Devlin et al., 2018) and GPT-2 (Radford et al., 2018), followed by the larger GPT-3 (Brown et al., 2020), have demonstrated remarkable improvements in various NLP tasks over their predecessors.
-These models, trained on extensive datasets, exhibit a wide range of capabilities, including the generation of coherent long texts and performing complex language tasks like translation and summarization.
+% Recent advancements in Large Language Models (LLMs) have significantly impacted the landscape of Natural Language Processing (NLP), particularly in the realm of information retrieval (IR) and question answering (QA).
+% The transformative potential of LLMs, especially those based on the transformer architecture introduced by Vaswani et al. (2017), is evident in their ability to comprehend and generate human-like textual responses.
+% Seminal models like BERT (Devlin et al., 2018) and GPT-2 (Radford et al., 2018), followed by the larger GPT-3 (Brown et al., 2020), have demonstrated remarkable improvements in various NLP tasks over their predecessors.
+% These models, trained on extensive datasets, exhibit a wide range of capabilities, including the generation of coherent long texts and performing complex language tasks like translation and summarization.
+% \\
+% While the scaling up of models like GPT-3 has led to emergent abilities, as described by Wei et al. (2022), it has also posed new challenges in the evaluation of these LLMs, particularly in the context of QA.
+% The diversity and complexity of long-form QA, a task where answers are not constrained to predefined formats, necessitates nuanced evaluation methods.
+% Traditional metrics like accuracy or overlap-based scores are insufficient for comprehensively evaluating such responses.
+% Instead, human evaluation emerges as the gold standard, examining aspects like relevance, readability, and credibility of the generated answers.
+% \\
+% This paper focuses on the intersection of LLMs and IR, specifically in the context of long-form QA.
+% Leveraging the capabilities of models like GPT-2, Falcon, Llama 2, and ChatGPT, we explore their efficacy in generating responses to health-related queries.
+% We employ a diverse range of prompting strategies to elicit varied responses from these models, considering the substantial impact of prompting methods on the quality of LLM outputs, as highlighted by Reynolds et al. (2021).
+
+In recent years, Large Language Models (LLMs) have become increasingly popular in the field of Natural Language Processing (NLP).
+The development started with the introduction of the attention architecture by \cite{vaswani:2017:Attention}, on which the transformer architecture is based.
+Early models like BERT (\cite{devlin:2018:BERT}) and GPT-2 (\cite{radford:2018:Improving}) quickly started to outperform previous state-of-the-art models on many NLP tasks.
+Scaling up the models and especially the amount of training data led to the release of GPT-3 (\cite{brown:2020:Language}), which is able to perform a wide range of tasks, including translation, summarization and question answering.
 \\
-While the scaling up of models like GPT-3 has led to emergent abilities, as described by Wei et al. (2022), it has also posed new challenges in the evaluation of these LLMs, particularly in the context of QA.
-The diversity and complexity of long-form QA, a task where answers are not constrained to predefined formats, necessitates nuanced evaluation methods.
-Traditional metrics like accuracy or overlap-based scores are insufficient for comprehensively evaluating such responses.
-Instead, human evaluation emerges as the gold standard, examining aspects like relevance, readability, and credibility of the generated answers.
+The most publicly visible use of LLMs are chatbots, like OpenAI's ChatGPT\footnote{\url{https://chat.openai.com/}} or Anthropic's Claude\footnote{\url{https://claude.ai/}}.
+These chatbots are marketed to professionals and casual users alike, with the promise of being able to answer most questions a user could have in a human-like manner.
+This is a novel task in the field of NLP, as the chatbots are not constrained to predefined formats, but are able to generate long-form answers.
+Traditional question answering tasks like single or choice questions or extracting answers from a given text are not representative of the task the chatbots are supposed to perform.
+Therefore, new evaluation methods are needed to evaluate the quality of generated long-form answers.
 \\
-This paper focuses on the intersection of LLMs and IR, specifically in the context of long-form QA.
-Leveraging the capabilities of models like GPT-2, Falcon, Llama 2, and ChatGPT, we explore their efficacy in generating responses to health-related queries.
-We employ a diverse range of prompting strategies to elicit varied responses from these models, considering the substantial impact of prompting methods on the quality of LLM outputs, as highlighted by Reynolds et al. (2021).
+Furthermore, the quality of the answers has to be evaluated in a multidimensional manner.
+In contrast to previous question answering tasks, there is no simple notion of a correct answer, since answer quality is not only determined by the correctness of the answer, but also by its readability, relevance and credibility.
+This is difficult to capture with traditional evaluation methods like accuracy for single choice question answering or the overlap between the extracted answer and the ground truth for extractive question answering.
+\\
+Currently, the most accurate way to evaluate the quality of the answers is human evaluation.
+This is however very expensive and time-consuming compared to automated evaluation methods.
+To reduce the cost of human evaluation and to be able to evaluate and compare the chatbots on a large scale, automated evaluation methods are needed.
+\\
+In this thesis, we propose a new evaluation method for long-form question answering based on information retrieval techniques.
+Using a dataset based on health questions from \cite{goeuriot:2021:Consumer}, we construct a benchmark consisting of multiple queries and human generated answers based on web content.
+We then use retrieval methods to rank answers generated by different LLMs against those human generated answers.
+Based on the rank of the generated answer we can compare the quality of the answers by different LLMs.
+This method is able to capture the multidimensional nature of answer quality, if the retrieval method is able to capture the relevance, readability and credibility of the answers.
+Evaluating the multidimensional retrieval performance of different retrieval methods is therefore an important part of this thesis.
+\\
+With the answer evaluation process being automated, this method allows for a large scale evaluation of LLMs, including the evaluation of different prompting strategies, the evaluation of how consistent the answers of a model are and the evaluation of how the quality of the answers changes with the number of model parameters.
 
 \section{Motivation}\label{sec:motivation}
-
-The motivation behind this thesis stems from the need to develop comprehensive and reliable evaluation methods for LLMs, especially in the realm of long-form QA. Current evaluation paradigms are limited in their ability to fully capture the depth and breadth of responses generated by state-of-the-art LLMs. This limitation is particularly evident when considering the emergent abilities of these models, such as generating coherent long narratives or answering complex queries across various domains (Wei et al., 2022). A robust evaluation framework is crucial for understanding and improving these models, ensuring their reliability, and paving the way for their practical applications in real-world scenarios.
-
-Furthermore, the expanding capabilities of LLMs call for a multi-dimensional approach to evaluation. Aspects such as relevance, readability, and credibility of the responses are as important as their factual accuracy. This multi-faceted approach aligns with the evolving expectations from AI systems in terms of not just providing correct information but also doing so in a manner that is user-friendly and trustworthy.
-
-In summary, this thesis seeks to bridge the gap in the evaluation of LLMs, particularly for long-form QA tasks. By integrating principles from IR and adapting them to the unique challenges posed by LLMs, this work aims to contribute significantly to the field of NLP, offering a comprehensive framework for evaluating the nuanced and complex outputs of contemporary language models.
+How to differentiate this section from Introduction?
 
 \section{Research Questions}\label{sec:research-question}
 In order to evaluate the proposed retrieval-based implicit evaluation method, the following research questions are investigated:
@@ -45,25 +68,26 @@ In order to evaluate the proposed retrieval-based implicit evaluation method, th
 \end{itemize}
 
 
-
-% \section{Scope and Limitations}\label{sec:scope-and-limitations}
-% This thesis is meant as a first step in investigating the use of information retrieval techniques for evaluating Large Language Models.
-% The used dataset is not originally intended for this purpose and was adapted accordingly.
-% Limitations of the dataset will be discussed in detail in section TODO.
+\section{Scope and Limitations}\label{sec:scope-and-limitations}
+This thesis is meant as a first step in investigating the use of information retrieval techniques for evaluating the long-form question answering capabilities of LLMs.
+It is not meant to be a comprehensive evaluation of the proposed method, but rather a proof of concept on which future work can build.
+\\
+The benchmark dataset is not built from scratch, but is based on the dataset from \cite{goeuriot:2021:Consumer}, which is not originally intended for evaluating long-form question answering.
+The dataset is therefore not perfectly suited for the task, but is still useful for a first evaluation of the proposed method.
 
 
 \section{Structure of the Thesis}\label{sec:structure-of-the-thesis}
 The thesis is structured as follows:\\
 After this Introduction, the related work will be discussed.
-First, the general field of evaluating Large Language Model in the context of question answering is introduced.
-Different question answering tasks and their evaluation methods are presented.
+First, the general field of evaluating Large Language Model in the context of question answering is introduced, alongside different question answering tasks and their evaluation methods.
 Then, the different retrieval methods used in this work are presented, together with the evaluation metrics used to compare them.
-A short section on how retrieval methods have previously been used to evaluate NLP tasks is also included.
+This section is concluded with a discussion on how retrieval methods have previously been used to evaluate NLP tasks.
 \\
-The next section describes the experimental setting, from dataset collection and preparation over development of the different retrieval pipelines and generation of LLM responses the the questions in the dataset.
+The next section describes the experimental setting, from dataset collection and preparation over development of the different retrieval pipelines and generation of LLM responses to the questions in the dataset.
 \\
-Afterwards, the experimental results are presented. The results contain the comparison of the different retrieval methods as well as a ranking of the LLM answers using the best retrieval method.
-Additionally, the results of ranking the LLM answers are compared to the results of the current evaluation methods introduced in the related work section.
-Noteworthy shortcomings of the LLMS are also discussed in this section.
+Afterwards, the experimental results are presented.
+The results contain the comparison of the different retrieval methods as well as a ranking of the LLM answers using the best retrieval method.
+We compare different prompting strategies and the correlation of the retrieval-based implicit evaluation method with the number of model parameters.
+A comparison of the retrieval-based implicit evaluation method with existing evaluation methods is also included.
 \\
-The thesis is concluded with a discussion and limitations section, followed by a conclusion and an outlook on future work.
+The thesis is concluded with a discussion section, followed by outlook on future work and a conclusion.
