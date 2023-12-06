@@ -2,7 +2,7 @@
 The work presented in this thesis is based on two main areas of research: the evaluation of Large Language Models (LLMs) and Information Retrieval (IR).
 In this chapter, the current state of research in those areas is presented, as it relates to this thesis.
 We start with a short introduction to LLMs, then present the current evaluation methods for those models in the field of question answering, since the different versions of question answering tasks, especially long form question answering are most similar to our evaluation setup.
-\\
+
 Afterwards, the field of IR is introduced.
 Different retrieval methods used in this thesis are presented and why they were chosen for this work.
 Additionally, the evaluation metrics used to compare those retrieval methods are introduced.
@@ -12,35 +12,35 @@ Transformer-based language models are generally defined as systems that produce 
 The rise of LLMs started with the introduction of the transformer architecture by \cite{vaswani:2017:Attention}, followed by the release of models like BERT~(\cite{devlin:2018:BERT}) and GPT-2~(\cite{radford:2018:Improving}).
 The transformer architecture allowed the models to process more context than previous models, such as LSTM-based methods like ELMo~(\cite{peters:2018:Deep}), or static word embeddings based on statistical co-occurrences like GloVe~(\cite{pennington:2014:Glove}).
 This led to improvements in many NLP tasks over earlier methods, as shown by \cite{radford:2018:Improving}, who compare the base GPT performance against multiple then state-of-the-art models on different tasks, improving or performing at least competitively on all of them.
-\\
+
 With the release of GPT-3~(\cite{brown:2020:Language}), the size of datasets used to train LLMs, as well as the number of parameters in the models increased significantly.
 While GPT-2 in its largest version has a total of 1.5 billion parameters, GPT-3 has 175 billion parameters.
 As \cite{wei:2022:Emergent} show, this scale not only leads to improvements over previously used benchmark compared to smaller models, but also to what they call \textit{emergent abilities}.
 \textit{Emergent abilities} are abilities that are not present in smaller models.
 Those include generating long coherent stories or poems, translating between languages and answering long form questions.
 None of those capabilities are present in smaller models, with e.g. the largest version of GPT-2 performing poorly on translation and summarization, as shown in the original paper~(\cite{radford:2018:Improving}).
-\\
+
 With the capabilities of LLMs expanding, the task of evaluating them becomes more challenging.
-\\\\
+
 In this section, we focus on the current evaluation methods of Question Answering (QA) capabilities of LLMs and how the task of long form question answering is evaluated.
-\\
+
 The field of QA in NLP contains multiple different tasks, which can be grouped into extractive QA, single/multiple choice QA and long form QA.
 Those tasks vary in their complexity, with earlier models like BERT and GPT-2 already being benchmarked on extractive QA and single choice QA.
-\\
+
 Extractive QA and single/multiple choice QA have in common that they are relatively easy to evaluate.
 When evaluating extractive QA the overlap of the predicted tokens with the answer span can be calculated, and for single choice QA the predicted answer option can be compared to the ground truth answer.
-\\
+
 This changes when evaluating long form QA.
 Here, models are evaluated on their ability to answer questions in a free form manner, without constraining the length of the answer.
 Answers can get long and complex, branching out in different directions by including examples or other information.
 The evaluation of such answers is not as straightforward as for the other versions of QA, so human evaluation is the gold standard.
-\\
+
 In the following, the different QA evaluation tasks are introduced, including popular datasets and evaluation metrics for them.
 
 \subsection{Extractive Question Answering}\label{sec:extractive-qa}
 Extractive QA is the task of answering questions given a context containing the answer.
 In this context, which can be a short paragraph or entire Wikipedia article, the correct answer span has to be selected by the model.
-\\
+
 One of the most popular datasets for evaluating LLMs in this task is SQuAD~(\cite{rajpurkar:2016:SQuAD}), and its successor SQuAD 2.0~(\cite{rajpurkar:2018:Know}), which includes unanswerable questions.
 Adding unanswerable questions to the dataset is a way to test the model's ability to detect when a question can not be answered by the given context.
 Many other datasets like NarrativeQA~(\cite{kovcisky:2018:The}), QuAC~(\cite{choi:2018:QuAC}) or Natural Questions~(\cite{kwiatkowski:2019:Natural}) are based on the same principle.
@@ -54,28 +54,31 @@ Figure~\ref{fig:extractive_qa_example} shows a generic example of a question fro
         \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,8);
         % Draw text
         \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,8.0) {
-            \textbf{Context:}\\
+            \textbf{Context:}
+
             Donald Duck is a cartoon character created in 1934 by Walt Disney Productions. He is an anthropomorphic white duck with a yellow-orange bill, legs, and feet. He typically wears a \textcolor{red}{sailor suit with a bow tie and a hat}.
         };
         % Draw vertical line
         \draw[thick] (0,4.5) -- (10,4.5);
         % Draw question
         \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,4.5) {
-            \textbf{Question:}\\
+            \textbf{Question:}
+
             In which outfit is Donald Duck typically protrayed?
         };
         % Draw vertical line
         \draw[thick] (0,2.0) -- (10,2.0);
         % Draw question
         \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,2.0) {
-            \textbf{Answer:}\\
+            \textbf{Answer:}
+
             \textcolor{red}{sailor suit with a bow tie and a hat}
         };
     \end{tikzpicture}
     \caption{Example of a typical extractive question answering task: The answer span ``sailor suit with a bow tie and a hat'' is highlighted in red in the paragraph.}
     \label{fig:extractive_qa_example}
 \end{figure}
-\\
+
 The evaluation metrics for tasks of this category are based on the overlap between the predicted answer span and the ground truth answer span.
 Specifically, this would be the exact match (EM) score, which measures the percentage of exact matches between the predicted and the ground truth answer span.
 Alternatively, the F1 score as the harmonic mean of precision and recall can be used, with precision being defined as
@@ -86,10 +89,10 @@ with a correct token being a predicted token that overlaps with the ground truth
 The F1 score is then calculated as
 \[ \text{F1} = 2 \times \frac{\text{precision} \times \text{recall}}{\text{precision} + \text{recall}} \]
 which is the harmonic mean of precision and recall.
-\\\\
+
 Earlier LLMs like BERT have to be specifically fine-tuned for the task of extractive QA.
 For each token in the provided context, the model assigns a probability of the token being the starting or ending token of the answer span~(\cite{devlin:2018:BERT}).
-\\
+
 Later models like GPT-3 are able to directly generate the answer from the context and the questions without any fine-tuning, by using the zero-shot, single-shot or multi-shot capabilities of the model~(\cite{brown:2020:Language}).
 In some settings of the datasets, the context can be completely omitted, forcing the model to directly answer the question.
 This means that the results of the two approaches are not directly comparable, because even though the models were evaluated on the same dataset, the approaches are fundamentally different.
@@ -99,7 +102,7 @@ For single and multiple choice question answering, the model has to select the c
 While most datasets are single choice datasets, some datasets (like MultiRC by \cite{khashabi:2018:Looking}) are multiple choice, so that the model has to check each answer for correctness, instead of just selecting the best fitting one.
 Questions for single and multiple choice QA often stem from official exams, like the MMLU dataset~(\cite{hendrycks:2020:Measuring}), which combines question from many exams like the United States Medical Licensing Examination or the Examination for Professional Practice in Psychology.
 In other datasets, the questions are collected from crowd workers and verified by experts~(\cite{clark:2018:Think},~\cite{mihaylov:2018:Can}).
-\\
+
 \begin{figure}[tb]
     \centering
     \begin{tikzpicture}
@@ -107,26 +110,32 @@ In other datasets, the questions are collected from crowd workers and verified b
         \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,10);
         % Draw text
         \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,10.0) {
-            \textbf{Context:}\\
+            \textbf{Context:}
+
             Donald Duck is a cartoon character created in 1934 by Walt Disney Productions. He is an anthropomorphic white duck with a yellow-orange bill, legs, and feet. He typically wears a sailor suit with a bow tie and a hat.
         };
         % Draw vertical line
         \draw[thick] (0,6) -- (10,6);
         % Draw question
         \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,6) {
-            \textbf{Question:}\\
+            \textbf{Question:}
+
             What does Donald Duck typically wear?
         };
         % Draw multiple-choice options
         \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,4.8) {
-            \textbf{(A)} T-shirt and jeans \\
-            \textcolor{red}{\textbf{(B)} Sailor suit with a bow tie and a hat} \\
-            \textbf{(C)} Business suit \\
+            \textbf{(A)} T-shirt and jeans
+
+            \textcolor{red}{\textbf{(B)} Sailor suit with a bow tie and a hat}
+
+            \textbf{(C)} Business suit
+
             \textbf{(D)} Basketball jersey
         };
         \draw[thick] (0,2) -- (10,2);
         \node[align=left,anchor=north west, text width=9cm,inner sep=1em] at (0.5,2) {
-            \textbf{Answer:}\\
+            \textbf{Answer:}
+
             \textcolor{blue}{B}
         };
     \end{tikzpicture}
@@ -137,7 +146,7 @@ In other datasets, the questions are collected from crowd workers and verified b
 Figure \ref{fig:mc_example} shows an example of a single choice question with context.
 The LLM is provided with the context, the question and the answer options and a ``Answer: '' prefix.
 Based on this, the model has to select one of the given options.
-\\
+
 Evaluation is straightforward in this case, the model's generated answer option is compared to the ground truth answer and accuracy over all questions is calculated.
 
 \subsection{Long Form Question Answering}\label{sec:long-form-qa}
@@ -148,16 +157,19 @@ Evaluation is straightforward in this case, the model's generated answer option 
         \draw[fill=gray!10,rounded corners=1em] (0,0) rectangle (10,10);
         % Draw question
         \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,10) {
-            \textbf{Question:}\\
+            \textbf{Question:}
+
             Describe the evolution of Donald Duck's character design and attire over the years, focusing on any major changes and the reasons behind them?
         };
         % Draw vertical line
         \draw[thick] (0,6.5) -- (10,6.5);
         % Draw sample answer
         \node[align=left,anchor=north west, text width=8.5cm,inner sep=1em] at (0.5,6.5) {
-            \textbf{Answer:}\\
+            \textbf{Answer:}
+
             \textcolor{blue}{The evolution of Donald Duck's character design and attire has seen several notable changes since his creation by Walt Disney and Dick Lundy in 1934. Here is an overview of the major changes and the reasons behind them:}
-            \\
+            
+
             \centerline{\Huge [\vdots]}
         };
     \end{tikzpicture}
@@ -167,18 +179,18 @@ Evaluation is straightforward in this case, the model's generated answer option 
 Long form QA refers to the task of answering open-ended questions, which can usually not be answered by simply providing one entity or number, but require an in-depth answer.
 % Similar tasks exist in the IR community, e.g. generating query biased summaries as described by \cite{tombros:1998}, in which a retrieval model retrieves and summarizes documents given a user query.
 With LLMs being deployed in chatbots and as such expected to deliver answers mostly without context, evaluating the models on long form QA is important.
-\\
+
 So far, only a handful of datasets are available for this task, with the first dataset in this category being the ELI5 dataset~(\cite{fan:2019:ELI5}).
 It consists of questions and the corresponding highest voted answer from the "Explain Like I'm Five" subreddit, where users ask questions about complex topics, which are then answered by other users.
 They are accompanied by support documents, which are retrieved from web sources by querying for the original question.
 This dataset was used to by~\cite{nakano:2021:Webgpt} to fine-tune GPT-3 for the task of long form QA without using the context documents.
 The answers given by the fine-tuned model are evaluated by humans, by comparing them to the highest voted answer from the ELI5 dataset.
-\\ 
+
 An additional dataset for this task is the MultiMedQA~(\cite{singhal:2023:Towards}), which curates questions from multiple other datasets used previously. 
 Answers generated by physicians are used as ground truth answers.
 Those are then compared to the model generated answers by other physicians, as well as by laypeople.
 Additionally, the answers were individually rated in different rubrics, introduced in a previous work~(\cite{singhal:2022:Large}).
-\\
+
 None of the papers for current, main-stream LLMs like GPT-3~(\cite{brown:2020:Language}), GPT-4~(\cite{openai:2023:GPT}) or Llama 2~(\cite{touvron:2023:Llama}) include evaluations on common benchmarks for this category.
 This shows that long form QA is still a relatively new task, lacking sufficient academic benchmarks.
 
@@ -192,8 +204,8 @@ Multiple evaluation dimensions are of interest, for example:
     \item \textbf{Credibility:} Are there any references provided and are they of high quality?
 \end{itemize}
 This adds additional complexity to the evaluation process, compared to other QA tasks which only measure correctness of the answer.
-\\
-\\
+
+
 \cite{xu:2023:A} focus on the evaluation process of LFQA, comparing different automatic evaluation methods to human judgement.
 They differentiate between general-purpose generation evaluation metrics, which were originally designed for other NLP tasks like summarization or translation, and fine-tuned metrics, which are fine-tuned to LFQA.
 The following types of metrics are considered general-purpose metrics, used in the same way in different NLP tasks:
@@ -207,15 +219,15 @@ In addition to these metrics, \cite{xu:2023:A} evaluate two different versions o
 The first one is based on Longformer~(\cite{beltagy:2020:Longformer}), in which the model is fine-tuned to produce a score given a question and an answer, optionally combined with evidence documents.
 The second model is a fine-tuned version of GPT-3, which is trained to output either \emph{Answer1} or \emph{Answer2} given a question and two answer options.
 Both fine-tuned models are trained on the dataset generated by \cite{nakano:2021:Webgpt}, which contains human preference labels for different answer pairs.
-\\
+
 All automatic evaluation methods are evaluated on the task of choosing the preferable answer given two long form answers to a question.
 The results are compared to previous human judgement on the same task.
 They find that one of their baseline models, choosing always the longest answer, performs almost as good as the fine-tuned GPT-3 model, which outperformed all other methods.
 Both variants are still outperformed by human annotations, which is the gold standard.
-\\\\
+
 \cite{krishna:2021:Hurdles} investigates in more detail the problems of reference based evaluation metrics like ROUGE-L. 
 They highlight that those metrics are unable to capture answer components like examples if those examples are not present in the ground truth answers. 
-\\
+
 Furthermore, they note that even human evaluation is limited in judging long form QA over different models.
 Some problems include the hiring process of experts, especially when datasets tackle multiple fields of expertise.
 Finding experts of similar education and background is challenging when doing evaluations of different models over a span of time.
@@ -224,15 +236,15 @@ Similar problems have previously been shown by \cite{akoury:2020:Storium} in the
 They find that crowd workers have low agreement for different evaluation metrics when evaluating the same stories.
 They tackle this problem by using gamification techniques to activate online users of a story writing platform to evaluate and improve the generated stories.
 A similar approach is taken by \cite{dugan:2020:RoFT}, who implement a website where users try to differentiate machine-generated text from human generated text.
-\\\\
+
 This shows that there are still many obstacles to overcome in the task of evaluating long form QA systems.
 We try to tackle some of those problems with the approach presented in this thesis.
 To incorporate multiple metrics, we first compare and evaluate multiple retrieval methods on the previously mentioned metrics of relevance, readability and credibility.
 This ensures that the document ranking is optimized for multiple dimensions, instead of just one.
 Based on the findings by \cite{xu:2023:A} how shows that of the automated metrics the transformer-based models perform best, we compare multiple transformer-based model for the retrieval step.
-\\
+
 Since our approach of tackling this problem uses concepts from the field of information retrieval, a short overview of relevant methods is given in the next section.
-\\
+
 %------------------------------------------------------------------
 %------------------------------------------------------------------
 %------------------------------------------------------------------
@@ -241,7 +253,7 @@ Since our approach of tackling this problem uses concepts from the field of info
 Since we want to use retrieval methods to evaluate the performance of LLMs, we will give some background on the field of Information Retrieval(IR), and how it relates to long form QA.
 IR is the process of retrieving relevant information based on an information need, from a collection of documents, usually in the form of whole documents, passages or single sentences.
 A brief overview of a retrieval pipeline based on ``An introduction to information retrieval'' by \cite{manning:2009:An} is provided now.
-\\
+
 In most IR systems, the document corpus first has to be brought into a form that is more suitable for retrieval.
 This process usually starts with a step to reduce to total size of the vocabulary, using tokenization, stemming, stop word removal and other techniques.
 This removes unnecessary information from the documents, which would otherwise increase the size of the index, which is created in the next step.
@@ -288,7 +300,7 @@ Both models use the implementation in the Terrier IR platform~(\cite{ounis:2005:
 Term Frequency-Inverse Document Frequency (tf-idf) is one of the most commonly used models in information retrieval.
 It measures the importance of a term in a document relative to a collection of documents or corpus.
 The central intuition is that terms that appear frequently in a document but not in many other documents in the corpus are significant and thus should be given higher weight.
-\\\\
+
 Given a query \( q \) consisting of terms \( t_1,t_2,\cdots,t_n \) and a document corpus \( D \) of size \( N \) we calculate the score of \( q \) given document \( d \) by first calculating the tf-idf of each term  in \( q \) given \( d \) and then summing them up.
 \[ \text{tf-idf}(t, d) = \text{tf}(t, d) \times \text{idf}(t) \]
 Where \( \text{tf}(t, d) \) is the frequency of term \( t \) in document \( d \) and 
@@ -297,7 +309,7 @@ where document frequency \( \text{df}(t) \) is the number of documents containin
 The final score of the query given the document is then calculated as
 \[ \text{score}(q, d) = \sum_{t \in q} \text{tf-idf}(t, d) \]
 For retrieval given a query \( q \) tf-idf scores are calculated for all documents, which are then ranked according to their score.
-\\
+
 In the Terrier IR platform, the implementation of tf-idf uses variants of the tf and idf components.
 For Term Frequency, the Robertson's tf formulation~(\cite{robertson:2004:Understanding}) is used, which incorporates an additional parameter that adds a saturation effect to the term frequency.
 For idf, the original formulation by Sparck Jones~(\cite{sparck:1972:A}) is applied.
@@ -305,7 +317,7 @@ For idf, the original formulation by Sparck Jones~(\cite{sparck:1972:A}) is appl
 \subsubsection{DPH}\label{sec:dph}
 Divergence from Randomness (DFR) is a framework in IR that assigns term weights based on the divergence of the actual within-document term frequency distribution from a random term frequency distribution~(\cite{amati:2006:Frequentist}).
 The divergence from randomness using the hyper-geometric distribution model(DPH) is one of the models derived from the DFR framework.
-\\
+
 The principle behind DFR is that terms that are informative in a document will have a distribution that deviates significantly from what would be expected if terms were distributed randomly.
 While TF-IDF emphasizes the importance of terms based on their frequency in a document and their inverse frequency in the corpus, DPH focuses on the divergence of a term's distribution from what would be expected under a random distribution.
 Specifically, DPH assesses the divergence using the hyper-geometric distribution.
@@ -318,7 +330,7 @@ As mentioned in earlier sections, transformer-based models have been shown to be
 There are different approaches of how transformers can be used for retrieval, a brief overview of methods used in this thesis is given here.
 All transformer models are a form of learning-to-rank, in which the model is trained on a dataset to predict which documents are relevant to a query.
 This differentiates them from our baseline models, which rule-based and do not require training.
-\\\\
+
 Two of the most common transformer based architectures are cross-encoder and bi-encoder models.
 \begin{figure}[tb]
   \centering
@@ -396,13 +408,13 @@ For the document collection, this can be done offline since the embeddings are i
 This separation allows them to efficiently process large datasets as the embeddings can be pre-computed and stored.
 It also enables rapid retrieval, since at inference time only the embedding for the current query has to be calculated and compared to the pre-computed document embeddings.
 The documents are then ranked according to their embedding similarity to the query.
-\\
+
 Cross-encoders, on the other hand, take a combined input sequence of both query and document and produce a scalar relevance score.
 This joint modeling enables them to better capture the interaction and nuances between a query and a document.
 Due to their fine-grained interaction modeling, cross-encoders outperform bi-encoders in terms of precision in retrieving relevant documents as shown by \cite{thakur:2020:Augmented} and \cite{rosa:2022:In}.
 However, the need to process each query-document pair individually makes them computationally demanding, especially for large datasets.
 As a result, they are typically only used in second-stage retrieval, where the objective is to re-rank the top results obtained from an initial retrieval method.
-\\
+
 The following sections describe the different transformer-based retrieval models used in this thesis.
 \subsubsection{MonoT5 + DuoT5}\label{sec:monot5-duot5}
 MonoT5 and DuoT5~(\cite{roberts:2019:Exploring}), are based on previous work by \cite{nogueira:2019:Multi}, who introduced monoBERT and duoBERT, first applying transformer architecture to the task of document ranking.
@@ -416,13 +428,13 @@ Since there is no [CLS] token for models in the T5 family, as they are sequence-
     \text{Query: \emph{q} Document: \emph{d} Relevant:}
 \end{equation} 
 where the model is fine-tuned to produce the token \emph{true} or \emph{false} given query \emph{q} and document \emph{d}.
-\\
+
 At inference, softmax is applied to the \emph{true} and \emph{false} tokens only, the scores are then calculated using the probability of the \emph{true} token.
 This works analogously for the Duo version of both models, by just adding the second document.
 MonoT5 and DuoT5 both belong to the family of cross-encoder models, sharing the general characteristics of those models.
-\\
+
 This model architecture allows for precisely tuning retrieval efficiency vs. effectiveness, by parameterizing how many documents are filtered in each step, making the model suitable for different usecases.
-\\
+
 
 \subsubsection{ColBERT}\label{sec:colbert}
 \begin{figure}[tb]
@@ -517,22 +529,22 @@ For the documents, this can again be done offline, so that at the retrieval stag
 The relevance score for document $d$ given query $q$ is estimated using their late interaction model, in which maximum cosine similarity between all query term embeddings and document term embeddings is calculated, and then summed over for all query terms.
 This allows for a more fine-grained mapping between query and document terms, also allowing for more fine-grained meaning of different terms.
 An efficient computation of the similarity calculation allows ColBERT to scale much better, compared to feeding BERT the query and each document as input.
-\\
+
 The ColBERT architecture can generally be used for re-ranking or for end-to-end retrieval.
 In the second case, an additional step is added in which the complete collection is filtered for relevant documents using similarity search for finding documents that contain similar terms as the query.
 In the second step, the remaining documents are re-ranked using the maximum similarity metrics.
-\\
+
 \subsubsection{ColBERTv2}\label{sec:colbertv2}
 ColBERTv2~\citep{santhanam:2021:Colbertv2} is directly based on the late-interaction architecture of ColBERT, but adds improvements to the architecture and the training process.
-\\
+
 To improve the training process, a new process of generating hard negatives is applied, in which a cross-encoder model is used to first rank passages given a query.
 From the ranked passages a highly ranked one is selected as the positive passage and a low ranked one as the negative passage.
-\\
+
 Improvements to the architecture are made by incorporating a residual compression technique.
 While for ColBERTv1 each token embedding is saved separately in its original state, ColBERTv2 represents each token embedding as its nearest neighboring centroid embedding and a residual.
 The centroids are calculated using k-means clustering on the token embeddings of a sample of all passages at indexing time. 
 This allows for a more compact representation of the token embeddings, since only the centroid embedding has to be stored.
-\\
+
 As shown by the authors, ColBERTv2 outperforms ColBERTv1 on all evaluated datasets, while also being more efficient
 
 \subsection{Evaluation of Retrieval Models}\label{sec:evaluation-of-retrieval-models}
@@ -541,7 +553,7 @@ They provide a quantitative measure of how well a system retrieves relevant docu
 Compared to other tasks like classification or regression, the evaluation of retrieval models is more challenging, since the evaluation metrics are not as intuitive.
 Instead of a single correct answer, there are multiple documents that could be considered relevant to a query, which can be retrieved in different permutations.
 To be able to judge different retrieval methods, relevance assessments for document-query pairs have to be defined by human assessors.
-\\
+
 There are multiple metrics which can be used in information retrieval tasks:
 \begin{itemize}
     \item \textbf{Precision}: Measures the fraction of retrieved documents that are relevant.
@@ -551,7 +563,7 @@ There are multiple metrics which can be used in information retrieval tasks:
     \item \textbf{Normalized Discounted Cumulative Gain (nDCG)}: Considers both the ranking and the relevance grade of retrieved documents, weighting highly relevant documents higher than less relevant ones.
 \end{itemize}
 Given the context of our dataset, which contains multiple queries with documents ranked for relevance between 0 and 3, and has relevance ratings for each document in the dataset, the nDCG metric is the most suitable one.
-\\
+
 The formula for nDCG@k is as follows is based on the concept of cumulative gain (CG), which is the sum of the relevance ratings of all documents up until position k:
 \[ \text{CG@k} = \sum_{i=1}^{k} r(d_i,q) \]
 where $r(d_i,q)$ is the relevance rating of document $d_i$ for query $q$.
@@ -565,31 +577,31 @@ Finally, the normalized DCG is calculated as
 which normalizes the DCG by the IDCG, producing a score between 0 and 1.
 The cutoff value of $k$ is set depending on how many of the ranked documents should be considered for each query.
 
-\subsection{Evaluation of Machine Translation Systems using Retrieval Models}\label{sec:eval-mts-ir}
+\subsection{Using Retrieval Models for Evaluating NLP tasks}\label{sec:eval-mts-ir}
 In the field of evaluating Natural Language Processing(NLP) tasks, IR techniques have been mainly used to evaluate machine translation systems.
 Since both question answering and machine translation are sequence-to-sequence tasks with multiple correct answers, there are similarities in the evaluation process.
-\\
+
 For machine translation, a model is given a source sentence, and has to produce a target sentence in another language.
 Those systems are usually evaluated given a ground truth reference sentence, which is compared to the predicted sentence.
 Traditionally, methods like BLEU~(\cite{papineni:2002:Bleu}), ROUGE~(\cite{lin:2004:Rouge}) or METEOR~(\cite{banerjee:2005:METEOR}) are used to compare the predicted sentence to one or multiple reference sentences.
 There are multiple versions of those metrics with slightly different parameters, which mostly differ in what sequences of tokens are compared (1-gram, 2-gram, 3-gram, 4-gram, longest common sub-sequence), how precision and recall are weighted and how the results are smoothed.
 In the end, all of those metrics generate a similarity score between the predicted and the reference sentence, which can be used to compare different models.
-\\
+
 Alternative approaches incorporating ranking methods have been proposed as well.
 \cite{duh:2008:Ranking} argues that, considering the final goal is to compare different translation systems, a direct comparison between the systems is preferable to evaluating their quality individually.
 He shows that ranking methods like RankSVM~(\cite{joachims:2002:Optimizing}) and RankBoost~(\cite{freund:2003:An}) can be applied to rank different candidate translations against the reference, generating similar scores to BLEU on the same feature set.
 When incorporating intra-set features which can not easily be incorporated to BLEU-like scores, the ranking methods achieve higher similarities to human rankings compared to BLEU and smoothed BLEU.
-\\
+
 Another approach based on learning-to-rank methods is proposed by \cite{li:2013:Listwise}.
 Again, they compare multiple translation candidates to a reference sentence, but here they use listwise learning-to-rank methods to generate a ranking of the candidates.
 The objective of listwise ranking is to train a ranking function that minimizes the loss between the predicted ranking and the ground truth human generated ranking on a training set.
 Similar to \cite{duh:2008:Ranking}, they show that the ranking based methods correlate stronger with human judgement, compared to BLEU-like metrics.
-\\
+
 \cite{guzman:2019:Pairwise} use neural methods to incorporate syntactic and semantic information into the evaluation process.
 They train a pairwise ranking model, which compares to candidate sentences given the reference and returns which one is the better translation.
 Even tough they do not outperform other state-of-the-art methods, they deliver competitive results while staying closer to the human evaluation framework.
-\\
-\\
+
+
 This overview shows that information retrieval methods have successfully been applied to the task of evaluating machine translation systems.
 But those approaches are hard to transfer to the task of evaluating long form question answering systems, since the evaluation metrics are not directly applicable.
 All ranking based machine translation evaluation methods mentioned here compare the set of candidate translations to a single reference translation, trying to rank the candidate translations amongst each other.
@@ -601,7 +613,7 @@ In this chapter we presented an overview of the current state of research in the
 We highlighted that the evaluation of long form question answering is challenging, since the answers are free form text and not only a single entity, number or multiple choice option.
 Additionally, we show that evaluating long form answers in one single dimension of correctness is not sufficient, as other aspects like readability and credibility are important as well.
 In this thesis, we try to tackle both of the mentioned challenges.
-\\
+
 Based on the assumption that if we develop a ranking model that is able to effectively rank human-generated documents in the dimensions of relevance, readability and credibility in a way that is similar to human judgement, we can use it to evaluate long form question answering systems.
 The evaluation of new documents generated by LLMs can be done by ranking them with the previously validated retrieval model and using the achieved rank of the new document as a proxy for the quality of the generated answer.
 We formalize this approach as follows:
@@ -615,5 +627,5 @@ This approach allows us to evaluate the capabilities of multiple LLMs in long fo
 By evaluating the retrieval models on multiple evaluation criteria, we tackle the problem of evaluating the answers in multiple dimensions.
 Furthermore, the diversity of possible answers can be better captured because multiple different answers in the dataset can be ranked highly, instead of only having one reference answer.
 We hope that the retrieval models can capture this diversity in their ranking, especially when using transfomer-based models.
-\\
+
 In the following chapter, the experimental setup is described, with the results being presented in chapter~\ref{chapter:results}.

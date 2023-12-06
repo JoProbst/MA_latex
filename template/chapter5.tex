@@ -1,24 +1,41 @@
 \chapter{Discussion \& Limitations}
 
-% This section provides an analysis of the experimental results, highlighting the intricacies and challenges of the dataset properties, the performances of various retrieval pipelines, and the capabilities of different large language models (LLMs) on our dataset. We will also discuss the limitations and potential biases inherent in our methodologies and results.
 This section provides an analysis of the experimental setup and results, investigating the quality of the dataset, the performances of various retrieval pipelines, and the capabilities of different LLMs on our dataset.
 We will also discuss the limitations and potential biases inherent in our methodologies and results.
 \section{Dataset Properties and Challenges}
-
+\begin{itemize}
+    \item small dataset, only health
+    \item all web data, noisy due to preprocessing
+    \item annotations are subjective, inconsistent between mutliple ratings
+    \item question type queries probably more relevant for LLMs, keyword based ones could be rewritten
+\end{itemize}
 \section{Retrieval Pipeline Performances}
-Our experiments with both baseline (TF-IDF, BM25) and advanced transformer-based pipelines (ColBERT, monoT5) reveal critical insights. Notably, while transformer-based models show a marginal improvement in relevance over baseline models, they excel significantly in readability and credibility scores. This improvement suggests that transformer models, with their sophisticated understanding of language and context, are better suited for capturing nuanced aspects like credibility and readability, which are not directly encoded in the models.
-
-However, the disparity in performance across different metrics (Table \ref{tab:baseline_pipelines} and \ref{tab:transformer_pipelines}) highlights a crucial limitation: the models' inability to equally prioritize all dimensions of document quality. This limitation suggests a need for further research and development in creating models that can holistically evaluate documents across multiple dimensions.
+\begin{itemize}
+    \item No big improvements of transformer over baseline, QE not making a huge difference
+    \item relevance seems to increase the least with more complex model/not much difference between architectures
+    \item larger improvements in credibility and readability in transformer models
+    \item can monoT5 still be seen as classical retrieval model? There is no indexing or direct comparison of answers, just the calculation of the score based on MS MARCO
+    \item not much different from generating scores, like in the fine-tuning step of LLMs
+    \item no specific mechanics for evaluating readability/credibility
+\end{itemize}
 
 \section{Performance of Large Language Models}
-The performance of various LLMs, including GPT-2, Falcon, Llama, and ChatGPT, offers valuable insights into the capabilities and limitations of these models. Notably, ChatGPT consistently outperforms other models across different query types and prompting strategies. This superiority could be attributed to its advanced fine-tuning techniques and larger model size, which likely enable a better understanding of complex queries and more accurate answer generation.
+% The performance of various LLMs, including GPT-2, Falcon, Llama, and ChatGPT, offers valuable insights into the capabilities and limitations of these models.
+% Notably, ChatGPT consistently outperforms other models across different query types and prompting strategies.
+% This superiority could be attributed to its advanced fine-tuning techniques and larger model size, which likely enable a better understanding of complex queries and more accurate answer generation.
 
-However, the performance variation among LLMs, especially when comparing different model sizes and fine-tuning techniques, underscores the complexity of long-form question answering. It is evident that larger and more sophisticated models tend to perform better, but this is not a universal rule, as seen with the Llama models.
+% However, the performance variation among LLMs, especially when comparing different model sizes and fine-tuning techniques, underscores the complexity of long-form question answering.
+% It is evident that larger and more sophisticated models tend to perform better, but this is not a universal rule, as seen with the Llama models.
+\begin{itemize}
+    \item ChatGPT outperforms other models significantly
+    \item Much larger, probably sophisticated rewriting of given prompt
+    \item Larger models tend to perform better, but not always (Llama)
+    \item Prompting strategies have a large impact on performance
+    \item Other benchmarks produce similar results
+    \item 
+\end{itemize}
 
 \section{Limitations and Future Directions}
-Our study, while comprehensive, has several limitations. Firstly, the dataset's focus on health-related topics may limit the generalizability of our findings to other domains. Additionally, the reliance on human annotations for readability and credibility assessments introduces subjectivity, which could affect the models' evaluation.
-
-Future research could explore more diverse datasets covering a wider range of topics and incorporating more objective measures of document quality. Additionally, developing retrieval models that can more effectively balance relevance, credibility, and readability remains an open challenge.
-
-In conclusion, our study provides valuable insights into the capabilities and limitations of various retrieval models and LLMs in processing complex queries. While significant advancements have been made, there remains substantial room for improvement in developing models that can comprehensively understand and respond to diverse information needs.
-
+\begin{itemize}
+    \item 
+\end{itemize}
