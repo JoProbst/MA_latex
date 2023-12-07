@@ -301,7 +301,7 @@ Instead, we use the implementation provided by the authors of the model\footnote
 The implementation works with any pre-trained checkpoint for the ColBERT version 2 model, with the MS MARCO checkpoint being downloaded by default.
 
 \subsection{External scores for Readability}\label{sec:external-scores}
-To improve retrieval performance for the readability, we experiment with adding pre-computed external scores to the retrieval process.
+To improve retrieval effectiveness for the readability, we experiment with adding pre-computed external scores to the retrieval process.
 
 To estimate readability of the documents in the dataset, different scores are calculated for each document.
 
@@ -341,7 +341,7 @@ All pipelines perform similarly, the influence of query expansion is small.}
 \label{tab:baseline_pipelines}
 \end{table}
 Table \ref{tab:baseline_pipelines} shows the results of the baseline pipelines.
-Performance on all three metrics is similar for all pipelines.
+Effectiveness on all three metrics is similar for all pipelines.
 The rankings seem to be closest to the human readability ranking, scoring around 0.75 for all pipelines.
 Relevance is interestingly lower than that, with scores around 0.64.
 Since those models are designed to retrieve relevant documents, we would expect the relevance scores to be higher.

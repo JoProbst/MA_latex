@@ -1,15 +1,13 @@
 \chapter{Results}\label{chapter:results}
 In this chapter, we present the results of our experiments.
-First, the properties of the generated dataset are presented and visualized.
-Then, the results of the different retrieval methods are presented and compared.
-Finally, the results of ranking the LLM answers are presented and the influence of the different prompting strategies, model sizes and question types are discussed.
+Starting with a general overview, we show the effectiveness of the different LLMs on the retrieval-based implicit evaluation method.
+After the overview, the results and visualizations needed to evaluate the research questions formulated in Section \ref{sec:research-question} are presented.
 
-
-\section{Ranking of Generated Answers}
-We now present the results of ranking the LLM answers using the best performing pipeline, the monoT5 pipeline.
+\section{Overview}
+We use our best performing pipeline to rank the generated answers of the LLMs against the human generated web documents in the dataset.
 Because monoT5 performs best on all three metrics, we use it for all further experiments and only evaluate the one ranking produced by this pipeline.
 
-In total, we rank 16000 generated answers, with each of the 8 models generating 10 answers for each of the 4 different prompting strategies for all 50 queries.
+In total, we rank 16000 generated answers, with each of the 8 models generating 10 answers for the 4 different prompting strategies for all 50 queries.
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{images/weighted_position_boxplot.png}
@@ -19,9 +17,10 @@ In total, we rank 16000 generated answers, with each of the 8 models generating 
 Figure \ref{fig:weighted_position_boxplot} shows the normalized position of the LLM answers in the ranking.
 The normalized position is the absolute position of the answer in the ranking, divided by the total number of documents for the query.
 
+
 The GPT-2 models generally perform worse, which was expected, as they are not fine-tuned for the task of question answering and are generally much smaller than the other models.
-Interestingly, even those models have a significant number of first place rankings.
-The four different sizes of GPT-2 nicely show the effect of model size on ranking performance, with the median ranking position improving with each size increase.
+Interestingly, even those models have a number of first place rankings.
+The four different sizes of GPT-2 nicely show the effect of model size on ranking results, with the median ranking position improving with each size increase.
 
 Of the fine-tuned models, ChatGPT performs best with a median position of 0.006, scoring the best or second-best answer at nearly all queries.
 Falcon 7B is the worst of the fine-tuned models with the Llama models performing slightly better.
@@ -32,7 +31,8 @@ This is not consistent with other benchmarks, where the larger model usually per
 ChatGPT is also the most consistent model, with the smallest standard deviation of 0.05.
 The other models have much higher standard deviations, with the Llama models both being around 0.2 and the other models between 0.3 and 0.35.
 
-
+\section{RQ1: Factors influencing LLM effectiveness}
+Investigate factors
 \subsection{Influence of Prompting Strategy}
 The different prompting strategies strongly influence the final rankings of the LLM answers.
 \begin{table}[tb]
@@ -63,7 +63,7 @@ Even the three smaller instruction tuned models (Falcon and Llama) show strong i
 As those models are already fine-tuned on the task of question answering, we could have expected them to perform better on the no prompt strategy.
 The biggest model, ChatGPT, shows the smallest differences in scores between the different prompting strategies, but still performs best with the MultiMedQA prompt.
 
-The results are consistent with the findings by \cite{reynolds:2021:Prompt} that more complex prompting strategies improve the performance of LLMs.
+The results are consistent with the findings by \cite{reynolds:2021:Prompt} that more complex prompting strategies improve the capabilities of LLMs.
 
 \subsection{Keyword vs Question Queries}
 \begin{figure}
@@ -77,38 +77,6 @@ Answers generated for the properly phrased question-type queries achieve higher 
 The spread of the rankings is also smaller for the question-type queries, with the keyword queries having more outliers at the bottom of the ranking.
 This also holds true for ChatGPT, which is the most consistent model overall.
 
-\subsection{Comparison to other Benchmarks}\label{sec:benchmark_comparison}
-We compare the median normalized ranking position of the LLM answers to the results of other benchmarks.
-To our knowledge, there are currently no benchmarks available that evaluate the performance of LLMs for long form question answering and provide results for the same models that we use.
-The HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open} provides results on multiple different benchmarks for many models hosted on the HuggingFace hub.
-From here, we select the ARC~(\cite{clark:2018:Think}), the HellaSwag~(\cite{zellers:2019:HellaSwag}) and the MMLU~(\cite{hendrycks:2020:Measuring}) datasets, all of which are single choice question answering benchmarks.
-\begin{table}[tb]
-    \centering
-    \begin{tabularx}{\textwidth}{lcccc}
-    \hline
-    \textbf{Model} & \textbf{Mean Ranking} & \textbf{ARC}  & \textbf{HellaSwag} & \textbf{MMLU} \\\hline
-    GPT-2          & 0.661                             & 21.8          & 31.6               & 25.9          \\
-    GPT-2 Medium   & 0.59                              & 27.0          & 40.2               & 26.6          \\
-    GPT-2 Large    & 0.4                               & 25.9          & 45.6               & 26.1          \\
-    GPT-2 XL       & 0.366                             & 30.3          & 51.4               & 26.4          \\
-    Falcon 7B      & 0.147                             & 46.2          & 70.9               & 25.8          \\
-    Llama-2 13B    & 0.082                             & 59.0          & 81.9               & 54.6          \\
-    Llama-2 7B     & 0.079                             & 52.9          & 78.6               & 48.3          \\
-    ChatGPT        & \textbf{0.006}                    & \textbf{85.2} & \textbf{85.5}      & \textbf{70.0} \\
-    \hline
-    \end{tabularx}
-    \caption{Comparison of the mean normalized ranking position of the LLM answers to the results of other benchmarks.
-    For the HuggingFace models, those scores are taken from the HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open}.
-    For ChatGPT, we estimate the score from the GPT-4 Technical Report~(\cite{openai:2023:GPT}), which provides scores for GPT-3.5, the underlying model of ChatGPT.
-    This is not the exact model we use in out testing, but we assume that the performance is similar.
-    Mean Ranking is the mean normalized ranking position over all generated answers for the model.
-    }
-    \label{tab:benchmark_comparison}
-\end{table}
-Table \ref{tab:benchmark_comparison} shows the scores over those benchmarks, as well as the mean normalized ranking position of the LLM answers.
-On all benchmarks, there is the general trend of higher number of model parameters leading to better scores.
-For our dataset this trend is only broken for the two Llama versions, with the 7B model ranking slightly better than the 13B model.
-Other than that, our results are consistent with the results of the traditional benchmarks.
 
 \subsection{Evaluation of Lower Ranked ChatGPT Answers}
 While ChatGPT generally performs best, there are still some answers that are ranked badly.
@@ -159,4 +127,35 @@ On average, those answers are ranked worse than the other answers, with a mean n
 The other models do not generate as many answers formatted as lists, with the both Llama models generating the most, 427 and 266 respectively.
 Here, the list answers are ranked higher than the remaining answers, so we can not assume that the worse ranking of list answers is a general pattern.
 
-
+\section{RQ2: Comparison to other Benchmarks}\label{sec:benchmark_comparison}
+We compare the median normalized ranking position of the LLM answers to the results of other benchmarks.
+To our knowledge, there are currently no benchmarks available that evaluate the effectiveness of LLMs for long form question answering and provide results for the same models that we use.
+The HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open} provides results on multiple different benchmarks for many models hosted on the HuggingFace hub.
+From here, we select the ARC~(\cite{clark:2018:Think}), the HellaSwag~(\cite{zellers:2019:HellaSwag}) and the MMLU~(\cite{hendrycks:2020:Measuring}) datasets, all of which are single choice question answering benchmarks.
+\begin{table}[tb]
+    \centering
+    \begin{tabularx}{\textwidth}{lcccc}
+    \hline
+    \textbf{Model} & \textbf{Mean Ranking} & \textbf{ARC}  & \textbf{HellaSwag} & \textbf{MMLU} \\\hline
+    GPT-2          & 0.661                             & 21.8          & 31.6               & 25.9          \\
+    GPT-2 Medium   & 0.59                              & 27.0          & 40.2               & 26.6          \\
+    GPT-2 Large    & 0.4                               & 25.9          & 45.6               & 26.1          \\
+    GPT-2 XL       & 0.366                             & 30.3          & 51.4               & 26.4          \\
+    Falcon 7B      & 0.147                             & 46.2          & 70.9               & 25.8          \\
+    Llama-2 13B    & 0.082                             & 59.0          & 81.9               & 54.6          \\
+    Llama-2 7B     & 0.079                             & 52.9          & 78.6               & 48.3          \\
+    ChatGPT        & \textbf{0.006}                    & \textbf{85.2} & \textbf{85.5}      & \textbf{70.0} \\
+    \hline
+    \end{tabularx}
+    \caption{Comparison of the mean normalized ranking position of the LLM answers to the results of other benchmarks.
+    For the HuggingFace models, those scores are taken from the HuggingFace Open LLM Leaderboard by \cite{beeching:2023:Open}.
+    For ChatGPT, we estimate the score from the GPT-4 Technical Report~(\cite{openai:2023:GPT}), which provides scores for GPT-3.5, the underlying model of ChatGPT.
+    This is not the exact model we use in out testing, but we assume that the capabilities are similar.
+    Mean Ranking is the mean normalized ranking position over all generated answers for the model.
+    }
+    \label{tab:benchmark_comparison}
+\end{table}
+Table \ref{tab:benchmark_comparison} shows the scores over those benchmarks, as well as the mean normalized ranking position of the LLM answers.
+On all benchmarks, there is the general trend of higher number of model parameters leading to better scores.
+For our dataset this trend is only broken for the two Llama versions, with the 7B model ranking slightly better than the 13B model.
+Other than that, our results are consistent with the results of the traditional benchmarks.
