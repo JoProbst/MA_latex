@@ -1,32 +1,53 @@
 \chapter{Introduction}\label{structure}
 In recent years, Large Language Models (LLMs) have become increasingly popular in the field of Natural Language Processing (NLP).
-The development started with the introduction of the attention architecture by \cite{vaswani:2017:Attention}, on which the transformer architecture is based.
-Early models like BERT (\cite{devlin:2018:BERT}) and GPT-2 (\cite{radford:2018:Improving}) quickly started to outperform previous state-of-the-art models on many NLP tasks.
-Scaling up the models and especially the amount of training data led to the release of GPT-3 (\cite{brown:2020:Language}), which is able to perform a wide range of tasks, including translation, summarization and question answering.
+The development started with the introduction of the attention architecture by \cite{bahdanau:2014:neural}, on which the transformer architecture which was introduced by \cite{vaswani:2017:Attention} is based.
+The transformer architecture improves upon the previously popular LSTM architecture by allowing the model to factor in more distant dependencies in the text.
+The new architecture also allows for better parallelization of the model training and inference (\cite{vaswani:2017:Attention}).
+Early models based on the transformer architecture like BERT (\cite{devlin:2018:BERT}) and GPT-2 (\cite{radford:2018:Improving}) quickly started to outperform previous state-of-the-art models on many NLP tasks.
+With the release of GPT-3 (\cite{brown:2020:Language}), the amount of training data and the number of model parameters is scaled up massively compared to previous models.
+This increase in size allows the model to perform a wide range of tasks, including translation, summarization and question answering(QA).
 
-The most publicly visible use of LLMs are chatbots, like OpenAI's ChatGPT\footnote{\url{https://chat.openai.com/}} or Anthropic's Claude\footnote{\url{https://claude.ai/}}.
-These chatbots are marketed to professionals and casual users alike, with the promise of being able to answer most questions a user could have in a human-like manner.
-This is a novel task in the field of NLP, as the chatbots are not constrained to predefined formats, but are able to generate long-form answers.
-Traditional question answering tasks like single or choice questions or extracting answers from a given text are not representative of the task the chatbots are supposed to perform.
-Therefore, new evaluation methods are needed to evaluate the quality of generated long-form answers.
+Based on this diverse set of capabilities the models could now be fine-tuned to cater more to the expectations of humans. 
+The idea of Reinforcement Learning from Human Feedback (RLHF) is applied in the release of InstructGPT by \cite{ouyang:2022:Training} to fine-tune a smaller version of GPT-3, vastly improving the models output quality based on human evaluations.
+Those improvements led to the currently most popular usecases of LLMs, which are chatbots like OpenAI's ChatGPT\footnote{\url{https://chat.openai.com/}} or Anthropic's Claude\footnote{\url{https://claude.ai/}}.
 
-Furthermore, the quality of the answers has to be evaluated in a multidimensional manner.
-In contrast to previous question answering tasks, there is no simple notion of a good answer since answer quality is not only determined by the correctness of the answer, but also by its readability, relevance and credibility.
+The chatbots are marketed to professionals and casual users alike, with the promise of being able to answer most questions a user could have in a human-like manner or brainstorming new ideas.
+This is a novel task in the field of NLP, as the chatbots are not constrained to predefined formats, but are able to generate open-ended text.
+In \cite{ouyang:2022:Training}, the authors show that the current NLP datasets do not reflect the actual usecases of LLMs as they are currently deployed.
+According to their data, only 18\% of GPT-3 API calls are targeted at conventional NLP tasks like classification or single choice QA tasks.
+On the other hand, 57\% of API requests lead to open-ended generation.
+Considering that this data stems from the GPT-3 API and not the converstion-focused ChatGPT model, we can just assume that the ratio is now even more in favor of open-ended generation.
+This shows that traditional QA tasks like single or multiple choice QA or extracting answers from a given text are not representative of the task the chatbots are supposed to perform.
+
+The relatively new field of long-form question answering (LFQA) deals with the answering of open-ended questions by automated systems.
+As shown by \cite{xu:2023:A}, the current automated methods of evaluating those LFQA systems are still lacking compared to manual human evaluation, often performed by crowd workers.
+However, they also mention multiple drawbacks of the human evaluation approach.
+For one, annotators need to be well-trained and have a solid foundational knowledge of the question field.
+This level of expertise is usually not given with crowd workers.
+Furthermore, the answer length makes evaluating long-form QA much more demanding than simple QA tasks (\cite{krishna:2021:Hurdles}), increasing the duration it takes to process one sample.
+Together, these problems lead to an increased need for well-trained human annotators, which are hard to find and expensive.
+Additionally, human evaluations take a long time for larger datasets, slowing down the development cycle especially when fine-tuning the LLMs
+
+\cite{krishna:2021:Hurdles} also show a high rate of disagreement between annotators when evaluating which of two given questions to an answer they prefer.
+They attribute this to the difficulty of judging answer quality, due to the many factors that make up a good answer.
+This subjectivity of the evaluation also poses problems for creating more widely used LFQA benchmarks based on human evaluation.
+Even if the questions for all benchmarked models are the same, if the annotators differ between the evaluations of different models, the resulting scores are not comparable.
+
+In addition to making the evaluation of correctness more difficult, open-ended generation of text also necessitates that the quality of the answers is evaluated in a multidimensional manner.
+In contrast to other QA tasks, LFQA has no simple notion of a good answer since answer quality is not only determined by the correctness of the answer, but also by its readability, relevance and credibility.
 Current evaluation methods like accuracy for single choice question answering or the overlap between the extracted answer and the ground truth for extractive question answering are not able to capture the multidimensional nature of answer quality.
-
-So far, the most accurate way to evaluate the quality of the answers is human evaluation.
-This is however very expensive and time-consuming compared to automated evaluation methods.
-To reduce the cost of human evaluation and to be able to evaluate and compare the chatbots on a large scale, automated evaluation methods are needed.
+To reduce the cost of human evaluation and to be able to evaluate and compare the chatbots on a large scale and in multiple dimensions, automated evaluation methods are needed.
 
 In this thesis, we propose a new evaluation method for long-form question answering based on information retrieval techniques.
 Using a dataset based on health questions from \cite{goeuriot:2021:Consumer}, we construct a benchmark consisting of multiple queries and human generated answers based on web content.
-We then use retrieval methods to rank answers generated by different LLMs against those human generated answers.
+We then use retrieval methods to rank answers generated by different LLMs against those human generated web documents.
 Based on the rank of the generated answer we can compare the quality of the answers by different LLMs.
 This method is able to capture the multidimensional nature of answer quality, if the retrieval method is able to capture the relevance, readability and credibility of the answers.
 Evaluating the multidimensional retrieval performance of different retrieval methods is therefore an important part of this thesis.
 
 With the answer evaluation process being automated, this method allows for a large scale evaluation of LLMs, including the evaluation of different prompting strategies, the evaluation of how consistent the answers of a model are and the evaluation of how the quality of the answers changes with the number of model parameters.
-
+This would decrease the need for human evaluations, decreasing the cost of developing and fine-tuning LLMs for the task of LFQA.
+It would also lead to more consistency in evaluating generated answers, limiting the subjective component brought in by human annotators.
 
 \section{Research Questions}\label{sec:research-question}
 In order to evaluate the proposed retrieval-based implicit evaluation method, we formulate two research questions which serve as the basis for the experiments in this thesis.
@@ -40,12 +61,15 @@ Investigating both research questions should help to clarify if the implicit eva
 
 
 \section{Scope and Limitations}\label{sec:scope-and-limitations}
-This thesis is meant as a first step in investigating the use of information retrieval techniques for evaluating the long-form question answering capabilities of LLMs.
+This thesis is meant as a first step in investigating the use of information retrieval techniques for evaluating the LFQA capabilities of LLMs.
 It is not meant to be a comprehensive evaluation of the proposed method, but rather a proof of concept on which future work can build.
 
-The benchmark dataset is not built from scratch, but is based on the dataset from \cite{goeuriot:2021:Consumer}, which is not originally intended for evaluating long-form question answering.
+The benchmark dataset is not built from scratch, but is based on the dataset from \cite{goeuriot:2021:Consumer}, which is not originally intended for evaluating LFQA.
 The dataset is therefore not perfectly suited for the task, but is still useful for a first evaluation of the proposed method.
 
+Additionally, the dataset is only contains queries and documents in English language, so capabilities of the models in other languages are not considered.
+
+The domain of the datasets is restricted to medical queries, other fields are not explored in this work.
 
 \section{Structure of the Thesis}\label{sec:structure-of-the-thesis}
 The thesis is structured as follows:
