@@ -264,16 +264,16 @@ Figure \ref{fig:reranking_pipeline} shows a basic retrieval pipeline, in which t
 \begin{tikzpicture}[node distance=0.8cm, auto]
 
 % Styles for boxes
-\tikzstyle{box} = [rectangle, draw, fill=blue!10, text width=4.5em, text centered, rounded corners, minimum height=3em]
-\tikzstyle{user} = [ellipse, draw, fill=blue!30, text width=4.5em, text centered, rounded corners, minimum height=3em]
+\tikzstyle{box} = [rectangle, draw, fill=gray!30, text width=4.5em, text centered, rounded corners, minimum height=3em]
+\tikzstyle{user} = [ellipse, draw, fill=gray!30, text width=4.5em, text centered, rounded corners, minimum height=3em]
 
 % Nodes
-\node [box, fill=blue!30] (corpus) {Document Corpus};
-\node [box, fill=blue!30, right=of corpus] (index) {Index};
-\node [box, fill=blue!30, right=of index] (model) {Retrieval Model};
+\node [box, ] (corpus) {Document Corpus};
+\node [box,  right=of corpus] (index) {Index};
+\node [box,  right=of index] (model) {Retrieval Model};
 \node [user, above=of model] (query) {Queries};
-\node [box, fill=blue!5, right=of model] (rerank) {Re-ranking};
-\node [box, fill=blue!30, right=of rerank] (output) {Ranked Documents};
+\node [box, dashed, fill=gray!5, right=of model] (rerank) {Re-ranking};
+\node [box,  right=of rerank] (output) {Ranked Documents};
 
 % Edges
 \draw[->] (corpus) -- (index);
@@ -331,10 +331,14 @@ Two of the most common transformer based architectures are cross-encoder and bi-
 \begin{figure}[tb]
   \centering
   % Define colors
-  \definecolor{textcolor}{RGB}{255, 230, 204}
-  \definecolor{encodercolor}{RGB}{204, 229, 255}
-  \definecolor{embeddingcolor}{RGB}{217, 234, 211}
-  \definecolor{scorecolor}{RGB}{230, 204, 255} % New color for scores
+%   \definecolor{textcolor}{RGB}{255, 230, 204}
+%   \definecolor{encodercolor}{RGB}{204, 229, 255}
+%   \definecolor{embeddingcolor}{RGB}{217, 234, 211}
+%   \definecolor{scorecolor}{RGB}{230, 204, 255} % New color for scores
+  \definecolor{textcolor}{gray}{0.9}
+  \definecolor{encodercolor}{gray}{0.9}
+  \definecolor{embeddingcolor}{gray}{0.9}
+  \definecolor{scorecolor}{gray}{0.9}
 
   % Bi-Encoder
   \begin{minipage}{.48\textwidth}
@@ -436,11 +440,17 @@ This model architecture allows for precisely tuning retrieval efficiency vs. eff
 \begin{figure}[tb]
 \centering
 % Define colors
-\definecolor{textcolor}{RGB}{255, 230, 204}
-\definecolor{encodercolor}{RGB}{204, 229, 255}
-\definecolor{embeddingcolor}{RGB}{217, 234, 211}
-\definecolor{similaritycolor}{RGB}{255, 204, 204} % New color for similarity scores
-\definecolor{scorecolor}{RGB}{230, 204, 255} % New color for scores
+% \definecolor{textcolor}{RGB}{255, 230, 204}
+% \definecolor{encodercolor}{RGB}{204, 229, 255}
+% \definecolor{embeddingcolor}{RGB}{217, 234, 211}
+% \definecolor{similaritycolor}{RGB}{255, 204, 204} % New color for similarity scores
+% \definecolor{scorecolor}{RGB}{230, 204, 255} % New color for scores
+
+\definecolor{textcolor}{gray}{0.9}
+\definecolor{encodercolor}{gray}{0.9}
+\definecolor{embeddingcolor}{gray}{0.9}
+\definecolor{scorecolor}{gray}{0.9}
+\definecolor{similaritycolor}{gray}{0.9}
 % ColBERT Retrieval Model
 \begin{tikzpicture}[node distance=0.7cm, auto, every node/.style={scale=0.8}]
 \tikzstyle{text_in} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=textcolor]
