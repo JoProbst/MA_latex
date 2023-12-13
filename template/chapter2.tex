@@ -416,8 +416,8 @@ However, the need to process each query-document pair individually makes them co
 As a result, they are typically only used in second-stage retrieval, where the objective is to re-rank the top results obtained from an initial retrieval method.
 
 The following sections describe the different transformer-based retrieval models used in this thesis.
-\subsubsection{MonoT5 + DuoT5}\label{sec:monot5-duot5}
-MonoT5 and DuoT5~(\cite{roberts:2019:Exploring}), are based on previous work by \cite{nogueira:2019:Multi}, who introduced monoBERT and duoBERT, first applying transformer architecture to the task of document ranking.
+\subsubsection{monoT5 + duoT5}\label{sec:monoT5-duoT5}
+MonoT5 and duoT5~(\cite{roberts:2019:Exploring}), are based on previous work by \cite{nogueira:2019:Multi}, who introduced monoBERT and duoBERT, first applying transformer architecture to the task of document ranking.
 The general idea is to first use a baseline retrieval model like BM25 to retrieve an initial set of relevant documents.
 Then, pairs of the query and each document in the initial set are concatenated and fed into the mono version of the transformer model, which produces a scalar score for each query-document pair.
 The documents with the highest scores are then fed into the duo model, which takes the query and each possible pair of documents as input, outputting a probability of one document being more relevant than the other.
@@ -431,7 +431,7 @@ where the model is fine-tuned to produce the token \emph{true} or \emph{false} g
 
 At inference, softmax is applied to the \emph{true} and \emph{false} tokens only, the scores are then calculated using the probability of the \emph{true} token.
 This works analogously for the Duo version of both models, by just adding the second document.
-MonoT5 and DuoT5 both belong to the family of cross-encoder models, sharing the general characteristics of those models.
+MonoT5 and duoT5 both belong to the family of cross-encoder models, sharing the general characteristics of those models.
 
 This model architecture allows for precisely tuning retrieval efficiency vs. effectiveness, by parameterizing how many documents are filtered in each step, making the model suitable for different usecases.
 

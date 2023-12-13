@@ -1,4 +1,4 @@
-\chapter{Experimental Setup}
+\chapter{Experimental Setup}\label{experimental-setup}
 This chapter describes the experimental setup of this thesis, starting with the data collection and preparation process as well as an analysis of the resulting dataset.
 Afterwards, we describe the retrieval pipeline development and how the pipelines are evaluated.
 Finally, the generation of LLM answers to the different queries is presented.
@@ -112,7 +112,7 @@ Query topics are diverse, ranging from general queries about chronic diseases to
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{images/num_words_per_query.png}
+\includegraphics[width=\textwidth]{images/num_words_per_query.pdf}
 \caption{Boxplot of the number of words per query, split by query type. Keyword queries are shorter than question queries with a median of 4 words compared to 7 words for the question queries.}
 \label{fig:num_words_per_query}
 \end{figure}
@@ -151,7 +151,7 @@ A total of 133 domains show up less than 10 times in the dataset, while 44 domai
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\textwidth]{images/num_words_per_passage.png}
+\includegraphics[width=\textwidth]{images/num_words_per_passage.pdf}
 \caption{Histogram of the number of words per document. The plot is cut at 15 000 words, which excludes 120 or 2\% of the documents. The median number of words per document is 1354, while the mean is 2901.}
 \label{fig:num_words_per_document}
 \end{figure}
@@ -174,7 +174,7 @@ For readability and relevance, the correlation is 0.22, which is slightly strong
 This can be interpreted as the relevance of a document being independent of its credibility and readability, which shows that the annotators were able to judge the relevance of a document independently of its credibility and readability.
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{images/heatmap_qrels.png}
+\includegraphics[width=\textwidth]{images/heatmap_qrels.pdf}
 \caption{Three heatmaps, one for each relevance category, plotting credibility against readability.
 The total number of documents with the given relevance ranking is in the title of the heatmap.
 In all three heatmaps, the highest number of documents is concentrated in the range between 1 and 2 for both credibility and readability, with 2 credibility and 2 readability being the most common combination.
@@ -258,15 +258,15 @@ Afterwards, the expanded query is run against the index again, and the documents
 \caption{Baseline retrieval pipeline, using either TF-IDF or DPH as retrieval model with optional query expansion. This retrieves and ranks evaluated documents for a given query.}
 \label{fig:baseline-pipeline}
 \end{figure}
-The resulting pipeline is shown in figure \ref{fig:baseline-pipeline}.
+The resulting pipeline is shown in Figure \ref{fig:baseline-pipeline}.
 This produces a ranked list of documents for each query, which can then be compared to the order of documents according to the human annotations.
 
 \subsection{Transformer Models}
 In addition to the baseline models, we also implement the transformer based models ColBERT version 1 and 2, as well as the monoT5 and duoT5 based models.
-The implementation of ColBERT version 1 and the MonoT5/DuoT5 based models is done in PyTerrier, while the implementation of ColBERT version 2 is done in the original implementation provided by the authors.
+The implementation of ColBERT version 1 and the monoT5/duoT5 based models is done in PyTerrier, while the implementation of ColBERT version 2 is done in the original implementation provided by the authors.
 
 All of the models are based on a pre-trained model, which is at some point used to encode the query and the documents in differnet ways.
-Both ColBERT versions are based on the BERT-base model, while the MonoT5 and DuoT5 based models are based on the T5 model.
+Both ColBERT versions are based on the BERT-base model, while the monoT5 and duoT5 based models are based on the T5 model.
 The retrieval models themselves are fine-tuned on the MS MARCO passage ranking dataset~(\cite{bajaj:2016:MSMARCO}), a large scale dataset for passage retrieval.
 
 Transformer-based retrieval models usually require a first retrieval step using a less computationally expensive model like tf-idf, to reduce the number of documents that are fed to the transformer model.
@@ -279,14 +279,14 @@ In our testing, we use the pre-trained ColBERT checkpoint provided by the author
 The checkpoint can directly be loaded in the PyTerrier framework, and then used to retrieve documents from the collection.
 All settings are left at their default values.
 
-\subsubsection{MonoT5 and DuoT5}
+\subsubsection{monoT5 and duoT5}
 Like the ColBERT implementation, the monoT5 and duoT5 implementations are also available in PyTerrier\footnote{\url{https://github.com/terrierteam/pyterrier_t5}}.
 Pre-trained checkpoints based on the MS MARCO dataset are provided by the authors.
 
 The monoT5 pipeline uses the pre-trained checkpoint to encode each query with each of the associated documents.
 From this encoding a score is calculated for each query-document pair, and the documents are ranked according to this score.
 
-The duoT5 pipeline is based on the monoT5 pipeline, but uses the duoT5 re-ranker to re-rank the top 10 documents retrieved by the MonoT5 pipeline.
+The duoT5 pipeline is based on the monoT5 pipeline, but uses the duoT5 re-ranker to re-rank the top 10 documents retrieved by the monoT5 pipeline.
 Here, the pre-trained duoT5 checkpoint is used to encode the query and each possible pair of the top 10 documents, to determine which of the two documents is more relevant to the query.
 Based on this order, the documents are re-ranked.
 

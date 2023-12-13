@@ -1,19 +1,24 @@
 \chapter{Introduction}\label{structure}
-In recent years, Large Language Models (LLMs) have become increasingly popular in the field of Natural Language Processing (NLP).
-The development started with the introduction of the attention architecture by \cite{bahdanau:2014:neural}, on which the transformer architecture by \cite{vaswani:2017:Attention} is based.
-The transformer architecture improves upon the previously popular LSTM architecture by allowing the model to factor in more distant dependencies in the text.
-The new architecture also allows for better parallelization of the model training and inference (\cite{vaswani:2017:Attention}).
-Early models based on the transformer architecture such as BERT (\cite{devlin:2018:BERT}) and GPT-2 (\cite{radford:2018:Improving}) quickly started to outperform previous state-of-the-art models on many NLP tasks.
-With the release of GPT-3 (\cite{brown:2020:Language}), the amount of training data and the number of model parameters were scaled up massively compared to previous models.
-This increase in size allows the model to perform a wide range of tasks, including translation, summarization and question answering (QA).
+% In recent years, Large Language Models (LLMs) have become increasingly popular in the field of Natural Language Processing (NLP).
+% The development started with the introduction of the attention architecture by \cite{bahdanau:2014:neural}, on which the transformer architecture by \cite{vaswani:2017:Attention} is based.
+% The transformer architecture improves upon the previously popular LSTM architecture by allowing the model to factor in more distant dependencies in the text.
+% The new architecture also allows for better parallelization of the model training and inference (\cite{vaswani:2017:Attention}).
+% Early models based on the transformer architecture such as BERT (\cite{devlin:2018:BERT}) and GPT-2 (\cite{radford:2018:Improving}) quickly started to outperform previous state-of-the-art models on many NLP tasks.
+% With the release of GPT-3 (\cite{brown:2020:Language}), the amount of training data and the number of model parameters were scaled up massively compared to previous models.
+% This increase in size allows the model to perform a wide range of tasks, including translation, summarization and question answering (QA).
 
-Based on this diverse set of capabilities, the models could now be fine-tuned to cater more to the expectations of humans. 
-The idea of Reinforcement Learning from Human Feedback (RLHF) is applied in the release of InstructGPT by \cite{ouyang:2022:Training} to fine-tune a smaller version of GPT-3, vastly improving the model's output quality based on human evaluations.
-These improvements led to the currently most popular use cases of LLMs: chatbots like OpenAI's ChatGPT\footnote{\url{https://chat.openai.com/}} and Anthropic's Claude\footnote{\url{https://claude.ai/}}.
+% Based on this diverse set of capabilities, the models could now be fine-tuned to cater more to the expectations of humans. 
+% The idea of Reinforcement Learning from Human Feedback (RLHF) is applied in the release of InstructGPT by \cite{ouyang:2022:Training} to fine-tune a small version of GPT-3, vastly improving the model's output quality based on human evaluations.
+% These improvements led to the currently most popular use cases of LLMs: chatbots like OpenAI's ChatGPT\footnote{\url{https://chat.openai.com/}} and Anthropic's Claude\footnote{\url{https://claude.ai/}}.
 
-Chatbots are marketed to professionals and casual users alike, with the promise of being able to answer most questions in a human-like manner or to assist in brainstorming new ideas.
-This is a novel task in the field of NLP, as the chatbots are not constrained to predefined formats, but are able to generate open-ended text.
-In \cite{ouyang:2022:Training}, the authors show that the current NLP datasets and benchmarks do not reflect the actual use cases of LLMs as they are currently deployed.
+After the release of ChatGPT\footnote{\url{https://chat.openai.com/}} by OpenAI in 2022 a number of other chatbots like Anthropic's Claude\footnote{\url{https://claude.ai/}} or Google's Bard\footnote{\url{https://bard.google.com/chat}} were published in the following months.
+Especially ChatGPT became successful very quickly, gaining 100 million active users in the first year after release, according to the OpenAI DevDay Opening Keynote\footnote{\url{https://www.youtube.com/watch?v=U9mJuUkhUzk}}.
+But the chatbots by other companies also got regular updates and a lot of attention from media and the companies, indicating high public interest in this space.
+Based on the findings by \cite{de:2014:seeking}, who show that a large amount of users turns to search engines or social media sites for medical information, we can assume that a large portion of users turns to ChatGPT and other chatbots with similar medical questions.
+This assumption is supported by studies investigating possible use cases of ChatGPT in the medical domain, which mention the use of ChatGPT by doctors, nursers or medical students as one possible application (\cite{dave:2023:chatgpt}, \cite{khan:2023:chatgpt}).
+While multiple benchmarks for answering questions in a single choice format or with short, factual answers are usually reported in the technical reports accompanying the release of new models, it is much harder to evaluate the LLMs on open-ended questions that are common in the medical domain.
+
+As \cite{ouyang:2022:Training} show, the current NLP datasets and benchmarks that are usually applied to evaluate LLMs do not reflect the described use case of answering open-ended questions.
 According to their data, only 18\% of GPT-3 API calls are targeted at conventional NLP tasks like classification or single choice QA tasks.
 On the other hand, 57\% of API requests lead to open-ended generation.
 Considering that this data originates from the GPT-3 API and not the conversation-focused ChatGPT model, it is reasonable to assume that open-ended generation now makes up even more of the requests.
@@ -77,15 +82,15 @@ Additionally, the dataset is only contains queries and documents in the English 
 The domain of the datasets is restricted to medical queries; other fields are not explored in this work.
 
 \section{Structure of the Thesis}\label{sec:structure-of-the-thesis}
-Following this Introduction, we delve into the related work.
-First, the general field of evaluating Large Language Model in the context of question answering is introduced.
+Following this Introduction, in Chapter \ref{related-work} we delve into the related work.
+First, the general field of evaluating Large Language Model in the context of question answering is introduced (Section \ref{sec:evaluation-of-large-language-models})
 This includes an overview of different question answering tasks and their evaluation methods.
 
-Subsequently, the different retrieval methods used in this work are presented, alongside the evaluation metrics used to compare them.
+Subsequently, in Section \ref{sec:retrieval-models} the different retrieval methods used in this work are presented, alongside the evaluation metrics used to compare them.
 This section is concluded with a discussion on how retrieval methods have previously been used to evaluate NLP tasks.
 
-The next section describes the experimental setting, from dataset collection and preparation over development of the different retrieval pipelines and generation of LLM responses to the questions in the dataset.
+Chapter \ref{experimental-setup} describes the experimental setting, from dataset collection and preparation over development of the different retrieval pipelines and generation of LLM responses to the questions in the dataset.
 
-Afterwards, the experimental results are presented, aiming to provide the necessary data for discussing the research questions, which is done in the section following the results.
+The experimental results are presented in Chapter \ref{chapter:results}, aiming to provide the necessary groundwork for discussing the research questions in the following Chapter \ref{discussion}, which is done in the section following the results.
 
-The thesis is concluded with an outlook on future work and a conclusion.
+We conclude this thesis with Chapter \ref{conclusion} on the outlook on future work and a conclusion.
