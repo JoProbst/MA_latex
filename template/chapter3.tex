@@ -234,8 +234,8 @@ Afterwards, the expanded query is run against the index again, and the documents
 
 \begin{figure}[tb]
     \begin{tikzpicture}[node distance=3cm, every node/.style={scale=0.7}]
-    \tikzstyle{box} = [rectangle, draw, fill=blue!10,  text width=2cm, text centered, rounded corners, minimum height=3em]
-    \tikzstyle{process} = [rectangle, draw, fill=blue!30,  text width=2cm, text centered, rounded corners, minimum height=3em]
+    \tikzstyle{box} = [rectangle, draw, fill=gray!10,  text width=2cm, text centered, rounded corners, minimum height=3em]
+    \tikzstyle{process} = [rectangle, draw, fill=gray!30,  text width=2cm, text centered, rounded corners, minimum height=3em]
     \node (docCol) [box] {Documents evaluated for query};
     \node (preprocess) [process, right of=docCol] {Pre-\\processing};
     \node (invertedindex) [process, right of=preprocess] {Inverted Index};
