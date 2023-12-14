@@ -265,7 +265,7 @@ This produces a ranked list of documents for each query, which can then be compa
 In addition to the baseline models, we also implement the transformer-based models ColBERT version 1 and 2, as well as the monoT5 and duoT5-based models.
 The implementation of ColBERT version 1 and the monoT5/duoT5-based models is done in PyTerrier, while the implementation of ColBERT version 2 is done in the original implementation provided by the authors.
 
-All of the models are based on a pre-trained model, which is at some point used to encode the query and the documents in different ways.
+All mentioned models are based on a pre-trained model, which is at some point used to encode the query and the documents in different ways.
 Both ColBERT versions are based on the BERT-base model, while the monoT5 and duoT5-based models are based on the T5 model.
 The retrieval models themselves are fine-tuned on the MS MARCO passage ranking dataset~(\cite{bajaj:2016:MSMARCO}), a large-scale dataset for passage retrieval.
 
@@ -329,8 +329,8 @@ DPH         & 0.643 & 0.742 & 0.539 \\
 DPH\ (qe)     & 0.637 & 0.751 & 0.51  \\
 TF-IDF     & 0.64  & 0.746 & 0.551 \\
 TF-IDF (qe) & 0.636 & 0.751 & 0.557 \\
-colbertv1      & 0.626 & 0.774 & 0.633 \\
-colbertv2       & 0.634 & 0.799 & 0.65  \\
+ColBERTv1      & 0.626 & 0.774 & 0.633 \\
+ColBERTv2       & 0.634 & 0.799 & 0.65  \\
 duoT5            & 0.64  & 0.805 & 0.714 \\
 monoT5           & \textbf{0.645} & \textbf{0.813} & \textbf{0.722} \\
 \hline
@@ -366,15 +366,15 @@ Those correlations are not strong enough to justify using the statistical scores
 This might be connected to the fact that the documents in our dataset are scraped from the web, which means that even after preprocessing they still contain noise not accounted for by the statistical scores, which are intended for the use on clean text.
 
 \section{Generating LLM Responses}
-This section details which LLMs are selected for the experiments, and how the responses are generated.
-We also describe the different prompting strategies that are used to generate the responses.
+We now introduce the LLMs that selected for the experiments, and the steps taken to get the generated answers from the LLMs.
+Additionally, the different prompting strategies that are used to generate the responses are described.
 
 \subsection{Selection of Language Models}
 We select multiple LLMs for our experiments, which differ in the number of parameters, amount and type of training data, and the type of pre-training and fine-tuning.
 
 \subsubsection{GPT-2}
 As a simple baseline and to investigate how an increased number of parameters affects the ranking results, we select different sizes of the GPT-2 model, namely the base, medium, large, and XL versions.
-Those models only differ in the number of parameters, which are 124M, 355M, 774M, and 1.5B respectively, while the training objective and the training data are the same for all of the models.
+Those models only differ in the number of parameters, which are 124M, 355M, 774M, and 1.5B respectively, while the training objective and the training data are the same for all the models.
 The dataset used for pre-training is the WebText dataset, which contains 40GB of web text, which is scraped from URLs shared on Reddit that received at least 3 upvotes.
 Other than this pre-training, the models are not fine-tuned to any specific task.
 
