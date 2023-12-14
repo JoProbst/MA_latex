@@ -19,7 +19,12 @@ We will also discuss the limitations and potential biases inherent in our method
 \begin{itemize}
     \item No big improvements of transformer over baseline, QE not making a huge difference
     \item relevance seems to increase the least with more complex model/not much difference between architectures
+    \item baseline rankings closest to readability ranking of humans, would have expected relevance.
+    \item Worst on credibility, because no built in way of judging this
     \item larger improvements in credibility and readability in transformer models
+    \item We attribute this to the fact that the transformer-based models do not consider the documents as bags of words, but instead use the full text of the documents.
+    \item This is especially important for readability, as the models can now take into account the structure of the text, including stopwords, punctuation, and other elements that are removed for the baseline models.
+    \item Even though the transformer models are not specifically trained to consider readability and credibility, the relevant passages in the MS MARCO corpus seem to reflect those properties.
     \item can monoT5 still be seen as classical retrieval model? There is no indexing or direct comparison of answers, just the calculation of the score based on MS MARCO
     \item not much different from generating scores, like in the fine-tuning step of LLMs
     \item no specific mechanics for evaluating readability/credibility
