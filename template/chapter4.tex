@@ -59,10 +59,6 @@ Table \ref{tab:prompting_strategy} shows the mean normalized position of the LLM
 Starting with no prompt produces the worst ranking results for all models, except for ChatGPT where the QuestionAnswer prompt performs slightly worse.
 The rankings improve with each more complex prompting strategy, except for GPT-2 Medium and GPT-2 Large, which perform best on the QA and the QuestionAnswer prompts respectively.
 Even the three smaller instruction tuned models (Falcon and Llama) show strong improvements when going from no prompt at all to the simple QA prompt.
-As those models are already fine-tuned on the task of question answering, we could have expected them to perform better on the no prompt strategy.
-The biggest model, ChatGPT, shows the smallest differences in scores between the different prompting strategies, but still performs best with the MultiMedQA prompt.
-
-The results are consistent with the findings by \cite{reynolds:2021:Prompt} that more complex prompting strategies improve the capabilities of LLMs.
 
 \subsection{Keyword vs Question Queries}
 \begin{figure}
@@ -76,12 +72,11 @@ Answers generated for the properly phrased question-type queries achieve higher 
 The spread of the rankings is also smaller for the question-type queries, with the keyword queries having more outliers at the bottom of the ranking.
 This also holds true for ChatGPT, which is the most consistent model overall.
 
-
 \subsection{Evaluation of Lower Ranked ChatGPT Answers}
 While ChatGPT generally performs best, there are still some answers that are ranked badly.
 In this section, we try to find patterns in those answers to explain why this is the case.
 We manually inspect each of the ChatGPT generated answers with a normalized ranking position of 0.1 or higher, meaning if there are 100 documents for the query, the answer is ranked 10 or lower.
-All the low ranked answers stem from just four queries, namely ``hypothyroidism symptoms'', ``List of multiple sclerosis symptoms'',  ``exercises for better posture'' and ``my risk for developing type 2 diabetes'' and follow one of two patterns.
+All the low ranked answers stem from four queries, namely ``hypothyroidism symptoms'', ``List of multiple sclerosis symptoms'',  ``exercises for better posture'' and ``my risk for developing type 2 diabetes'' and follow one of two patterns.
 The answers for the question about the personal risk of developing type 2 diabetes all contain the phrase ``As an AI'', as in the phrase ``I'm sorry, but as an AI language model, I don't have access to personal data about individuals unless it has been shared with me in the course of our conversation.''.
 This is a commonly used phrase by ChatGPT, which indicates that the model is unable to answer the question.
 The answers for the other three queries are all formatted as lists, either using enumeration or simple bullet points.
@@ -124,7 +119,6 @@ Here the answers also rank worse, but the difference is not as pronounced.
 ChatGPT generates a lot of answers formatted as lists, with 748 of the 2000 answers following that pattern.
 On average, those answers are ranked worse than the other answers, with a mean normalized ranking position of 0.0128 compared to 0.0021 for the non list answers.
 The other models do not generate as many answers formatted as lists, with the both Llama models generating the most, 427 and 266 respectively.
-Here, the list answers are ranked higher than the remaining answers, so we can not assume that the worse ranking of list answers is a general pattern.
 
 \section{RQ2: Comparison to other Benchmarks}\label{sec:benchmark_comparison}
 We compare the median normalized ranking position of the LLM answers to the results of other benchmarks.

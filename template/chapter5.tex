@@ -3,8 +3,17 @@
 This section provides an analysis of the experimental setup and results, investigating the quality of the dataset, the performances of various retrieval pipelines, and the capabilities of different LLMs on our dataset.
 We will also discuss the limitations and potential biases inherent in our methodologies and results.
 
-\section{RQ1}
+\section{RQ1: LLM factors}
 
+
+Question vs. query
+As those models are already fine-tuned on the task of question answering, we could have expected them to perform better on the no prompt strategy.
+The biggest model, ChatGPT, shows the smallest differences in scores between the different prompting strategies, but still performs best with the MultiMedQA prompt.
+
+The results are consistent with the findings of \cite{reynolds:2021:Prompt} that more complex prompting strategies improve the capabilities of LLMs.
+
+list:
+Here, the list answers are ranked higher than the remaining answers, so we can not assume that the worse ranking of list answers is a general pattern.
 \section{RQ2}
 
 \section{Dataset Properties and Challenges}

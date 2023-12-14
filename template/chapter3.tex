@@ -374,8 +374,8 @@ We select multiple LLMs for our experiments, which differ in the number of param
 
 \subsubsection{GPT-2}
 As a simple baseline and to investigate how an increased number of parameters affects the ranking results, we select different sizes of the GPT-2 model, namely the base, medium, large, and XL versions.
-Those models only differ in the number of parameters, which are 124M, 355M, 774M, and 1.5B respectively, while the training objective and the training data are the same for all the models.
-The dataset used for pre-training is the WebText dataset, which contains 40GB of web text, which is scraped from URLs shared on Reddit that received at least 3 upvotes.
+Those models only differ in the number of parameters, which are 124M, 355M, 774M, and 1.5B respectively, while the training objective and the training data are the same for all models.
+The dataset used for pre-training is the WebText dataset, which contains 40 GB of web text, which is scraped from URLs shared on Reddit that received at least 3 upvotes.
 Other than this pre-training, the models are not fine-tuned to any specific task.
 
 \subsubsection{Models optimized for dialog}\label{sec:dialog-models}
@@ -510,9 +510,7 @@ The \textbf{maximum number of new tokens} is set to 512 because that's the maxim
 \textbf{Top k} is set to 50, and \textbf{top p} is set to 0.95, which both restrict the number of tokens the model can choose from to more likely tokens.
 
 Finally, we set a \textbf{repetition penalty} of 1.2, which is a relatively low value, but still helps to reduce repetition in the generated output, which we found to be a common problem, especially for the GPT-2 models, but also for the smaller instructing tuned models.
-
 Any additional parameters that are available for a model are left at their default values.
-
 
 The generating of the answers is done in two different ways.
 For ChatGPT, we use the OpenAI API to generate the answers, specifically using the model version ``GPT-3.5-turbo-0613''.
@@ -520,9 +518,7 @@ Since they do not provide any parameters apart from temperature and number of to
 
 For all other models, we use the HuggingFace library to generate the answers.
 This allows us to set all parameters as described above.
-
 Each model is prompted ten times with each of the prompting strategies, resulting in 40 generated answers per query for each model.
-
 
 \subsection{Ranking LLM Answers}
 After generating all answers with the different models and prompt pairings, the responses have to be ranked with the human-generated reference answers.
