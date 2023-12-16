@@ -5,6 +5,9 @@ We will also discuss the limitations and potential biases inherent in our method
 
 \section{RQ1: LLM factors}
 
+The GPT-2 models generally perform worse, which was expected, as they are not fine-tuned for the task of question answering and are generally much smaller than the other models.
+Interestingly, even those models have a number of first place rankings.
+The four different sizes of GPT-2 nicely show the effect of model size on ranking results, with the median ranking position improving with each size increase.
 This could potentially be due to the more sophisticated fine-tuning techniques for the Llama models, which are described in section \ref{sec:dialog-models}.
 Between the two Llama models, the smaller one is slightly better, but they perform very similar.
 This is not consistent with other benchmarks, where the larger model usually performs better, as shown in the following subsection \ref{sec:benchmark_comparison}.
