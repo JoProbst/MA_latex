@@ -1,49 +1,61 @@
+
 \chapter{Discussion \& Limitations}\label{discussion}
 
-This section provides an analysis of the experimental setup and results, investigating the quality of the dataset, the performances of various retrieval pipelines, and the capabilities of different LLMs on our dataset.
-We will also discuss the limitations and potential biases inherent in our methodologies and results.
+This chapter discusses the findings from our experiments, focusing on the factors influencing the ranking of LLM answers for health-related questions and how these rankings compare with other benchmarks. Additionally, we address the properties and challenges of our dataset and the limitations of our retrieval pipeline.
 
-\section{RQ1: LLM factors}
+\section{RQ1: Factors Influencing LLM Effectiveness}
 
-The GPT-2 models generally perform worse, which was expected, as they are not fine-tuned for the task of question answering and are generally much smaller than the other models.
-Interestingly, even those models have a number of first place rankings.
-The four different sizes of GPT-2 nicely show the effect of model size on ranking results, with the median ranking position improving with each size increase.
-This could potentially be due to the more sophisticated fine-tuning techniques for the Llama models, which are described in section \ref{sec:dialog-models}.
-Between the two Llama models, the smaller one is slightly better, but they perform very similar.
-This is not consistent with other benchmarks, where the larger model usually performs better, as shown in the following subsection \ref{sec:benchmark_comparison}.
+The effectiveness of LLMs in providing health-related answers varies significantly depending on several factors, as elucidated by our experimental results.
 
-Question vs. query
-As those models are already fine-tuned on the task of question answering, we could have expected them to perform better on the no prompt strategy.
-The biggest model, ChatGPT, shows the smallest differences in scores between the different prompting strategies, but still performs best with the MultiMedQA prompt.
+\subsection{Model Size}
+Model size has a direct correlation with the performance of LLMs in our study. The GPT-2 series demonstrates a clear pattern where an increase in model size results in better rankings. This trend suggests that larger models have a more comprehensive understanding and processing capability, which is crucial for the complex task of health-related question answering. The smaller models, like GPT-2, are not specialized for question answering and lack the nuanced understanding that larger, fine-tuned models possess.
 
-The results are consistent with the findings of \cite{reynolds:2021:Prompt} that more complex prompting strategies improve the capabilities of LLMs.
+The Llama models, despite their sophistication in fine-tuning, do not show a linear improvement with size, indicating that beyond a certain threshold, increases in model size might offer diminishing returns in terms of effectiveness for specific tasks like LFQA.
 
-list:
-Here, the list answers are ranked higher than the remaining answers, so we can not assume that the worse ranking of list answers is a general pattern.
-\section{RQ2}
+\subsection{Prompting Strategy}
+The impact of prompting strategies illustrates the complex nature of LLMs' response mechanisms. The variance in performance based on the complexity of prompts contradicts the expectation that models fine-tuned for question answering would excel with simpler prompts. This could be attributed to the nature of the health-related dataset, where complex prompts might provide a more context-rich environment for generating accurate responses.
+
+ChatGPT's minimal variance across different prompting strategies, yet its best performance with the most intricate MultiMedQA prompt, suggests that the model has a high degree of adaptability. It can extract and utilize the nuanced information provided in complex prompts, enhancing its response quality. This finding is in line with \cite{reynolds:2021:Prompt}, emphasizing the benefits of sophisticated prompting in extracting the best performance from LLMs.
+
+\subsection{Query Type}
+The distinction in performance between question-type and keyword queries is significant. LLMs show a predisposition towards well-structured, coherent queries, as evidenced by higher median rankings for question-type queries. This insight is crucial for the development of LFQA systems, suggesting that query formulation plays a vital role in eliciting the most effective responses from LLMs.
+
+\subsection{List Formatting}
+The variation in the ranking of list-formatted answers across different models suggests a nuanced aspect of LLMs' response generation. While list-style answers from ChatGPT ranked lower, this pattern was not universally observed across all models. This inconsistency implies that the response format's impact on answer quality might be specific to individual models and their underlying training and fine-tuning methodologies.
+
+\subsection{Answer Length}
+
+\section{RQ2: Comparison with Other Benchmarks}
+
+The comparison of our results with benchmarks like ARC, HellaSwag, and MMLU reveals insightful trends. While larger models generally perform better in these benchmarks, the Llama models' performance in our study deviates from this trend, with the smaller version outperforming the larger one. This divergence underscores the specialized nature of LFQA as a domain and the necessity for benchmarks tailored to this field.
+
+Our findings indicate that the effectiveness of LLMs in LFQA cannot be directly inferred from their performance in other standard NLP tasks. The nuanced requirements of LFQA, particularly in the health domain, demand a more tailored approach to model evaluation and benchmarking.
+
+In summary, our study reveals that LLM effectiveness in health-related question answering is a multifaceted issue, influenced by model size, prompting strategy, query type, and response format. These factors, along with the unique challenges of LFQA, highlight the need for specialized benchmarks and a deeper understanding of LLM capabilities and limitations in this emerging field.
 
 \section{Dataset Properties and Challenges}
-\begin{itemize}
-    \item small dataset, only health
-    \item all web data, noisy due to preprocessing
-    \item annotations are subjective, inconsistent between mutliple ratings
-    \item question type queries probably more relevant for LLMs, keyword based ones could be rewritten
-\end{itemize}
+
+The properties and challenges of our dataset are crucial in understanding the context and limitations of our results:
+
+\begin{enumerate}
+    \item \textbf{Size and Scope:} The dataset is confined in size and scope, focusing solely on health-related questions. This limits its generalizability across different domains and question types.
+    \item \textbf{Data Quality:} Since the dataset is derived from web content, it includes noise introduced during preprocessing. This noise potentially impacts the quality and reliability of the benchmarks.
+    \item \textbf{Subjectivity in Annotations:} The annotations' subjective nature leads to inconsistencies, especially when involving multiple raters. This subjectivity can skew the evaluation of LLMs' responses.
+    \item \textbf{Relevance of Query Types:} The dataset's reliance on question-type queries, as opposed to keyword-based queries, might limit the applicability of our findings. This suggests an area for future improvement in dataset design for LFQA systems.
+\end{enumerate}
 
 \section{Retrieval Pipeline Limitations}
-\begin{itemize}
-    \item No big improvements of transformer over baseline, QE not making a huge difference
-    \item relevance seems to increase the least with more complex model/not much difference between architectures
-    \item baseline rankings closest to readability ranking of humans, would have expected relevance.
-    \item Worst on credibility, because no built in way of judging this
-    \item larger improvements in credibility and readability in transformer models
-    \item We attribute this to the fact that the transformer-based models do not consider the documents as bags of words, but instead use the full text of the documents.
-    \item This is especially important for readability, as the models can now take into account the structure of the text, including stopwords, punctuation, and other elements that are removed for the baseline models.
-    \item Even though the transformer models are not specifically trained to consider readability and credibility, the relevant passages in the MS MARCO corpus seem to reflect those properties.
-    \item can monoT5 still be seen as classical retrieval model? There is no indexing or direct comparison of answers, just the calculation of the score based on MS MARCO
-    \item not much different from generating scores, like in the fine-tuning step of LLMs
-    \item no specific mechanics for evaluating readability/credibility
-    \item did not consider efficiency vs effectiveness, because effectiveness is most important
-\end{itemize}
+
+The limitations of our retrieval pipeline are important to acknowledge as they influence the interpretation of our results:
+
+\begin{enumerate}
+    \item \textbf{Performance Gains:} There is a lack of significant performance improvement in transformer models over the baseline, and the impact of Query Expansion (QE) is minimal.
+    \item \textbf{Relevance and Readability:} Our pipeline showed the best performance in terms of readability, rather than relevance. This outcome may be due to transformer models considering the full text of documents, including structural elements that influence readability.
+    \item \textbf{Credibility Assessment:} The pipeline's credibility assessment was the weakest, likely because it lacks specific mechanisms to judge this quality dimension.
+    \item \textbf{Role of Transformer Models:} Transformer models like monoT5, which diverge from traditional retrieval methods like indexing or direct document comparison, challenge the conventional understanding of retrieval models.
+    \item \textbf{Efficiency vs Effectiveness:} Our research focused exclusively on the effectiveness of the retrieval process, not considering the efficiency aspect, which is vital in real-world applications.
+\end{enumerate}
+
+These limitations underscore the complexity of designing effective and reliable retrieval pipelines for evaluating LLMs in the context of long-form question answering.
 
 
