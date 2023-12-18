@@ -1,24 +1,30 @@
-\chapter{Future Work and Conclusion}\label{conclusion}
 
-\section{Future Work}
-This thesis has laid the groundwork for a novel approach to evaluating Large Language Models (LLMs) in the domain of long-form question answering (LFQA), specifically in the medical domain. However, there is substantial room for further research and development. Future work should focus on:
+\chapter{Limitations}\label{limitations}
+
+
+\section{Dataset Properties and Challenges}
+
+The properties and challenges of our dataset are crucial in understanding the context and limitations of our results:
 
 \begin{enumerate}
-    \item \textbf{Dataset Expansion:} Extending the dataset to include more diverse queries and documents, particularly in languages other than English, and other domains beyond medical queries, to enhance the generalizability of the findings.
-    \item \textbf{Algorithmic Improvements:} Developing more sophisticated methods for preprocessing web documents and extracting their core messages, which could lead to more challenging and representative datasets for LFQA.
-    \item \textbf{Multidimensional Evaluation:} Refining the evaluation metrics to better capture the multidimensional nature of answer quality, including aspects like the factual accuracy, coherence, and user engagement.
-    \item \textbf{Cross-Model and Cross-Lingual Comparisons:} Conducting comparative analyses across different LLMs and languages to understand the nuances in model performances and linguistic variations.
-    \item \textbf{User Experience Studies:} Investigating how users interact with LLMs in real-world scenarios, especially in the medical domain, to understand user expectations and satisfaction.
-    \item \textbf{Ethical and Privacy Considerations:} Addressing ethical and privacy concerns related to the use of LLMs for medical advice, ensuring that such systems are safe, reliable, and respectful of user privacy.
-    \item \textbf{Integration with Healthcare Systems:} Exploring the potential integration of LLMs into existing healthcare systems, assessing the practical challenges and benefits of such integration.
+    \item \textbf{Size and Scope:} The dataset is confined in size and scope, focusing solely on health-related questions. This limits its generalizability across different domains and question types.
+    \item \textbf{Data Quality:} Since the dataset is derived from web content, it includes noise introduced during preprocessing. This noise potentially impacts the quality and reliability of the benchmarks.
+    \item \textbf{Subjectivity in Annotations:} The annotations' subjective nature leads to inconsistencies, especially when involving multiple raters. This subjectivity can skew the evaluation of LLMs' responses.
+    \item \textbf{Relevance of Query Types:} The dataset's reliance on question-type queries, as opposed to keyword-based queries, might limit the applicability of our findings. This suggests an area for future improvement in dataset design for LFQA systems.
 \end{enumerate}
 
-\section{Conclusion}
-In conclusion, this thesis has introduced a new approach to evaluating LLMs for LFQA tasks using a retrieval-based implicit evaluation method. Our findings, as discussed in Chapter \ref{chapter:results} and Chapter \ref{discussion}, highlight the multidimensional nature of answer quality in LFQA and the various factors that influence the effectiveness of LLMs in this context.
+\section{Retrieval Pipeline Limitations}
 
-The proposed method has shown promise in reducing the reliance on human evaluations, thereby potentially lowering the costs and increasing the consistency in evaluating LLMs. However, as outlined in Chapter \ref{sec:scope-and-limitations}, this approach is not without limitations and should be considered a starting point for future research.
+The limitations of our retrieval pipeline are important to acknowledge as they influence the interpretation of our results:
 
-The rapid development and widespread adoption of LLMs, especially in applications like ChatGPT, as mentioned in Chapter \ref{structure}, underscore the importance of robust and scalable evaluation methods. The healthcare domain, in particular, presents unique challenges and opportunities for the application of LLMs. It is crucial that we continue to refine our evaluation methodologies to ensure that these powerful tools are used effectively and responsibly.
+\begin{enumerate}
+    \item \textbf{Performance Gains:} There is a lack of significant performance improvement in transformer models over the baseline, and the impact of Query Expansion (QE) is minimal.
+    \item \textbf{Relevance and Readability:} Our pipeline showed the best performance in terms of readability, rather than relevance. This outcome may be due to transformer models considering the full text of documents, including structural elements that influence readability.
+    \item \textbf{Credibility Assessment:} The pipeline's credibility assessment was the weakest, likely because it lacks specific mechanisms to judge this quality dimension.
+    \item \textbf{Role of Transformer Models:} Transformer models like monoT5, which diverge from traditional retrieval methods like indexing or direct document comparison, challenge the conventional understanding of retrieval models.
+    \item \textbf{Efficiency vs Effectiveness:} Our research focused exclusively on the effectiveness of the retrieval process, not considering the efficiency aspect, which is vital in real-world applications.
+\end{enumerate}
 
-This thesis represents a step forward in the ongoing journey to understand and harness the potential of LLMs in answering complex, open-ended questions, particularly in sensitive domains like healthcare. The path ahead is filled with exciting possibilities and challenges, and it is hoped that this work will inspire and inform future endeavors in this dynamic field.
+These limitations underscore the complexity of designing effective and reliable retrieval pipelines for evaluating LLMs in the context of long-form question answering.
+
 

@@ -56,17 +56,18 @@ The improvement is not linear, with the biggest improvements happening between G
 \begin{tabular}{lllll}
 \hline
 \textbf{Model}        & \textbf{No Prompt} & \textbf{QA}     & \textbf{QuestionAnswer} & \textbf{MultiMedQA} \\\hline
-GPT-2        & 0.763      & 0.663 & 0.614    & 0.603      \\
-GPT-2 Medium & 0.675      & 0.524 & 0.544    & 0.618      \\
-GPT-2 Large  & 0.496      & 0.393 & 0.336    & 0.374      \\
-GPT-2 XL     & 0.509      & 0.336 & 0.327    & 0.292      \\
-Falcon 7B    & 0.324      & 0.133 & 0.118    & 0.012      \\
-Llama-2 7B   & 0.211      & 0.073 & 0.027    & 0.005      \\
-Llama-2 13B  & 0.218      & 0.068 & 0.032    & 0.01       \\
-ChatGPT      & 0.006      & 0.01  & 0.007    & 0.001     \\
+GPT-2        & 0.763      & 0.663 & 0.614    & \textbf{0.603}      \\
+GPT-2 Medium & 0.675      & \textbf{0.524} & 0.544    & 0.618      \\
+GPT-2 Large  & 0.496      & 0.393 & \textbf{0.336}    & 0.374      \\
+GPT-2 XL     & 0.509      & 0.336 & 0.327    & \textbf{0.292}      \\
+Falcon 7B    & 0.324      & 0.133 & 0.118    & \textbf{0.012}      \\
+Llama-2 7B   & 0.211      & 0.073 & 0.027    & \textbf{0.005}      \\
+Llama-2 13B  & 0.218      & 0.068 & 0.032    & \textbf{0.01 }      \\
+ChatGPT      & 0.006      & 0.01  & 0.007    & \textbf{0.001}     \\
 \hline
 \end{tabular}
 \caption{Mean normalized position of the LLM answers, by prompting strategy.
+The best performing strategy for each model is highlighted in bold.
 The prompting strategies are described in section \ref{sec:prompting-approaches}, order here from least to most complex.
 Increasing prompting complexity generally improves the ranking of the LLM answers for most models, with exception to GPT-2 Medium and GPT-2 Large.
 }
@@ -79,7 +80,6 @@ The rankings improve with each more complex prompting strategy, except for GPT-2
 For all other models, the ranking is best on the complex MultiMedQA prompt.
 
 Inside each prompting strategy, the ordering of the models is consistent except for the Llama models, which change between second and third place depending on the prompting strategy.
-Notably, the smaller models with the MultiMedQA prompt perform better than the next larger model with no additional prompting.
 
 \subsection{Keyword vs Question Queries}
 \begin{figure}
@@ -89,9 +89,11 @@ Notably, the smaller models with the MultiMedQA prompt perform better than the n
     \label{fig:weighted_position_boxplot_by_model_and_question}
 \end{figure}
 Figure \ref{fig:weighted_position_boxplot_by_model_and_question} shows the normalized position of the LLM answers, split by query type and model.
+Question-type queries are identified by the last character of the query being a question mark, while keyword queries are all other queries.
 Answers generated for the properly phrased question-type queries achieve higher median rankings than the answers generated for the keyword queries.
 The spread of the rankings is also smaller for the question-type queries, with the keyword queries having more outliers at the bottom of the ranking.
 This also holds true for ChatGPT, which is the most consistent model overall.
+The GPT-2 based models exhibit the same pattern of question-type queries being ranked better than keyword queries, but are omitted from Figure \ref{fig:weighted_position_boxplot_by_model_and_question} for better readability.
 
 \subsection{Lower Ranked ChatGPT Answers}
 While ChatGPT generally performs best, there are still some answers that are ranked badly.
@@ -139,7 +141,8 @@ The other models do not generate as many answers formatted as lists, with the bo
 The answers by Llama models which are formatted as lists score higher than the non-list ones, while for the remaining models the answer rank follows the ChatGPT patter, in that list-style answers are ranked lower than non list-style answers.
 
 For ChatGPT, the answers containing the phrase ``As an AI'' are ranked worse than the other answers, with a mean normalized ranking position of 0.0578 compared to 0.0056.
-The only other model frequently generating that phrase is the Falcon 7B model.
+They are also generated less frequently, with only 20 of the 2000 answers containing the phrase.
+The only other model generating that phrase is the Falcon 7B model, which generates it 30 times.
 With a mean normalized rank of 0.191 the answers containing the phrase also rank worse, but the difference is not as pronounced compared to the rank of 0.146 which the remaining answers by Falcon 7B achieve.
 
 \subsection{Influence of Answer Length}
@@ -153,8 +156,9 @@ We investigate the influence of answer length on the ranking of the LLM answers 
 Figure \ref{fig:weighted_position_vs_answer_length} shows the scatterplot of the weighted normalized position against the number of words in the answer, with three regression lines which are linear (order 1), quadratic (order 2) and cubic (order 3).
 The linear regression fails to capture the variance in the data, indicated by the R-squared value of 0.
 With R-squared values of 0.48 and 0.50, the quadratic and cubic regression lines are better at capturing the variance, indicating a parabolic relationship between answer length and ranking.
-Very short and long answers are ranked worse than answers of medium length, with the best ranking answers on average having between 200 and 300 words.
-
+Very short and long answers are ranked worse than answers of medium length, with the best ranking answers on average having between 200 and 350 words.
+Of the 3271 answers with more than 350, about 85\% are generated by any of the GPT-2 models.
+Manual evaluation shows that many of the answers show a pattern of repeating the same phrase multiple times, leading to a high word count but not adding any additional information to the answer.
 
 \section{RQ2: Comparison to other Benchmarks}\label{sec:benchmark_comparison}
 We compare the median normalized ranking position of the LLM answers to the results of other benchmarks.

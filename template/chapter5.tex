@@ -1,61 +1,75 @@
 
-\chapter{Discussion \& Limitations}\label{discussion}
+\chapter{Discussion}\label{discussion}
 
-This chapter discusses the findings from our experiments, focusing on the factors influencing the ranking of LLM answers for health-related questions and how these rankings compare with other benchmarks. Additionally, we address the properties and challenges of our dataset and the limitations of our retrieval pipeline.
+In this chapter, we discuss the results of our experiments and their implications for the research questions. 
 
 \section{RQ1: Factors Influencing LLM Effectiveness}
 
-The effectiveness of LLMs in providing health-related answers varies significantly depending on several factors, as elucidated by our experimental results.
+The effectiveness of LLMs in providing health-related answers varies significantly depending on several factors, as shown by our experimental results.
 
 \subsection{Model Size}
-Model size has a direct correlation with the performance of LLMs in our study. The GPT-2 series demonstrates a clear pattern where an increase in model size results in better rankings. This trend suggests that larger models have a more comprehensive understanding and processing capability, which is crucial for the complex task of health-related question answering. The smaller models, like GPT-2, are not specialized for question answering and lack the nuanced understanding that larger, fine-tuned models possess.
+Our results show a strong connection between model size and ranking results in our retrieval-based implicit evaluation as evident in Figure \ref{fig:weighted_position_vs_model_size}. 
+Especially the differences between the GPT-2 based models are insightful, as they share the same architecture and dataset, only differing in the number of parameters.
+The larger the model size, the better the ranking results, which aligns with the findings of \cite{radford:2019:language} who showed that the increased model sizes leads to better performance on various NLP tasks.
 
-The Llama models, despite their sophistication in fine-tuning, do not show a linear improvement with size, indicating that beyond a certain threshold, increases in model size might offer diminishing returns in terms of effectiveness for specific tasks like LFQA.
+With 185 billion parameters, ChatGPT is the largest model in our evaluation, and it ranks best on nearly every query.
+For the small to medium-sized fine-tuned models, specifically the 7B variant of Falcon and the 7B and 13B variants of Llama-2, the trend is less clear.
+Llama-2 7B performs better than the 7B variant of Falcon, scoring a mean normalized rank of 0.079 compared to 0.146 by Falcon 7B.
+Even though they have the same number of parameters, the differences could be explained by the different training data used for the models and the more sophisticated fine-tuning strategy of Llama-2.
+
+More surprisingly, Llama-2 7B on average ranks about as well as its larger variant, which has nearly twice as many parameters.
+This indicates either a saturation of the model's effectiveness or that the ranking result is not accurate enough to distinguish between the two models.
+Since according to the original paper \cite{touvron:2023:Llama} the model exhibits the usual trend of increasing performance with model size, we assume that the latter is the case.
+
+So, while the model size is a strong indicator of the model's effectiveness in our evaluation, the results do not fully align with the expected trend.
 
 \subsection{Prompting Strategy}
-The impact of prompting strategies illustrates the complex nature of LLMs' response mechanisms. The variance in performance based on the complexity of prompts contradicts the expectation that models fine-tuned for question answering would excel with simpler prompts. This could be attributed to the nature of the health-related dataset, where complex prompts might provide a more context-rich environment for generating accurate responses.
+Prompting strategies have a significant impact on the effectiveness of LLMs, shown in Table \ref{tab:prompting_strategy}.
+There is a general tendency that the more sophisticated the prompting strategy, the better the ranking results.
+While there are two outliers (GPT-2 Medium and GPT-2 Large), which rank better with one of the simpler prompting strategies, the overall trend is clear, with the MultiMedQA prompt leading to the best results.
+This aligns with the findings of \cite{reynolds:2021:Prompt} who showed this pattern for the task of text translation using GPT-3.
 
-ChatGPT's minimal variance across different prompting strategies, yet its best performance with the most intricate MultiMedQA prompt, suggests that the model has a high degree of adaptability. It can extract and utilize the nuanced information provided in complex prompts, enhancing its response quality. This finding is in line with \cite{reynolds:2021:Prompt}, emphasizing the benefits of sophisticated prompting in extracting the best performance from LLMs.
+Even for ChatGPT, which already ranks best on nearly every query without any additional prompting, the ranking results are best when using the complex MultiMedQA prompt.
+We assume the small differences between the prompting strategies are due to the fact that the models are already very effective in answering the queries, so the additional prompting does not have a large impact.
+
+Except for ChatGPT, all models perform worse than the next smaller model, if the smaller models uses the MultiMedQA prompt and the larger model uses no additional prompting.
+This emphasizes the importance of a good prompting strategy, even for models that are already fine-tuned for a conversational experience like Falcon and Llama-2.
 
 \subsection{Query Type}
-The distinction in performance between question-type and keyword queries is significant. LLMs show a predisposition towards well-structured, coherent queries, as evidenced by higher median rankings for question-type queries. This insight is crucial for the development of LFQA systems, suggesting that query formulation plays a vital role in eliciting the most effective responses from LLMs.
+Similar to the influence of prompting strategies, our results show that phrasing the query as a proper question leads to better ranking results than using a keyword-based query.
+The improvements are consistent across all models, but the difference seems to be less pronounced the larger the model is, as shown in Figure \ref{fig:weighted_position_boxplot_by_model_and_question}.
 
-\subsection{List Formatting}
-The variation in the ranking of list-formatted answers across different models suggests a nuanced aspect of LLMs' response generation. While list-style answers from ChatGPT ranked lower, this pattern was not universally observed across all models. This inconsistency implies that the response format's impact on answer quality might be specific to individual models and their underlying training and fine-tuning methodologies.
+
+\subsection{Lower ranked Answers Properties}
+When investigating why certain answers by ChatGPT are ranked especially low, we found that the lower ranked answers follow two patterns.
+They either contain the phrase ``As an AI..'' or they contain a formatted list.
+For both patterns, we investigated if they are also present in other LLMs and how they are ranked.
+
+The substring ``As an AI..'' is present in answers generated by ChatGPT and by Falcon 7B, but not in any of the other models.
+The phrase is commonly used by ChatGPT and seems to be a part of OpenAI's training data, leading the model to not answer controversial questions or telling the user that it does not have enough information to provide an answer.
+As Falcon 7B's training data is in part based on self-chats of ChatGPT(see Section \ref{sec:dialog-models}), it is not surprising that it also uses this phrase.
+Answers containing this substring are ranked lower than other answers, which indicates that the ranking pipeline works as expected in this case, as the answers most likely are not useful for the user.
+On the other hand, telling the user that the model is unable to answer the question should be considered a desirable behavior, as the alternative would be to provide a misleading answer.
+Future research in retrieval-based implicit evaluation should investigate how this behavior could be evaluated
+
+Answers exhibiting the list pattern are generated by all models, except for GPT-2 and GPT-2 Medium.
+There seems to be a connection between the model size and the frequency of this pattern, as the larger models generate more answers containing lists.
+The effect of achieving a worse ranking by using this pattern is not consistent over all models, as the Llama-2 models answers perform better when using this pattern.
+Additionally, many highly ranked answers by ChatGPT also contain lists, so the pattern is not a clear indicator of a bad answer.
+We assume that observing this pattern in many of the lower ranked answers is dependent on the queries that prompted the answers, which are all keyword-based queries.
+This is consistent with the previous finding that keyword-based queries lead to worse ranking results than question-type queries.
 
 \subsection{Answer Length}
+FIgure \ref{fig:weighted_position_vs_answer_length} shows that there is a connection between the length of the generated answer and the ranking result.
+Very short and very long answers are ranked worse than answers of medium length containing between 200 and 300 words.
+Short answers being ranked worse is consistent with expectations, as the often complex questions require longer answers to be answered sufficiently.
+Longer answers being ranked worse is more surprising, but closer inspection revealed that most of the overly long answers are generated by GPT-2 variants, explaining the worse ranking results.
+This could potentially be avoided with other parameters used for the generation, but we did not investigate this further.
 
 \section{RQ2: Comparison with Other Benchmarks}
+Comparing the results of our retrieval-based implicit evaluation with other benchmarks, proved to be challenging, as there are no other benchmarks for evaluating LLMs in the context of LFQA.
 
-The comparison of our results with benchmarks like ARC, HellaSwag, and MMLU reveals insightful trends. While larger models generally perform better in these benchmarks, the Llama models' performance in our study deviates from this trend, with the smaller version outperforming the larger one. This divergence underscores the specialized nature of LFQA as a domain and the necessity for benchmarks tailored to this field.
 
-Our findings indicate that the effectiveness of LLMs in LFQA cannot be directly inferred from their performance in other standard NLP tasks. The nuanced requirements of LFQA, particularly in the health domain, demand a more tailored approach to model evaluation and benchmarking.
 
-In summary, our study reveals that LLM effectiveness in health-related question answering is a multifaceted issue, influenced by model size, prompting strategy, query type, and response format. These factors, along with the unique challenges of LFQA, highlight the need for specialized benchmarks and a deeper understanding of LLM capabilities and limitations in this emerging field.
-
-\section{Dataset Properties and Challenges}
-
-The properties and challenges of our dataset are crucial in understanding the context and limitations of our results:
-
-\begin{enumerate}
-    \item \textbf{Size and Scope:} The dataset is confined in size and scope, focusing solely on health-related questions. This limits its generalizability across different domains and question types.
-    \item \textbf{Data Quality:} Since the dataset is derived from web content, it includes noise introduced during preprocessing. This noise potentially impacts the quality and reliability of the benchmarks.
-    \item \textbf{Subjectivity in Annotations:} The annotations' subjective nature leads to inconsistencies, especially when involving multiple raters. This subjectivity can skew the evaluation of LLMs' responses.
-    \item \textbf{Relevance of Query Types:} The dataset's reliance on question-type queries, as opposed to keyword-based queries, might limit the applicability of our findings. This suggests an area for future improvement in dataset design for LFQA systems.
-\end{enumerate}
-
-\section{Retrieval Pipeline Limitations}
-
-The limitations of our retrieval pipeline are important to acknowledge as they influence the interpretation of our results:
-
-\begin{enumerate}
-    \item \textbf{Performance Gains:} There is a lack of significant performance improvement in transformer models over the baseline, and the impact of Query Expansion (QE) is minimal.
-    \item \textbf{Relevance and Readability:} Our pipeline showed the best performance in terms of readability, rather than relevance. This outcome may be due to transformer models considering the full text of documents, including structural elements that influence readability.
-    \item \textbf{Credibility Assessment:} The pipeline's credibility assessment was the weakest, likely because it lacks specific mechanisms to judge this quality dimension.
-    \item \textbf{Role of Transformer Models:} Transformer models like monoT5, which diverge from traditional retrieval methods like indexing or direct document comparison, challenge the conventional understanding of retrieval models.
-    \item \textbf{Efficiency vs Effectiveness:} Our research focused exclusively on the effectiveness of the retrieval process, not considering the efficiency aspect, which is vital in real-world applications.
-\end{enumerate}
-
-These limitations underscore the complexity of designing effective and reliable retrieval pipelines for evaluating LLMs in the context of long-form question answering.
-
+\section{Is the Proposed Retrieval-Based Evaluation Effective?}
 
