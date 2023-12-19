@@ -1,29 +1,37 @@
-\chapter{Limitations}\label{limitations}
-In this section, the limitations of our research are discussed, including the dataset properties and challenges, as well as the limitations of our retrieval pipeline.
+\chapter{Future Work and Conclusion}\label{conclusion}
 
-\section{Dataset Properties and Challenges}
-
-The properties and challenges of our dataset are crucial in understanding the context and limitations of our results:
-
-\begin{enumerate}
-    \item \textbf{Size and Scope:} The dataset is confined in size and scope, focusing solely on health-related questions. This limits its generalizability across different domains and question types.
-    \item \textbf{Data Quality:} Since the dataset is derived from web content, it includes noise introduced during preprocessing. This noise potentially impacts the quality and reliability of the benchmarks.
-    \item \textbf{Subjectivity in Annotations:} The annotations' subjective nature leads to inconsistencies, especially when involving multiple raters. This subjectivity can skew the evaluation of LLMs' responses.
-    \item \textbf{Relevance of Query Types:} The dataset's reliance on question-type queries, as opposed to keyword-based queries, might limit the applicability of our findings. This suggests an area for future improvement in dataset design for LFQA systems.
-\end{enumerate}
-
-\section{Retrieval Pipeline Limitations}
-
-The limitations of our retrieval pipeline are important to acknowledge as they influence the interpretation of our results:
+\section{Future Work}
+In this thesis we present a first approach of using IR methods for evaluating LLMs in LFQA, specifically in the medical domain.
+However, there is substantial room for further research and development.
+Some areas on which future work could focus are:
 
 \begin{enumerate}
-    \item \textbf{Performance Gains:} There is a lack of significant performance improvement in transformer models over the baseline, and the impact of Query Expansion (QE) is minimal.
-    \item \textbf{Relevance and Readability:} Our pipeline showed the best performance in terms of readability, rather than relevance. This outcome may be due to transformer models considering the full text of documents, including structural elements that influence readability.
-    \item \textbf{Credibility Assessment:} The pipeline's credibility assessment was the weakest, likely because it lacks specific mechanisms to judge this quality dimension.
-    \item \textbf{Role of Transformer Models:} Transformer models like monoT5, which diverge from traditional retrieval methods like indexing or direct document comparison, challenge the conventional understanding of retrieval models.
-    \item \textbf{Efficiency vs Effectiveness:} Our research focused exclusively on the effectiveness of the retrieval process, not considering the efficiency aspect, which is vital in real-world applications.
+    \item \textbf{Dataset Improvements:} The currently used dataset is not originally designed for LFQA and has some limitations, as discussed in Chapter \ref{sec:scope-and-limitations}. Future work could focus on designing a more comprehensive dataset that addresses these limitations and provides a more challenging benchmark for LLMs. An intermediate step could be to use the existing dataset and incorporate more sophisticated preprocessing steps to improve the quality of the data. Redoing the current annotations using a more consistent methodology could also improve the dataset quality.
+    \item \textbf{Retrieval Pipeline Improvements:} The retrieval pipeline used in this thesis is a first attempt at using IR methods for evaluating LLMs in LFQA. Future work could focus on improving the pipeline's performance and investigate closer in which cases the retrieval pipeline produces different rankings than the human annotators.
+    \item \textbf{Multidimensional Evaluation:} The currently used retrieval pipeline is only trained to rank documents based on their relevance, which is only one of the dimensions of answer quality. Future work could focus on extending the pipeline to also rank documents based on their readability and credibility.
+    \item \textbf{Professional Evaluation:} The used retrieval pipeline is evaluated on the human ranked documents from the dataset, but after including the LLM generated answers the produced ranking is not evaluated again by medical experts. Future work could evaluate if human experts prefer the highest ranked LLM generated answers over the highly ranked web answers.
+    \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to already consider the evaluation of these systems, which is more complex than the evaluation of single answers. How could the proposed retrieval-based implicit evaluation be extended to evaluate conversational LLMs?
 \end{enumerate}
 
-These limitations underscore the complexity of designing effective and reliable retrieval pipelines for evaluating LLMs in the context of long-form question answering.
+\section{Conclusion}
+The exploration of large language models (LLMs) in the domain of long-form question answering (LFQA), particularly in the medical field, as presented in this thesis, signifies an important step in the broader context of natural language processing and artificial intelligence research.
+The innovative use of information retrieval (IR) techniques for the evaluation of LLMs, as detailed in this work, addresses a crucial gap in the existing literature and methodologies.
 
-\section{Limitations of the Retrieval-based Implicit Evaluation}
+This thesis, building upon the foundations laid in the introduction and supported by the experimental setup and results, demonstrates that the retrieval-based implicit evaluation method can be a viable tool for assessing the quality of health answers generated by LLMs.
+The method's ability to capture the multidimensional nature of answer quality — relevance, readability, and credibility — represents a significant advancement over traditional evaluation methods that often focus on unidimensional metrics.
+
+The research questions, RQ1 and RQ2, provide a structured approach to understanding the factors that influence the effectiveness of LLMs and how these models perform in comparison to established benchmarks in the field.
+The findings highlight the importance of model size, prompting strategies, and the formulation of queries in influencing the performance of LLMs.
+Moreover, the comparison to other benchmarks reiterates the potential of the proposed method in providing a comprehensive evaluation framework that aligns with the broader trends observed in the field.
+
+However, as discussed in the limitations section, the current study is not without its challenges.
+The reliance on noisy web data, the general quality of answers, and the limitations in the retrieval pipeline underscore the need for ongoing improvement and refinement of the methodologies employed.
+The scope of the study, primarily focused on English language queries in the medical domain, also suggests the potential for expanding this research to encompass a wider range of languages and fields.
+
+The conclusion of this thesis is not an end, but rather a stepping stone towards a more nuanced and effective evaluation of LLMs in LFQA.
+The potential directions for future work, including dataset improvements, enhancement of the retrieval pipeline, and the extension to multidimensional evaluation, pave the way for more sophisticated and accurate assessments of LLMs.
+Additionally, the exploration of professional evaluations and the adaptation of this method to conversational LLMs opens up new avenues for research that are more aligned with the current trajectory of LLM applications in real-world scenarios.
+
+In the broader context of AI and NLP research, this thesis contributes to a deeper understanding of the capabilities and limitations of LLMs in handling complex, open-ended queries, particularly in sensitive domains like healthcare.
+It underscores the importance of developing robust, multidimensional evaluation methods that can keep pace with the rapid advancements in LLM technology.
+As LLMs continue to evolve and find new applications, the methodologies and insights presented in this thesis will serve as a valuable reference point for researchers and practitioners aiming to harness the full potential of these models in an ethical, effective, and user-centric manner.
