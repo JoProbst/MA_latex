@@ -1,20 +1,20 @@
 \chapter{Future Work and Conclusion}\label{conclusion}
 
 \section{Future Work}
-In this thesis we present a first approach of using IR methods for evaluating LLMs in LFQA, specifically in the medical domain.
+In this thesis, we present a first approach to using IR methods for evaluating LLMs in LFQA, specifically in the medical domain.
 However, there is substantial room for further research and development.
 Some areas on which future work could focus are:
 
 \begin{enumerate}
-    \item \textbf{Dataset Quality:} The currently used dataset is not originally designed for LFQA and has some limitations, as discussed in Chapter \ref{sec:scope-and-limitations}. Those limitations include the general lower quality of web content as well as the problems in the annotation process. Future work could focus on designing a more comprehensive dataset that addresses these limitations and provides a more challenging benchmark for LLMs. An intermediate step could be to use the existing dataset and incorporate more sophisticated preprocessing steps to improve the quality of the data. Redoing the current annotations using a more consistent methodology could also improve the dataset quality.
-    \item \textbf{Retrieval Pipeline Improvements:} The retrieval pipeline used in this thesis is a first attempt at using IR methods for evaluating LLMs in LFQA. Future work could focus on improving the pipeline's performance and investigate closer in which cases the retrieval pipeline produces different rankings than the human annotators.
-    \item \textbf{Multidimensional Evaluation:} The currently used retrieval pipeline is only trained to rank documents based on their relevance, which is only one of the dimensions of answer quality. Future work could focus on extending the pipeline to also rank documents based on their readability and credibility.
-    \item \textbf{Human Evaluation:} The used retrieval pipeline is evaluated on the human ranked documents from the dataset, but after including the LLM generated answers the produced ranking is not reevaluated by medical experts. Future work could evaluate if human experts prefer the highest ranked LLM generated answers over the highly ranked web answers.
-    \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to already consider the evaluation of these systems, which is more complex than the evaluation of single answers. How could the proposed retrieval-based implicit evaluation be extended to evaluate conversational LLMs?
+    \item \textbf{Dataset Quality:} The currently used dataset is not originally designed for LFQA and has some limitations, as discussed in Chapter \ref{sec:scope-and-limitations}. Those limitations include the generally lower quality of web content as well as the problems in the annotation process. Future work could focus on designing a more comprehensive dataset that addresses these limitations and provides a more challenging benchmark for LLMs. An intermediate step could be to use the existing dataset and incorporate more sophisticated preprocessing steps to improve the quality of the data. Redoing the current annotations using a more consistent methodology could also improve the dataset quality.
+    \item \textbf{Retrieval Pipeline Improvements:} The retrieval pipeline used in this thesis is a first attempt at using IR methods for evaluating LLMs in LFQA. Future work could focus on improving the pipeline's performance and investigate closely in which cases the retrieval pipeline produces different rankings than the human annotators.
+    \item \textbf{Multidimensional Evaluation:} The currently used retrieval pipeline is only trained to rank documents based on their relevance, which is only one of the dimensions of answer quality. Future work could focus on extending the pipeline to rank documents based on their readability and credibility.
+    \item \textbf{Human Evaluation:} The used retrieval pipeline is evaluated on the human-ranked documents from the dataset, but after including the LLM-generated answers the produced ranking is not reevaluated by medical experts. Future work could evaluate if human experts prefer the highest-ranked LLM-generated answers over the highly ranked web answers.
+    \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to consider the evaluation of these systems, which is more complex than the evaluation of single answers. How could the proposed retrieval-based implicit evaluation be extended to evaluate conversational LLMs?
 \end{enumerate}
 
 \section{Conclusion}
-In this thesis we present a first approach of using human-written web content as a proxy for evaluating LLMs in LFQA, specifically in the medical domain.
+In this thesis, we present a first approach of using human-written web content as a proxy for evaluating LLMs in LFQA, specifically in the medical domain.
 We propose a retrieval-based implicit evaluation method that uses IR methods to rank documents based on their relevance to the question.
 Our contributions are:
 \begin{enumerate}
@@ -22,9 +22,8 @@ Our contributions are:
     \item Implementing and evaluating different retrieval pipelines for the new dataset.
     \item Generating a collection of 16,000 answers for the queries in the dataset, using multiple LLMs and prompting strategies.
     \item Evaluating the LFQA performance of the LLMs using the most effective retrieval pipeline.
-    \item Investigating which factors influence the ranking of the LLM generated answers.
-    \item Comparing the effectiveness of LLMs on out benchmark to the effectiveness on other benchmarks.
+    \item Investigating which factors influence the ranking of the LLM-generated answers.
+    \item Comparing the effectiveness of LLMs on our benchmark to the effectiveness on other benchmarks.
 \end{enumerate}
 
-Our results show that while the retrieval-based evaluation method is able to use human-written web content to show broad differences in the effectiveness of LLM answers, it is not able to show fine-grained differences.
-The more sophisticated fine-tuned LLMs are already able to achieve the top ranking answer on most queries, which makes it difficult to differentiate between their performance.
+Our results show that while the retrieval-based evaluation method can use human-written web content to show broad differences in the effectiveness of LLM answers, it is not able to show fine-grained differences.

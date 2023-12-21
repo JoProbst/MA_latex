@@ -1,13 +1,11 @@
-\newpage
 \appendix
 \chapter{Dataset}\label{appendix:dataset}
-\newpage
 \begin{figure}
-    \begin{minipage}{\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/sample_query_multi_eval.png}
-    \end{minipage}
-    \begin{minipage}{\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/sample_query_multi_eval.png}
+    \caption{Sample of a web document from the dataset. As a general article about the topic of Multiple Sclerosis, it is annotated for multiple queries that all relate to the topic. The different annotations can be found in the following table.}
+\end{figure}
+\begin{table}
         \centering
         \begin{tabularx}{\linewidth}{lXXX}
         \textbf{Query}                                                         & Rel & Cred & Read \\
@@ -27,7 +25,7 @@
         MS impact on career                                                    & 2            & 1             & 2             \\
         Managing MS                                                            & 2            & 2             & 2            
         \end{tabularx}
-    \end{minipage}
-    \caption{Example of a document with multiple ratings for different queries. Queries are shortened for readability.}
-\end{figure}
-\newpage
+        \caption{The different annotations for the sample web document in the dimensions of relevance, credibility and readability.
+        The document was annotated by different people for different queries, resulting in different annotations for the same document.
+        While this makes sense for the relevance dimension, it is not ideal for the credibility and readability dimensions, as those should be consistent across queries.}
+\end{table}
