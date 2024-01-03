@@ -10,12 +10,12 @@ Some areas on which future work could focus are:
     \item \textbf{Retrieval Pipeline Improvements:} The retrieval pipeline used in this thesis is a first attempt at using IR methods for evaluating LLMs in LFQA. Future work could focus on improving the pipeline's performance and investigate closely in which cases the retrieval pipeline produces different rankings than the human annotators.
     \item \textbf{Multidimensional Evaluation:} The currently used retrieval pipeline is only trained to rank documents based on their relevance, which is only one of the dimensions of answer quality. Future work could focus on extending the pipeline to rank documents based on their readability and credibility.
     \item \textbf{Human Evaluation:} The used retrieval pipeline is evaluated on the human-ranked documents from the dataset, but after including the LLM-generated answers the produced ranking is not reevaluated by medical experts. Future work could evaluate if human experts prefer the highest-ranked LLM-generated answers over the highly ranked web answers.
-    \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to consider the evaluation of these systems, which is more complex than the evaluation of single answers. How could the proposed retrieval-based implicit evaluation be extended to evaluate conversational LLMs?
+    \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to consider the evaluation of these systems, which is more complex than the evaluation of single answers. How could the proposed rank-based implicit evaluation be extended to evaluate conversational LLMs?
 \end{enumerate}
 
 \section{Conclusion}
 In this thesis, we present a first approach of using human-written web content as a proxy for evaluating LLMs in LFQA, specifically in the medical domain.
-We propose a retrieval-based implicit evaluation method that uses IR methods to rank documents based on their relevance to the question.
+We propose a rank-based implicit evaluation method that uses IR methods to rank documents based on their relevance to the question.
 Our contributions are:
 \begin{enumerate}
     \item Adapting the existing dataset by \cite{goeuriot:2021:Consumer} to the LFQA task.
@@ -26,4 +26,4 @@ Our contributions are:
     \item Comparing the effectiveness of LLMs on our benchmark to the effectiveness on other benchmarks.
 \end{enumerate}
 
-Our results show that while the retrieval-based evaluation method can use human-written web content to show broad differences in the effectiveness of LLM answers, it is not able to show fine-grained differences.
+Our results show that while the rank-based evaluation method can use human-written web content to show broad differences in the effectiveness of LLM answers, it is not able to show fine-grained differences.

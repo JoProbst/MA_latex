@@ -1,84 +1,73 @@
 \chapter{Introduction}\label{structure}
-After the release of ChatGPT\footnote{\url{https://chat.openai.com/}} by OpenAI in 2022 a number of other chatbots like Anthropic's Claude\footnote{\url{https://claude.ai/}} or Google's Bard\footnote{\url{https://bard.google.com/chat}} were published in the following months.
-Especially ChatGPT became successful very quickly, gaining 100 million active users in the first year after release, according to the OpenAI DevDay Opening Keynote\footnote{\url{https://www.youtube.com/watch?v=U9mJuUkhUzk}}.
-But the chatbots by other companies also got regular updates and a lot of attention from media and the companies, indicating high public interest in this space.
-Based on the findings by \cite{de:2014:seeking}, who show that a large amount of users turns to search engines or social media sites for medical information, we can assume that a large portion of users turns to ChatGPT and other chatbots with similar medical questions.
-This assumption is supported by studies investigating possible use cases of ChatGPT in the medical domain, which mention the use of ChatGPT by doctors, nursers or medical students as one possible application (\cite{dave:2023:chatgpt}, \cite{khan:2023:chatgpt}).
-While multiple benchmarks for answering questions in a single choice format or with short, factual answers are usually reported in the technical reports accompanying the release of new models, it is much harder to evaluate the LLMs on open-ended questions that are common in the medical domain.
+After the release of ChatGPT\footnote{\url{https://chat.openai.com/}} by OpenAI in 2022 several other LLM based chatbots like Anthropic's Claude\footnote{\url{https://claude.ai/}} or Google's Bard\footnote{\url{https://bard.google.com/chat}} were published in the following months.
+ChatGPT became successful quickly, gaining 100 million active users in the first year after release, according to the OpenAI DevDay Opening Keynote\footnote{\url{https://www.youtube.com/watch?v=U9mJuUkhUzk}}.
+\cite{de:2014:seeking} showed that a large amount of users turned to search engines or social media sites for medical information, we can assume that a large portion of users turned to ChatGPT and other chatbots with similar medical questions.
+This assumption is supported by \cite{dave:2023:chatgpt} and \cite{khan:2023:chatgpt} who investigate possible use cases of ChatGPT in the medical domain and mention the use of ChatGPT by doctors, nurses or medical students as possible applications.
+
+While multiple benchmarks for answering questions in a single choice format or with short, factual answers are usually reported in the technical reports accompanying the release of new models, as \cite{xu:2023:A} show it is much harder to evaluate the LLMs on open-ended questions that are common in the medical domain due to the many factors that influence health outcomes.
 
 As \cite{ouyang:2022:Training} show, the current NLP datasets and benchmarks that are usually applied to evaluate LLMs do not reflect the described use case of answering open-ended questions.
-According to their data, only 18\% of GPT-3 API calls are targeted at conventional NLP tasks like classification or single choice QA tasks.
+According to the data by \cite{ouyang:2022:Training}, only 18\% of GPT-3 API calls are targeted at conventional NLP tasks like classification or single choice QA tasks.
 On the other hand, 57\% of API requests lead to open-ended generation.
 Considering that this data originates from the GPT-3 API and not the conversation-focused ChatGPT model, it is reasonable to assume that open-ended generation now makes up even more of the requests.
-This shows that traditional QA tasks like single or multiple choice QA or extracting answers from a given text are not representative of the task the chatbots are supposed to perform.
+This shows that traditional QA tasks like single or multiple choice QA or extracting answers from a given text are not representative of the wide range of tasks supported by LLMs.
 
 The relatively new field of long-form question answering (LFQA) deals with the answering of open-ended questions by automated systems.
-As shown by \cite{xu:2023:A}, the current automated methods of evaluating those LFQA systems are still lacking compared to manual human evaluation, which is often performed by crowd workers.
+As shown by \cite{xu:2023:A}, the current automated methods of evaluating those LFQA systems are still lacking compared to manual human evaluation, which according to \cite{xu:2023:A} is often performed by crowd workers.
 However, \cite{xu:2023:A} also mention multiple drawbacks of the human evaluation approach.
 For one, annotators need to be well-trained and have a solid foundational knowledge of the question field.
 This level of expertise is usually lacking among crowd workers.
-Furthermore, the answer length makes evaluating long-form QA much more demanding than simple QA tasks (\cite{krishna:2021:Hurdles}), increasing the duration it takes to process one sample.
-Together, these problems lead to an increased need for well-trained human annotators, which are hard to find and expensive.
-Additionally, human evaluations for larger datasets are time-consuming, slowing down the development cycle particularly in the fine-tuning of LLMs.
+\cite{krishna:2021:Hurdles} note that the answer length makes evaluating LFQA much more demanding than simple QA tasks, increasing the duration it takes to process one sample.
 
 \cite{krishna:2021:Hurdles} demonstrate a high rate of disagreement among annotators when choosing between two given answers to the same question.
 They attribute this to the difficulty of judging answer quality, due to the many factors that make up a good answer.
 The subjectivity of the evaluation also poses problems for creating more widely used LFQA benchmarks based on human evaluation.
-Even if the questions for all benchmarked models are the same, the subjectivity introduced by human annotators between the different models renders the resulting scores incomparable, assuming not every question is annotated by the same crowd worker for each LLM.
+Even if the questions for all benchmarked models are the same, the subjectivity introduced by human annotators between the different models renders the resulting scores hard to compare, assuming not every question is annotated by the same crowd worker for each LLM.
 
 In addition to making the evaluation of correctness more difficult, open-ended generation of text also necessitates that the quality of the answers is evaluated in a multidimensional manner.
-In contrast to other QA tasks, LFQA has no simple notion of a good answer since answer quality is not only determined by the correctness of the answer, but also by its readability, relevance and credibility.
+\cite{sakai:2023:swan} have proposed a framework for evaluating the quality of conversational systems, including criteria like fluency (text sounds natural), groundedness (answer is grounded on evidence), explainability (user can understand why the system gave a certain answer) and many more.
+According to \cite{sakai:2023:swan}, evaluating most of those criteria in an automated manner is still an open research question and still requires human evaluation. 
+Similar to conversational systems and in contrast to other QA tasks, LFQA has no simple notion of a good answer and requires multiple evaluation criteria.
 Current evaluation methods like accuracy for single choice question answering or the overlap between the extracted answer and the ground truth for extractive question answering are not able to capture the multidimensional nature of answer quality.
 To reduce human evaluation costs and enable large-scale, multidimensional evaluation and comparison of chatbots, automated methods are necessary.
 
-In this thesis, we propose a new evaluation method for long-form question answering based on information retrieval techniques.
+In this thesis, we propose a new evaluation method for LFQA based on information retrieval techniques.
 Using a dataset based on health questions from \cite{goeuriot:2021:Consumer}, we construct a benchmark consisting of multiple queries and human-generated answers based on web content.
 We then use retrieval methods to rank answers generated by different LLMs against those human-generated web documents.
 Based on the rank of the generated answer, we can compare the quality of the answers by different LLMs.
 This method captures the multidimensional nature of answer quality, assuming the retrieval method is effectively ranking documents in terms of relevance, readability and credibility.
-Evaluating the multidimensional retrieval performance of different retrieval methods is therefore an important part of this thesis.
+Evaluating the multidimensional retrieval performance of different retrieval methods is therefore a key part of this thesis.
 
-With the answer evaluation process being automated, this method allows for large-scale evaluation of LLMs, including the evaluation of different prompting strategies, the assessment of answer consistency across a model, and the analysis of how answer quality varies with the number of model parameters.
-This reduction in human evaluations would consequently lower the costs associated with developing and fine-tuning LLMs for LFQA tasks.
+Our method allows for large-scale evaluation of LLMs, including the evaluation of different prompting strategies, the assessment of answer consistency across a model, and the analysis of how answer quality varies with the number of model parameters.
+The reduction in human evaluators would consequently lower the costs associated with developing and fine-tuning LLMs for LFQA tasks.
 It would also lead to more consistency in evaluating generated answers, limiting the subjective component brought in by human annotators.
 
-\section{Research Questions}\label{sec:research-question}
-In order to evaluate the proposed retrieval-based implicit evaluation method, we formulate one overarching research question:
+In order to evaluate the proposed rank-based implicit evaluation method, we formulate one overarching research question:
 
 \begin{center}
-\textbf{Is a retrieval-based implicit evaluation method using human-written web content a viable approach for assessing the quality of health answers generated by LLMs?}
+\textbf{Is rank-based implicit evaluation with human-written web content a viable approach for evaluating health answers generated by LLMs?}
 \end{center}
 
 To investigate the main research question, we formulate two supporting research questions:
 
 \begin{itemize}
-    \item \textbf{RQ1:} Which factors influence the effectiveness of LLMs on the proposed evaluation method?
-    \item \textbf{RQ2:} How does the effectiveness of LLMs on existing benchmarks relate to their effectiveness on the proposed retrieval-based implicit evaluation method?
+    \item \textbf{RQ1:} Which factors influence the effectiveness of LLMs when using rank-based implicit evaluation?
+    \item \textbf{RQ2:} How does the effectiveness of LLMs on existing benchmarks compare to their effectiveness when using rank-based implicit evaluation?
 \end{itemize}
 
+To answer \textbf{RQ1}, we look at differences in model size and prompting strategy, which have previously been shown to influence the effectiveness of LLMs on other tasks.
+We also investigate the influence of query properties by investigating how LLM generated answers perform on queries that are phrased as questions versus queries that are a collection of keywords.
+Additionally, we investigate different properties of the generated answers, like their length or the general structure of the answer.
 
-\section{Scope and Limitations}\label{sec:scope-and-limitations}
-This thesis is intended as a first step in investigating the use of information retrieval techniques for evaluating the LFQA capabilities of LLMs.
-It is not meant to be a comprehensive evaluation of the proposed method, but rather a proof of concept on which future work can build.
+For \textbf{RQ2}, we take the mean ranking scores of all answers generated by each LLM and compare those to how the LLMs rank on other benchmarks.
+Those benchmarks are ARC~(\cite{clark:2018:Think}), HellaSwag~(\cite{zellers:2019:HellaSwag}) and MMLU~(\cite{hendrycks:2020:Measuring}).
 
-The benchmark dataset is not built from scratch, but is based on the dataset from \cite{goeuriot:2021:Consumer}, which is not originally constructed for evaluating LFQA.
-Our preprocessing of the web documents still leaves some noise, indicating that more sophisticated methods for extracting the core message from the web documents could yield a more challenging dataset.
-The dataset is therefore not perfectly suited for the task, but is still useful for a first evaluation of the proposed method.
-
-Additionally, the dataset is only contains queries and documents in the English language, so the capabilities of the models in other languages are not considered.
-
-The domain of the datasets is restricted to medical queries; other fields are not explored in this work.
-
-\section{Structure of the Thesis}\label{sec:structure-of-the-thesis}
-Following this Introduction, in Chapter \ref{related-work} we delve into the related work.
-First, the general field of evaluating Large Language Model in the context of question answering is introduced (Section \ref{sec:evaluation-of-large-language-models})
+The rest of this thesis is structured as follows.
+In Chapter \ref{related-work} we delve into the related work.
+First, the general field of evaluating LLMs in the context of question answering is introduced.
 This includes an overview of different question answering tasks and their evaluation methods.
-
-Subsequently, in Section \ref{sec:retrieval-models} the different retrieval methods used in this work are presented, alongside the evaluation metrics used to compare them.
-This section is concluded with a discussion on how retrieval methods have previously been used to evaluate NLP tasks.
-
+Secondly, the different retrieval methods used in this work are presented, alongside the evaluation metrics used to compare them.
+This chapter is concluded with a discussion on how retrieval methods have previously been used to evaluate NLP tasks.
 Chapter \ref{experimental-setup} describes the experimental setting, from dataset collection and preparation over development of the different retrieval pipelines and generation of LLM responses to the questions in the dataset.
-
 The experimental results are presented in Chapter \ref{chapter:results}, aiming to provide the necessary groundwork for discussing the research questions in the following Chapter \ref{discussion}, which is done in the section following the results.
-
 We conclude this thesis with Chapter \ref{conclusion} on the outlook on future work and a conclusion.
