@@ -9,14 +9,14 @@ Additionally, the evaluation metrics used to compare those retrieval methods are
 \section{Evaluation of LLMs for Question Answering}\label{sec:evaluation-of-large-language-models}
 While general-purpose NLP models such as the LSTM-based ELMo~(\cite{peters:2018:Deep}) or the static word embeddings based statistical co-occurrences model GloVe~(\cite{pennington:2014:Glove}) were already popular for many NLP tasks, the introduction of the transformer architecture by \cite{vaswani:2017:Attention} led to a new generation of LLMs.
 The transformer architecture allowed models like BERT~(\cite{devlin:2018:BERT}) and GPT-2~(\cite{radford:2019:language}) to process more context than previous models, which led to improved effectiveness of the transformer-based models compared to LSTM or static word embedding based models.
-This improved effectiveness on many NLP tasks over earlier methods was shown by \cite{radford:2019:language}, who compare the base GPT performance against multiple then state-of-the-art models on different tasks, showing that their model was at least as effective as state-of-the-art models on most of those tasks.
+This improved effectiveness on many NLP tasks over earlier methods was shown by \cite{radford:2019:language}, who compare the base GPT effectiveness against multiple then state-of-the-art models on different tasks, showing that their model was at least as effective as state-of-the-art models on most of those tasks.
 
 With the release of GPT-3~(\cite{brown:2020:Language}), the size of datasets used to train LLMs, as well as the number of parameters in the models increased significantly.
 While GPT-2 in its largest version has a total of 1.5 billion parameters, GPT-3 has 175 billion parameters.
 As \cite{wei:2022:Emergent} show, this scale not only leads to improvements over previously used benchmarks compared to smaller models but also to what they call \textit{emergent abilities}.
 \textit{Emergent abilities} are abilities that are not present in smaller models.
 Those include generating long coherent stories or poems, translating between languages, and answering long-form questions.
-None of those capabilities are present in smaller models, with, e.g., the largest version of GPT-2 performing poorly on translation and summarization, as shown in the original paper~(\cite{radford:2019:language}).
+None of those capabilities are present in smaller models, with, e.g., the largest version of GPT-2 not being effective on translation and summarization tasks, as shown in the original paper~(\cite{radford:2019:language}).
 As the new capabilities of LLMs are emerging, general evaluation methods for those tasks are yet to be established.
 
 In this section, different question-answering (QA) tasks like extractive QA, single/multiple choice QA, and LFQA are introduced, and their evaluation methods are discussed.
@@ -29,15 +29,6 @@ Answers can get long and complex, branching out in different directions by inclu
 The evaluation of such answers is not as straightforward as for the other versions of QA, so human evaluation is currently the only option.
 
 \subsection{Extractive Question Answering}\label{sec:extractive-qa}
-Extractive QA is the task of answering questions given a context containing the answer.
-In this context, which can be a short paragraph or an entire Wikipedia article, the correct answer span has to be selected by the model.
-
-One of the most popular datasets for evaluating LLMs in this task is SQuAD~(\cite{rajpurkar:2016:SQuAD}), and its successor SQuAD 2.0~(\cite{rajpurkar:2018:Know}), which includes unanswerable questions in which the correct answer is not present in the context, e.g., ``What are the names of Donald Duck's nephews?'' in the context of the paragraph in Figure~\ref{fig:extractive_qa_example}.
-Adding unanswerable questions to the dataset is a way to test the model's ability to detect when a question can not be answered by the given context.
-Many other datasets like NarrativeQA~(\cite{kovcisky:2018:The}), QuAC~(\cite{choi:2018:QuAC}) or Natural Questions~(\cite{kwiatkowski:2019:Natural}) are based on the same principle.
-They consist of questions written by crowd workers or experts in the field, based on a Wikipedia article snippet or similar text passages.
-The exact constraints on the questions and the context vary between the datasets, but the general idea is the same.
-Figure~\ref{fig:extractive_qa_example} shows a made-up example of a question and context that could be used in such a dataset.
 \begin{figure}[tb]
     \centering
     \begin{tikzpicture}
@@ -66,9 +57,17 @@ Figure~\ref{fig:extractive_qa_example} shows a made-up example of a question and
             \textcolor{red}{sailor suit with a bow tie and a hat}
         };
     \end{tikzpicture}
-    \caption{Example of a typical extractive question answering task: The answer span ``sailor suit with a bow tie and a hat'' is highlighted in red in the paragraph.}
-    \label{fig:extractive_qa_example}
+    \caption{Example of a typical extractive question answering task: The answer span ``sailor suit with a bow tie and a hat'' is highlighted in red in the paragraph.}\label{fig:extractive_qa_example}
 \end{figure}
+Extractive QA is the task of answering questions given a context containing the answer.
+In this context, which can be a short paragraph or an entire Wikipedia article, the correct answer span has to be selected by the model.
+
+One of the most popular datasets for evaluating LLMs in this task is SQuAD~(\cite{rajpurkar:2016:SQuAD}), and its successor SQuAD 2.0~(\cite{rajpurkar:2018:Know}), which includes unanswerable questions in which the correct answer is not present in the context, e.g., ``What are the names of Donald Duck's nephews?'' in the context of the paragraph in Figure~\ref{fig:extractive_qa_example}.
+Adding unanswerable questions to the dataset is a way to test the model's ability to detect when a question can not be answered by the given context.
+Many other datasets like NarrativeQA~(\cite{kovcisky:2018:The}), QuAC~(\cite{choi:2018:QuAC}) or Natural Questions~(\cite{kwiatkowski:2019:Natural}) are based on the same principle.
+They consist of questions written by crowd workers or experts in the field, based on a Wikipedia article snippet or similar text passages.
+The exact constraints on the questions and the context vary between the datasets, but the general idea is the same.
+Figure~\ref{fig:extractive_qa_example} shows a made-up example of a question and context that could be used in such a dataset.
 
 The evaluation metrics for tasks of this category are based on the overlap between the predicted answer span and the ground truth answer span.
 This is called the exact match (EM) score, which measures the percentage of exact matches between the predicted and the ground truth answer span.
@@ -78,7 +77,7 @@ and recall as
 \[ \text{recall} = \frac{\text{number of correct tokens in prediction}}{\text{total number of tokens in the ground truth}} \]
 with a correct token being a predicted token that overlaps with the ground truth answer.
 The F1 score is then calculated as
-\[ \text{F1} = 2 \times \frac{\text{precision} \times \text{recall}}{\text{precision} + \text{recall}} \].
+\[ \text{F1} = 2 \times \frac{\text{precision} \times \text{recall}}{\text{precision} + \text{recall}} .\]
 
 Encoder-only LLMs like BERT have to be specifically fine-tuned for the task of extractive QA.
 For each token in the provided context, the model assigns a probability of the token being the starting or ending token of the answer span~(\cite{devlin:2018:BERT}).
@@ -88,11 +87,6 @@ In some settings of the datasets, the context can be completely omitted, forcing
 This means that the results of the two approaches are not directly comparable, because even though the models were evaluated on the same dataset, the approaches are fundamentally different.
 
 \subsection{Single and Multiple Choice Question Answering}\label{sec:multiple-choice-qa}
-For single and multiple choice question answering, the model has to select the correct answer from a set of possible answers, which can be done with or without context.
-While most datasets are single-choice datasets, some datasets like MultiRC by \cite{khashabi:2018:Looking} are multiple-choice so that the model has to check each answer for correctness, instead of just selecting the best fitting one.
-Questions for single and multiple choice QA often stem from official exams, like the MMLU dataset~(\cite{hendrycks:2020:Measuring}), which combines questions from many exams like the United States Medical Licensing Examination or the Examination for Professional Practice in Psychology.
-In other datasets, the questions are collected from crowd workers and verified by experts~(\cite{clark:2018:Think},~\cite{mihaylov:2018:Can}).
-
 \begin{figure}[tb]
     \centering
     \begin{tikzpicture}
@@ -133,6 +127,11 @@ In other datasets, the questions are collected from crowd workers and verified b
     The blue B would be a possible answer generated by the LLM, after being primed with the context and the question.
     }\label{fig:mc_example}
 \end{figure}
+For single and multiple choice question answering, the model has to select the correct answer from a set of possible answers, which can be done with or without context.
+While most datasets are single-choice datasets, some datasets like MultiRC by \cite{khashabi:2018:Looking} are multiple-choice so that the model has to check each answer for correctness, instead of just selecting the best fitting one.
+Questions for single and multiple choice QA often stem from official exams, like the MMLU dataset~(\cite{hendrycks:2020:Measuring}), which combines questions from many exams like the United States Medical Licensing Examination or the Examination for Professional Practice in Psychology.
+In other datasets, the questions are collected from crowd workers and verified by experts~(\cite{clark:2018:Think},~\cite{mihaylov:2018:Can}).
+
 Figure \ref{fig:mc_example} shows an example of a single-choice question with context.
 The LLM is provided with the context, the question and the answer options, and a ``Answer: '' prefix.
 Based on this, the model has to select one of the given options.
@@ -171,7 +170,7 @@ LFQA refers to the task of answering open-ended questions, which can usually not
 With LLMs being deployed in chatbots and as such expected to deliver answers mostly without context, evaluating the models on LFQA is important.
 
 So far, only a handful of datasets are available for this task, with the first dataset in this category being the ELI5 dataset~(\cite{fan:2019:ELI5}).
-It consists of questions and the corresponding highest-voted answer from the "Explain Like I'm Five" subreddit, where users ask questions about complex topics, which are then answered by other users.
+It consists of questions and the corresponding highest-voted answer from the ``Explain Like I'm Five'' subreddit, where users ask questions about complex topics, which are then answered by other users.
 They are accompanied by support documents, which are retrieved from web sources by querying for the original question.
 This dataset was used by~\cite{nakano:2021:Webgpt} to fine-tune GPT-3 for the task of LFQA without using the context documents.
 The answers given by the fine-tuned model are evaluated by humans, by comparing them to the highest voted answer from the ELI5 dataset.
@@ -212,7 +211,7 @@ Both fine-tuned models are trained on the dataset created by \cite{nakano:2021:W
 
 All automated evaluation methods for LFQA are judged on the task of choosing the preferable answer given two long-form answers to a question.
 The results are compared to previous human judgment on the same task.
-\cite{xu:2023:A} find that one of their baseline models, choosing always the longest answer, imitates human judgments almost as well as the fine-tuned GPT-3 model, which comes closest to human judgements.
+\cite{xu:2023:A} find that one of their baseline models, choosing always the longest answer, imitates human judgments almost as well as the fine-tuned GPT-3 model, which comes closest to human judgments.
 All automated evaluation methods have lower agreement with human judgment than the human annotators have among each other, calculated by pairwise agreement.
 This shows that the current automated evaluation methods are not yet able to evaluate LFQA as well as human annotators.
 
@@ -231,7 +230,7 @@ A similar approach is taken by \cite{dugan:2020:RoFT}, who implement a website w
 We attempt to tackle some issues with evaluating LFQA discussed in this section using the approach presented in this thesis.
 
 \section{Retrieval Models}\label{sec:retrieval-models}
-Since we want to use retrieval methods to indirectly evaluate the performance of LLMs, we will give some background on the field of information retrieval (IR), and how it relates to LFQA.
+Since we want to use retrieval methods to indirectly evaluate the effectiveness of LLMs in LFQA, we will give some background on the field of information retrieval (IR), and how it relates to LFQA.
 IR is concerned with retrieving relevant information based on an information need, from a collection of documents, usually in the form of whole documents, passages, or single sentences.
 A brief overview of a typical retrieval pipeline as outlined by \cite{manning:2009:An} is provided and visualized in Figure \ref{fig:reranking_pipeline}.
 Given a query, an IR system returns a ranked list of documents that are most relevant to the query.
@@ -328,7 +327,7 @@ Two of the most common transformer-based architectures are cross-encoder and bi-
       \tikzstyle{encoder} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=encodercolor]
       \tikzstyle{embedding} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, draw=black, fill=embeddingcolor]
       \tikzstyle{score} = [ellipse, minimum width=2cm, minimum height=1cm, align=center, draw=black, fill=scorecolor]
-
+      \tikzstyle{highlight}= [draw=black, rounded corners, inner sep=1cm, dashed, thick]
       % Nodes
       \node[text_in] (query) {Query};
       \node[encoder, below=of query] (qencoder) {Query Encoder};
@@ -340,6 +339,10 @@ Two of the most common transformer-based architectures are cross-encoder and bi-
 
       \node[score, below=of qembed.south, xshift=2.5cm] (biScore) {Relevance Score}; % New node for relevance score
 
+
+        % draw highlight box around document, doc encoder and doc embeddings. Label above the box says "Offline"
+        \node[highlight, fit=(doc) (docencoder) (docembed), label={[align=center]above:Offline}] (docbox) {};
+
       % Arrows
       \draw[-{Latex[length=3mm]}] (query) -- (qencoder);
       \draw[-{Latex[length=3mm]}] (qencoder) -- (qembed);
@@ -349,7 +352,7 @@ Two of the most common transformer-based architectures are cross-encoder and bi-
       \draw[-{Latex[length=3mm]}] (docembed) -- (biScore);
 
     \end{tikzpicture}
-    \caption{Bi-Encoder Architecture. Query and document are encoded separately, then the relevance is calculated as the similarity between the embeddings.}
+    \caption{Bi-Encoder Architecture. Query and document are encoded separately, document embeddings can be calculated offline. Then the relevance is calculated as the similarity between the embeddings.}
     \label{fig:bi-encoder}
   \end{minipage}
   \hfill
@@ -391,7 +394,7 @@ The documents are then ranked according to their embedding similarity to the que
 
 Cross-encoders, on the other hand, take a concatenated input sequence of both query and document and produce a scalar relevance score.
 This joint modeling enables them to better capture the interaction between a query and a document by leveraging the transformer's attention mechanism.
-Due to their fine-grained interaction modeling, cross-encoders outperform bi-encoders in terms of precision in retrieving relevant documents as shown by \cite{thakur:2020:Augmented} and \cite{rosa:2022:In}.
+Due to their fine-grained interaction modeling, cross-encoders are more effective than bi-encoders in terms of precision in retrieving relevant documents as shown by \cite{thakur:2020:Augmented} and \cite{rosa:2022:In}.
 However, the need to process each query-document pair individually makes them computationally demanding, especially for large datasets.
 As a result, they are typically only used in second-stage retrieval, where the objective is to re-rank the top results obtained from an initial retrieval method.
 
@@ -530,7 +533,7 @@ While for ColBERTv1 each token embedding is saved separately in its original sta
 The centroids are calculated using k-means clustering on the token embeddings of a sample of all passages at indexing time. 
 This allows for a more compact representation of the token embeddings since only the centroid embedding has to be stored.
 
-As shown by the authors, ColBERTv2 outperforms ColBERTv1 on all evaluated datasets, while also being more efficient
+As shown by the authors, ColBERTv2 is more effective than ColBERTv1 on all evaluated datasets, while also being more efficient
 
 \subsection{Evaluation of Retrieval Models}\label{sec:evaluation-of-retrieval-models}
 Evaluation metrics are important for the automatic evaluation of retrieval model effectiveness.
@@ -582,7 +585,7 @@ Similar to \cite{duh:2008:Ranking}, they show that the ranking-based methods cor
 
 \cite{guzman:2019:Pairwise} use neural methods to incorporate syntactic and semantic information into the evaluation process.
 They train a pairwise ranking model, which compares two candidate sentences given the reference and returns which one is the better translation.
-Even though they do not outperform other state-of-the-art methods, they deliver competitive results while staying closer to the human evaluation framework.
+Even though they are not more effective than other state-of-the-art methods in terms of agreeing with human judgments, they deliver competitive results while staying closer to the human evaluation framework.
 
 
 This overview shows that information retrieval methods have successfully been applied to the task of evaluating machine translation systems.
@@ -601,7 +604,7 @@ Based on the assumption that if we develop a ranking model that can effectively 
 The evaluation of text generated by LLMs can be done by ranking the LLM output with the previously validated retrieval model and using the rank of the generated output alongside human-written texts as a proxy for the effectiveness of the generated answer.
 We formalize this approach as follows:
 \begin{enumerate}
-    \item \textbf{Dataset acquisition:} Collect a dataset of queries \( q_1, q_2, \cdots, q_n \) with associated human-generated documents for each query \( d_{i,1}, d_{i,2}, \cdots d_{i,j} \forall i \in \{1, \cdots, n\} \). Each document has a relevance rating \( r_{rel}(d_{i,j}, q_i) \), a readability rating \( r_{read}(d_{i,j}, q_i) \) and a credibility rating \( r_{cred}(d_{i,j}, q_i) \) for the query.
+    \item \textbf{Dataset acquisition:} Collect a dataset of queries \( q_1, q_2, \ldots, q_n \) with associated human-generated documents for each query \( d_{i,1}, d_{i,2}, \ldots d_{i,j} \forall i \in \{1, \ldots, n\} \). Each document has a relevance rating \( r_{rel}(d_{i,j}, q_i) \), a readability rating \( r_{read}(d_{i,j}, q_i) \) and a credibility rating \( r_{cred}(d_{i,j}, q_i) \) for the query.
     \item \textbf{Retrieval Model Evaluation:} Evaluate a set of retrieval models \( \mathcal{M}\) on the dataset, using the nDCG metric for relevance, readability and credibility.
     \item \textbf{Generate LLM Answers:} Use a set of LLMs \( \mathcal{L} \) to generate answers \( a_{l,i} \) for all queries \( q_i \).
     \item \textbf{Rank Answers:} Add the generated answers \( a_{l,i} \) to the documents \(d_{1,i}, d_{2,i}, \cdots, d_{n,i} \) for each query \( q_i \) and rank them using the best of the previously evaluated retrieval model from set \( \mathcal{M} \).

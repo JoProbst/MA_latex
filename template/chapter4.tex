@@ -1,12 +1,12 @@
 \chapter{Results}\label{chapter:results}
 In this chapter, we present the results of our experiments.
 Starting with an evaluation of the retrieval pipelines, we follow with showing the effectiveness of the different LLMs on the rank-based implicit evaluation method.
-The results and visualizations needed to evaluate the research questions formulated in Section \ref{sec:research-question} are presented.
+The results and visualizations needed to evaluate the research questions formulated in the Introduction are presented.
 
 \section{Evaluation of Retrieval Pipelines}
 In this section, we compare the effectiveness of the different retrieval pipelines.
 We chose to evaluate the pipelines using nDCG@10.
-nDCG is a suitable metric for our task, as it takes into account multiple different relevance/credibility/readability levels instead of only the binary relevant/non relevant distinction.
+nDCG is a suitable metric for our task, as it takes into account multiple different relevance/credibility/readability levels instead of only the binary relevant/non-relevant distinction.
 Furthermore, it emphasizes the importance of the pipeline being able to distinguish between answers at the top level by giving more weight to the top results.
 We chose a cutoff of 10 because even though the minimum available number of answers per query is 39, the number of relevant results is much lower.
 This also normalizes the rank position between the different queries, as the number of assessed documents per query varies.
@@ -25,7 +25,7 @@ duoT5            & 0.64  & 0.805 & 0.714 \\
 monoT5           & \textbf{0.645} & \textbf{0.813} & \textbf{0.722} \\
 \hline
 \end{tabularx}
-\caption{Results of the transformer pipelines, shown as nDCG@10. The best results of the baseline pipelines are shown for comparison. All models are trained on the MS MARCO passage ranking dataset(\cite{bajaj:2016:MSMARCO}).}
+\caption{Results of the transformer pipelines, shown as nDCG@10. The best results of the baseline pipelines are shown for comparison. All models are trained on the MS MARCO passage ranking dataset (\cite{bajaj:2016:MSMARCO}).}
 \label{tab:transformer_pipelines}
 \end{table}
 \subsection{Baseline Pipelines}
@@ -189,7 +189,7 @@ Table \ref{tab:badly_ranked_answers} shows the mean normalized ranking position 
 ChatGPT generates the most answers formatted as lists, with 748 of the 2000 answers following that pattern.
 On average, those answers are ranked worse than the other answers by ChatGPT, with a mean normalized ranking position of 0.0128 compared to 0.0021 for the non list answers.
 The other models do not generate as many answers formatted as lists, with the both Llama models generating the most, 427 and 266 respectively.
-The answers by Llama models which are formatted as lists score higher than the non-list ones, while for the remaining models the answer rank follows the ChatGPT pattern, in that list-style answers are ranked lower than non list-style answers.
+The answers by the Llama models which are formatted as lists score higher than the non-list ones, while for the remaining models the answer rank follows the ChatGPT pattern, in that list-style answers are ranked lower than non list-style answers.
 
 For ChatGPT, the answers containing the phrase ``As an AI'' are ranked worse than the other answers, with a mean normalized ranking position of 0.0578 compared to 0.0056.
 They are also generated less frequently, with only 20 of the 2000 answers containing the phrase.
