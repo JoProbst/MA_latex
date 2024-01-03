@@ -106,7 +106,7 @@ The improvement is not linear, with the biggest improvements happening between G
 \centering
 \begin{tabular}{lllll}
 \hline
-\textbf{Model}        & \textbf{No Prompt} & \textbf{QA}     & \textbf{QuestionAnswer} & \textbf{MultiMedQA} \\\hline
+\textbf{Model}        & \textbf{No Prompt} & \textbf{Short QA}     & \textbf{Long QA} & \textbf{MultiMedQA} \\\hline
 GPT-2        & 0.763      & 0.663 & 0.614    & \textbf{0.603}      \\
 GPT-2 Medium & 0.675      & \textbf{0.524} & 0.544    & 0.618      \\
 GPT-2 Large  & 0.496      & 0.393 & \textbf{0.336}    & 0.374      \\
@@ -126,8 +126,8 @@ Increasing prompting complexity generally improves the ranking of the LLM answer
 \end{table}
 The different prompting strategies strongly influence the final rankings of the LLM answers.
 Table \ref{tab:prompting_strategy} shows the mean normalized position of the LLM answers for the different prompting strategies.
-Starting with no prompt produces the worst ranking results for all models, except for ChatGPT where the QuestionAnswer prompt is slightly less effective.
-The rankings improve with each more complex prompting strategy, except for GPT-2 Medium and GPT-2 Large, which is most effective on the QA and the QuestionAnswer prompts respectively.
+Starting with no prompt produces the worst ranking results for all models, except for ChatGPT where the long QA prompt is slightly less effective.
+The rankings improve with each more complex prompting strategy, except for GPT-2 Medium and GPT-2 Large, which is most effective on the short QA and the long QA prompts respectively.
 For all other models, the ranking is best on the complex MultiMedQA prompt.
 
 Inside each prompting strategy, the ordering of the models is consistent except for the Llama models, which change between second and third place depending on the prompting strategy.

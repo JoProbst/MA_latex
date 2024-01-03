@@ -371,12 +371,12 @@ Based on those results we use a similar approach of different prompting strategi
 We use the following four strategies:
 \begin{enumerate}
     \item \textbf{No Prompt:}\\ \textit{query}
-    \item \textbf{QA Prompt:}\\ Q: \textit{query}\\A:
-    \item \textbf{QuestionAnswer Prompt:}\\ Question: \textit{query}\\Answer:
+    \item \textbf{Short QA Prompt:}\\ Q: \textit{query}\\A:
+    \item \textbf{Long QA Prompt:}\\ Question: \textit{query}\\Answer:
     \item \textbf{MultiMedQA Promp:}\\ You are a helpful medical knowledge assistant. Provide useful, complete, and scientifically grounded answers to common consumer search queries about health.\\Question: \textit{query}\\Complete Answer:
 \end{enumerate}
 where \textit{query} is replaced by the query to be answered.
-Based on the results of \cite{reynolds:2021:Prompt}, we expect the generated answers based on the MultiMedQA prompt to rank highest, followed by the QuestionAnswer prompt.
+Based on the results of \cite{reynolds:2021:Prompt}, we expect the generated answers based on the MultiMedQA prompt to rank highest, followed by the long QA prompt.
 To reduce the influence of random variations in the generated responses, we generate 10 responses for each query and model.
 
 \subsection{Generating Answers}
