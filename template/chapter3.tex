@@ -284,60 +284,8 @@ This library also provides the second score, which is an aggregate of multiple s
 Those scores are all based on different text statistics, like the number of syllables per word, the number of words per sentence, or the number of characters per word.
 More details about the different scores can be found in the documentation of the textstat library.
 
-\section{Evaluation of Retrieval Pipelines}
-In this section, we compare the effectiveness of the different retrieval pipelines.
-We chose to evaluate the pipelines using nDCG@10.
-nDCG is a suitable metric for our task, as it takes into account multiple different relevance/credibility/readability levels instead of only the binary relevant/non relevant distinction.
-Furthermore, it emphasizes the importance of the pipeline being able to distinguish between answers at the top level by giving more weight to the top results.
-We chose a cutoff of 10 because even though the minimum available number of answers per query is 39, the number of relevant results is much lower.
-This also normalizes the rank position between the different queries, as the number of assessed documents per query varies.
-\begin{table}[tb]
-\centering
-\begin{tabularx}{\textwidth}{lXXX}
-\hline
-Pipeline    & Relevance          & Readability        & Credibility        \\ \hline
-DPH         & 0.643 & 0.742 & 0.539 \\
-DPH\ (qe)     & 0.637 & 0.751 & 0.51  \\
-TF-IDF     & 0.64  & 0.746 & 0.551 \\
-TF-IDF (qe) & 0.636 & 0.751 & 0.557 \\
-ColBERTv1      & 0.626 & 0.774 & 0.633 \\
-ColBERTv2       & 0.634 & 0.799 & 0.65  \\
-duoT5            & 0.64  & 0.805 & 0.714 \\
-monoT5           & \textbf{0.645} & \textbf{0.813} & \textbf{0.722} \\
-\hline
-\end{tabularx}
-\caption{Results of the transformer pipelines, shown as nDCG@10. The best results of the baseline pipelines are shown for comparison. All models are trained on the MS MARCO passage ranking dataset(\cite{bajaj:2016:MSMARCO}).}
-\label{tab:transformer_pipelines}
-\end{table}
-\subsection{Baseline Pipelines}
-Our baseline retrieval pipelines are the TF-IDF and BM25 pipelines, each once with and once without query expansion.
-Effectiveness on all three dimensions is similar for all pipelines, showing little difference between the strategies.
-Table \ref{tab:transformer_pipelines} shows the retrieval performance of the baseline pipelines in the first four rows.
-The rankings are closest to the human rankings for readability, scoring around 0.75 for all pipelines.
-Relevance is lower than that, with scores around 0.64.
-Since those models are designed to retrieve relevant documents, we would expect the relevance scores to be higher.
-The credibility scores are the lowest, with scores around 0.55.
-
-\subsection{Transformer Pipelines}
-Table \ref{tab:transformer_pipelines} shows the nDCG@10 scores for the different transformer-based pipelines, compared to the best baseline results.
-The monoT5 pipeline performs best on all three dimensions, with scores of 0.645 for relevance, 0.813 for readability, and 0.722 for credibility.
-Re-ranking the top 10 results using duoT5 made the results slightly worse in all dimensions.
-ColBERTv2 shows a slight improvement over ColBERTv1 but is still worse in relevance while being better in readability and credibility.
-
-In general, the transformer-based models perform very similarly to the baseline models in terms of relevance, but all transformer-based models achieve higher scores on readability and credibility.
-
-\subsection{External Document Scores}
-Because we did not find any retrieval models that consider readability as the main ranking dimension, we investigate adding external scores to the ranking process.
-First, the statistical scores described in Section \ref{sec:external-scores} are calculated for all documents in the dataset.
-We then compare the calculated scores to the readability scores assigned by the human annotators.
-For our dataset, we do not find a strong correlation between the human-annotated readability scores and the statistical scores.
-The Flesch Reading Ease score has a correlation of 0.177 with the readability scores, while the full textstat score has a slightly negative correlation of -0.147.
-Those correlations are not strong enough to justify using the statistical scores as a proxy for readability.
-
-This might be connected to the fact that the documents in our dataset are scraped from the web, which means that even after preprocessing they still contain noise not accounted for by the statistical scores, which are intended for the use on clean text.
-
 \section{Generating LLM Responses}
-We now introduce the LLMs that selected for the experiments, and the steps taken to get the generated answers from the LLMs.
+We now introduce the LLMs that we selected for the experiments, and the steps taken to get the generated answers from the LLMs.
 Additionally, the different prompting strategies that are used to generate the responses are described.
 
 \subsection{Selection of Language Models}
@@ -355,37 +303,33 @@ This is currently the use case of LLMs that comes closest to the task of LFQA, s
 To make a model suitable for directly interacting with humans, different fine-tuning objectives are used in which the behavior of the model is aligned with the expectations of the human.
 
 The importance of this alignment is shown by \cite{ouyang:2022:Training}, who show that answers of their instruction-tuned model InstructGPT are preferred by humans compared to outputs by a model with over 100 times the number of parameters, but without any fine-tuning.
-
 We select the following models:
-
-The \textbf{Falcon} family of models, which was released in 2023 on HuggingFace\footnote{\url{https://huggingface.co/blog/falcon}}.
+\begin{description}
+\item[Falcon,] which was released in 2023 on HuggingFace.\footnote{\url{https://huggingface.co/blog/falcon}}
 At the time of writing, there are three model sizes available, 7B, 40B, and 180B parameters, each as a foundation model or as an instruction-tuned model.
-For our testing, we only use the small 7B instruction-tuned model.
+For our experiments, we only use the small 7B instruction-tuned model.
 
 According to the HuggingFace model card, the model is pre-trained on the RefinedWeb dataset by \cite{penedo:2023:The} and then fine-tuned on the GPTeacher\footnote{\url{https://github.com/teknium1/GPTeacher}}, GPT4All\footnote{\url{https://github.com/nomic-ai/gpt4all}} and Baize~(\cite{xu:2023:Baize}) datasets.
 GPTeacher and GPT4All are both datasets of prompt-response pairs, while Baize is a dataset based on self-chats by ChatGPT, which have been seeded by questions from Quora, StackOverflow, and MedQuAD.
-
 Unfortunately, the authors do not detail exactly how the data was used to fine-tune the model, as a scientific paper is still yet to be released.
 
 
-\textbf{Llama 2}, a model introduced in 2023 by \cite{touvron:2023:Llama}.
+\item[Llama 2,] a model introduced in 2023 by \cite{touvron:2023:Llama}.
 It is available through the HuggingFace library, after agreeing to the terms of use posed by Meta.
 It comes in three sizes, 7B, 13B, and 70B parameters.
 For each of the sizes, the base language model, and a fine-tuned version for chat is available.
-In our testing, we use the fine-tuned version in both the 7B and 13B sizes, since the 70B parameter model is too large to fit on the available hardware.
+In our experiments, we use the fine-tuned version in both the 7B and 13B sizes, since the 70B parameter model is too large to fit on our available hardware.
 
 To create the chat model, the base model is first tuned using supervised fine-tuning, where the model is trained on a dataset of prompt-response pairs, which are all written by humans.
-
 The next step is Reinforcement Learning with Human Feedback (RLHF), by which the model is aligned with human preferences. 
 To generate a training set, humans are tasked to evaluate which of two generated responses to a given prompt they prefer.
 Based on that data, a reward model is trained, which can then evaluate generated responses on a large scale.
 The model is then fine-tuned to maximize the reward given by the reward model.
-
 The RLHF training is done over multiple iterations, continuously improving the reward model and the chat model based on human feedback.
 Additionally, they not only optimize for the helpfulness of the generated response but also evaluate for safety, instructing the model not to provide harmful content in that way.
 
 
-\textbf{ChatGPT}, is the largest model we used, with 175B parameters. 
+\item[ChatGPT,] is the largest model we used, with 175B parameters. 
 It was introduced by OpenAI at the end of 2022\footnote{\url{https://openai.com/blog/chatgpt/}}.
 As a commercial product, it can only be accessed through the OpenAI API, which we did using the provided Python library.
 
@@ -393,7 +337,7 @@ With OpenAI becoming more secretive about their models since starting to monetiz
 In their blog post, they state that the model is a close sibling to the InstructGPT model mentioned above.
 This means the fine-tuning procedure is likely similar to the one described by \cite{ouyang:2022:Training} but with a larger model size.
 The methods applied are similar to the ones used for the Llama 2 model, first using supervised fine-tuning, and then using RLHF to align the model with human preferences.
-
+\end{description}
 
 Table \ref{tab:language-models} gives an overview of all the used models, comparing parameter size pre-training and fine-tuning data, as well as fine-tuning methods.
 In total, we use 8 different models, 4 of which are variants of GPT-2, while the others a different fine-tuned models for chat.
@@ -433,7 +377,7 @@ We use the following four strategies:
 \end{enumerate}
 where \textit{query} is replaced by the query to be answered.
 Based on the results of \cite{reynolds:2021:Prompt}, we expect the generated answers based on the MultiMedQA prompt to rank highest, followed by the QuestionAnswer prompt.
-To restrict the influence of random variations in the generated responses, we generate 10 responses for each query and model.
+To reduce the influence of random variations in the generated responses, we generate 10 responses for each query and model.
 
 \subsection{Generating Answers}
 To generate answers for a given query, the query is passed to the LLM using one of the prompting strategies described above.
@@ -448,7 +392,7 @@ The following parameters are considered for the different models in our experime
 \end{itemize}
 Not all parameters are available for all models and the optimal values for each parameter differ between models.
 We chose to set the same values for all models, to make the comparison between the models more consistent.
-We did not try to find the optimal values for each model but instead used values we found to work well with all models in manual testing.
+We did not try to find the optimal values for each model but instead used values we found to work well with all models in manual experiments.
 
 The \textbf{maximum number of new tokens} is set to 512 because that's the maximum length of the input for the GPT-2 models.
 
