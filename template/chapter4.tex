@@ -29,13 +29,13 @@ monoT5           & \textbf{0.645} & \textbf{0.813} & \textbf{0.722} \\
 \label{tab:transformer_pipelines}
 \end{table}
 \subsection{Baseline Pipelines}
-Our baseline retrieval pipelines are the TF-IDF and BM25 pipelines, each once with and once without query expansion.
+Our baseline retrieval pipelines are the TF-IDF and BM25 pipelines, each evaluated once with and once without query expansion.
 Effectiveness on all three dimensions is similar for all pipelines, showing little difference between the strategies.
 Table \ref{tab:transformer_pipelines} shows the retrieval effectiveness of the baseline pipelines in the first four rows.
 The rankings are closest to the human rankings for readability, scoring around 0.75 for all pipelines.
 Relevance is lower than that, with scores around 0.64.
 Since those models are designed to retrieve relevant documents, we would expect the relevance scores to be higher.
-The credibility scores are the lowest, with scores around 0.55.
+With scores around 0.55, the credibility scores are the lowest of the three dimensions.
 
 \subsection{Transformer Pipelines}
 Table \ref{tab:transformer_pipelines} shows the nDCG@10 scores for the different transformer-based pipelines, compared to the best baseline results.
