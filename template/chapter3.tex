@@ -47,7 +47,7 @@ The reasoning for this additional ranking score for credibility is not given in 
 The following sections describe how the dataset was collected and prepared for the experiments in this thesis.
 \subsection{Dataset Collection}
 There are two ways of accessing the CLEF eHealth 2021 dataset.
-Option one is to download the indexed collection directly which is available on the organizers' GitHub repository.\footnote{\url{https://github.com/CLEFeHealth/CHS-2021}, last access: 04.01.2024}
+Option one is to download the indexed collection directly which is available on the organizers' GitHub repository.\footnote{\url{https://github.com/CLEFeHealth/CHS-2021}, accessed on 04.01.2024}
 This index does not contain the full text of the documents, so it can not be used to compare the original documents against newly generated answers.
 The second option is to download all documents individually, given their IDs.
 In theory, downloading all documents can be done by using the provided scripts in the GitHub repository.
@@ -67,7 +67,7 @@ Since all social media content is discarded, the number of queries for which doc
 The files in the WARC format contain the full HTML of the web documents.
 Before being able to compare the content to the generated answers, the HTML is extracted from the documents.
 HTML elements containing fewer than 50 characters in the element body are discarded, assuming they are not relevant to the content of the document (e.g. fields of navigation bars).
-Then, the plain text is extracted using the ChatNoir Resiliparse Library.\footnote{\url{https://resiliparse.chatnoir.eu/en/stable/}, last access: 04.01.2024}
+Then, the plain text is extracted using the ChatNoir Resiliparse Library.\footnote{\url{https://resiliparse.chatnoir.eu/en/stable/}, accessed on 04.01.2024}
 
 \section{Analysis of the Final Dataset}
 We now go more in-depth on the properties of the final dataset, considering the type of queries, the number of answers per query, and the length of the answers.
@@ -183,7 +183,7 @@ Because we are only interested in the ranking of the documents for one query at 
 \section{Retrieval Pipeline Development}
 In this section, the implementation of the different retrieval pipelines is discussed.
 The baseline models (DPH and TF-IDF), as well as the ColBERT version 1 and the monoT5/duoT5-based pipelines, are implemented in the PyTerrier framework by \cite{pyterrier:2020:Declarative}, which is a Python API for the Terrier IR Platform~(\cite{macdonald:2012:From}).
-The ColBERT version 2 pipeline is based on the original implementation provided by the authors.\footnote{\url{https://github.com/stanford-futuredata/ColBERT}, last access: 04.01.2024}
+The ColBERT version 2 pipeline is based on the original implementation provided by the authors.\footnote{\url{https://github.com/stanford-futuredata/ColBERT}, accessed on 04.01.2024}
 
 \subsection{Retrieval Setup}
 The retrieval setup in this work differs from the usual retrieval setup, in which a large document collection is indexed, and then multiple queries are run against the index using different retrieval models.
@@ -248,13 +248,13 @@ Transformer-based retrieval models usually require a first retrieval step using 
 Because in this thesis the retrieval dataset is small, the first retrieval step is omitted for all transformer-based models.
 
 \subsubsection{ColBERT Version 1}
-Using the ColBERT implementation for PyTerrier,\footnote{\url{https://github.com/terrierteam/pyterrier_colbert}, last access: 04.01.2024} an end-to-end pipeline can be constructed from a pre-trained ColBERT model and a document collection.
+Using the ColBERT implementation for PyTerrier,\footnote{\url{https://github.com/terrierteam/pyterrier_colbert}, accessed on 04.01.2024} an end-to-end pipeline can be constructed from a pre-trained ColBERT model and a document collection.
 In our experiments, we use the pre-trained ColBERT checkpoint provided by the authors.
 The checkpoint can directly be loaded in the PyTerrier framework, and then used to retrieve documents from the collection.
 All parameters are left at their default values.
 
 \subsubsection{monoT5 and duoT5}
-Like the ColBERTv1 implementation, the monoT5 and duoT5 implementations are also available in PyTerrier.\footnote{\url{https://github.com/terrierteam/pyterrier_t5}, last access: 04.01.2024}
+Like the ColBERTv1 implementation, the monoT5 and duoT5 implementations are also available in PyTerrier.\footnote{\url{https://github.com/terrierteam/pyterrier_t5}, accessed on 04.01.2024}
 Pre-trained checkpoints based on the MS MARCO dataset are provided by the authors.
 The monoT5 pipeline generates scores for each query-document pair, which are then used to rank the documents.
 The duoT5 pipeline takes the ranking from the monoT5 pipeline and re-ranks the top 10 documents by directly comparing each pair of the top 10 documents directly to the query.
@@ -263,7 +263,7 @@ Again, all parameters are left at their default values.
 
 \subsubsection{ColBERT Version 2}
 Unlike the other transformer-based models, ColBERT version 2 is not available directly in PyTerrier.
-Instead, we use the implementation provided by the authors of the model.\footnote{\url{https://github.com/stanford-futuredata/ColBERT}, last access: 04.01.2024}
+Instead, we use the implementation provided by the authors of the model.\footnote{\url{https://github.com/stanford-futuredata/ColBERT}, accessed on 04.01.2024}
 The implementation works with any pre-trained checkpoint for the ColBERT version 2 model, with the MS MARCO checkpoint being downloaded by default.
 
 \subsection{External scores for Readability}\label{sec:external-scores}
@@ -275,7 +275,7 @@ It is calculated using the following formula, based on average sentence length (
 \begin{equation}
     FRE = 206.835 - (1.015 \times ASL) - (84.6 \times ASW)
 \end{equation}
-We use the implementation provided by the textstat library.\footnote{\url{https://pypi.org/project/textstat/}, last access: 04.01.2024}
+We use the implementation provided by the textstat library.\footnote{\url{https://pypi.org/project/textstat/}, accessed on 04.01.2024}
 This library also provides the second score, which is an aggregate of multiple similar scores, like the FOG score, the SMOG score, and the Coleman-Liau Index.
 Those scores are all based on different text statistics, like the number of syllables per word, the number of words per sentence, or the number of characters per word.
 More details about the different scores can be found in the documentation of the textstat library.
@@ -301,11 +301,11 @@ To make a model suitable for directly interacting with humans, different fine-tu
 The importance of this alignment is shown by \cite{ouyang:2022:Training}, who show that answers of their instruction-tuned model InstructGPT are preferred by humans compared to outputs by a model with over 100 times the number of parameters, but without any fine-tuning.
 We select the following models:
 \begin{description}
-\item[Falcon,] which was released in 2023 on HuggingFace.\footnote{\url{https://huggingface.co/blog/falcon}, last access: 04.01.2024}
+\item[Falcon,] which was released in 2023 on HuggingFace.\footnote{\url{https://huggingface.co/blog/falcon}, accessed on 04.01.2024}
 At the time of writing, there are three model sizes available, 7B, 40B, and 180B parameters, each as a foundation model or as an instruction-tuned model.
 For our experiments, we only use the small 7B instruction-tuned model.
 
-According to the HuggingFace model card, the model is pre-trained on the RefinedWeb dataset by \cite{penedo:2023:The} and then fine-tuned on the GPTeacher,\footnote{\url{https://github.com/teknium1/GPTeacher}, last access: 04.01.2024} GPT4All\footnote{\url{https://github.com/nomic-ai/gpt4all}, last access: 04.01.2024} and Baize~(\cite{xu:2023:Baize}) datasets.
+According to the HuggingFace model card, the model is pre-trained on the RefinedWeb dataset by \cite{penedo:2023:The} and then fine-tuned on the GPTeacher,\footnote{\url{https://github.com/teknium1/GPTeacher}, accessed on 04.01.2024} GPT4All\footnote{\url{https://github.com/nomic-ai/gpt4all}, accessed on 04.01.2024} and Baize~(\cite{xu:2023:Baize}) datasets.
 GPTeacher and GPT4All are both datasets of prompt-response pairs, while Baize is a dataset based on self-chats by ChatGPT, which have been seeded by questions from Quora, StackOverflow, and MedQuAD.
 Unfortunately, the authors do not detail exactly how the data was used to fine-tune the model, as a scientific paper is still yet to be released.
 
@@ -326,7 +326,7 @@ Additionally, they not only optimize for the helpfulness of the generated respon
 
 
 \item[ChatGPT,] is the largest model we used, with 175B parameters. 
-It was introduced by OpenAI at the end of 2022.\footnote{\url{https://openai.com/blog/chatgpt/}, last access: 04.01.2024}
+It was introduced by OpenAI at the end of 2022.\footnote{\url{https://openai.com/blog/chatgpt/}, accessed on 04.01.2024}
 As a commercial product, ChatGPT can only be accessed through the OpenAI API, which we did by using the provided Python library.
 
 With OpenAI becoming more secretive about their models since starting to monetize them, the exact training data and fine-tuning procedure are not known.
