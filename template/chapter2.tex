@@ -9,7 +9,7 @@ Additionally, the evaluation metrics used to compare those retrieval methods are
 \section{Evaluation of LLMs for Question Answering}\label{sec:evaluation-of-large-language-models}
 While general-purpose NLP models such as the LSTM-based ELMo~(\cite{peters:2018:Deep}) or the static word embeddings based statistical co-occurrences model GloVe~(\cite{pennington:2014:Glove}) were already popular for many NLP tasks, the introduction of the transformer architecture by \cite{vaswani:2017:Attention} led to a new generation of LLMs.
 The transformer architecture allowed models like BERT~(\cite{devlin:2018:BERT}) and GPT-2~(\cite{radford:2019:language}) to process more context than previous models, which led to improved effectiveness of the transformer-based models compared to LSTM or static word embedding based models.
-This improved effectiveness on many NLP tasks over earlier methods was shown by \cite{radford:2019:language}, who compare the base GPT effectiveness against multiple then state-of-the-art models on different tasks, showing that their model was at least as effective as state-of-the-art models on most of those tasks.
+This improved effectiveness on many NLP tasks over methods with other architectures was shown by \cite{radford:2019:language}, who compare the base GPT effectiveness against multiple then state-of-the-art models on different tasks, showing that their model was at least as effective as state-of-the-art models on most of those tasks.
 
 With the release of GPT-3~(\cite{brown:2020:Language}), the size of datasets used to train LLMs, as well as the number of parameters in the models increased significantly.
 While GPT-2 in its largest version has a total of 1.5 billion parameters, GPT-3 has 175 billion parameters.
@@ -23,7 +23,7 @@ In this section, different question-answering (QA) tasks like extractive QA, sin
 What extractive QA and single/multiple choice QA have in common is that they are relatively easy to evaluate.
 When evaluating extractive QA, the overlap of the predicted tokens with the answer span can be calculated, and for single-choice QA the predicted answer option can be compared to the ground truth answer.
 
-This changes when evaluating LFQA.
+The difficulty of evaluation changes when evaluating LFQA.
 Here, models are evaluated on their ability to answer questions in a free-form manner, without constraining the length of the answer.
 Answers can get long and complex, branching out in different directions by including examples or other information.
 The evaluation of such answers is not as straightforward as for the other versions of QA, so human evaluation is currently the only option.
@@ -70,7 +70,7 @@ The exact constraints on the questions and the context vary between the datasets
 Figure~\ref{fig:extractive_qa_example} shows a made-up example of a question and context that could be used in such a dataset.
 
 The evaluation metrics for tasks of this category are based on the overlap between the predicted answer span and the ground truth answer span.
-This is called the exact match (EM) score, which measures the percentage of exact matches between the predicted and the ground truth answer span.
+The score is called the exact match (EM) score, which measures the percentage of exact matches between the predicted and the ground truth answer span.
 Alternatively, the F1 score as the harmonic mean of precision and recall can be used, with precision being defined as
 \[ \text{precision} = \frac{\text{number of correct tokens in prediction}}{\text{total number of tokens in the prediction}} \]
 and recall as
@@ -84,7 +84,7 @@ For each token in the provided context, the model assigns a probability of the t
 
 Decoder-only models like GPT-3 can directly generate the answer from the context and the questions without any fine-tuning, by using the zero-shot, single-shot, or multi-shot capabilities of the model~(\cite{brown:2020:Language}).
 In some settings of the datasets, the context can be completely omitted, forcing the model to directly answer the question.
-This means that the results of the two approaches are not directly comparable, because even though the models were evaluated on the same dataset, the approaches are fundamentally different.
+The different approaches to answering the question mean that the results of the two approaches are not directly comparable, because even though the models were evaluated on the same dataset, the approaches are fundamentally different.
 
 \subsection{Single and Multiple Choice Question Answering}\label{sec:multiple-choice-qa}
 \begin{figure}[tb]
@@ -134,9 +134,9 @@ In other datasets, the questions are collected from crowd workers and verified b
 
 Figure \ref{fig:mc_example} shows an example of a single-choice question with context.
 The LLM is provided with the context, the question and the answer options, and a ``Answer: '' prefix.
-Based on this, the model has to select one of the given options.
+Based on the context, the model has to select one of the given options.
 Evaluation is straightforward in this case, the model's generated answer option is compared to the ground truth answer, and accuracy over all questions is calculated.
-For encoder-only models like BERT, this is modeled as a classification task, where the model has to classify the correct answer option from the given options.
+For encoder-only models like BERT, the task is modeled as a classification task, where the model has to classify the correct answer option from the given options after fine-tuning on the dataset as described by \cite{devlin:2018:BERT}.
 
 \subsection{Long Form Question Answering}\label{sec:long-form-qa}
 \begin{figure}[tb]
@@ -181,7 +181,7 @@ To evaluate LLM generated answers on the dataset, the authors let physicians and
 Additionally, the answers were individually rated in multiple rubrics, introduced in a previous work~(\cite{singhal:2022:Large}).
 
 None of the papers for current, main-stream LLMs like GPT-3~(\cite{brown:2020:Language}), GPT-4~(\cite{openai:2023:GPT}) or Llama 2~(\cite{touvron:2023:Llama}) include evaluations on common benchmarks for this category.
-This shows that LFQA is still a relatively new task, lacking sufficient academic evaluation measures.
+The few available datasets and the lack of evaluation on those in main stream papers shows that LFQA is still a relatively new task, lacking sufficient academic evaluation measures.
 
 \subsection{Difficulties of Long Form Question Answering}\label{sec:long-form-qa-difficulties}
 Recent works by \cite{xu:2023:A} and \cite{krishna:2021:Hurdles} have shown multiple challenges in the task of LFQA, independently of the model architecture used to answer the questions.
@@ -192,7 +192,7 @@ Multiple evaluation dimensions are of interest in this thesis:
     \item \textbf{Readability:} How easy is the answer to read and understand?
     \item \textbf{Credibility:} Are there any references provided and are they of high quality?
 \end{itemize}
-This adds additional complexity to the evaluation process, compared to other QA tasks which only measure the correctness of the answer.
+Multiple evaluation dimensions add additional complexity to the evaluation process, compared to other QA tasks which only measure the correctness of the answer.
 
 
 \cite{xu:2023:A} survey the evaluation of LFQA, comparing different automatic evaluation methods to human judgment.
@@ -213,7 +213,7 @@ All automated evaluation methods for LFQA are judged on the task of choosing the
 The results are compared to previous human judgment on the same task.
 \cite{xu:2023:A} find that one of their baseline models, choosing always the longest answer, imitates human judgments almost as well as the fine-tuned GPT-3 model, which comes closest to human judgments.
 All automated evaluation methods have lower agreement with human judgment than the human annotators have among each other, calculated by pairwise agreement.
-This shows that the current automated evaluation methods are not yet able to evaluate LFQA as well as human annotators.
+The low agreement shows that the current automated evaluation methods are not yet able to evaluate LFQA as well as human annotators.
 
 \cite{krishna:2021:Hurdles} investigate the problems of reference-based evaluation metrics like ROUGE-L. 
 They highlight that those metrics are unable to capture answer components like examples if those examples are not present in the ground truth answers. 
@@ -224,7 +224,7 @@ Finding experts of similar education and background is challenging when doing ev
 Additionally, the evaluation process is more mentally demanding for the individual annotator the longer the answers get.
 Similar problems have previously been shown by \cite{akoury:2020:Storium} in the context of machine-generated stories.
 They find that crowd workers have low Fleiss' kappa agreement for different dimensions like fluency and coherence when evaluating the same stories.
-They tackle this problem by using gamification techniques to activate online users of a story-writing platform to evaluate and improve the generated stories, motivating annotators to stay engaged for longer periods of time.
+They tackle this low agreement problem by using gamification techniques to activate online users of a story-writing platform to evaluate and improve the generated stories, motivating annotators to stay engaged for longer periods of time.
 A similar approach is taken by \cite{dugan:2020:RoFT}, who implement a website where users try to differentiate machine-generated text from human-generated text.
 
 We attempt to tackle some issues with evaluating LFQA discussed in this section using the approach presented in this thesis.
@@ -304,9 +304,7 @@ As mentioned in earlier sections, transformer-based models have been shown to be
 There are different approaches to how transformers can be used for retrieval.
 A brief overview of methods used in this thesis is given here.
 Transformer models can be used for learning-to-rank, where the model is trained on a dataset to predict which documents are relevant to a query.
-This differentiates them from our baseline models, which do not require training.
-
-Two of the most common transformer-based architectures are cross-encoder and bi-encoder models.
+This training step differentiates them from our baseline models, which do not require training.
 \begin{figure}[tb]
   \centering
   % Define colors
@@ -386,8 +384,10 @@ Two of the most common transformer-based architectures are cross-encoder and bi-
     \label{fig:cross-encoder}
   \end{minipage}
 \end{figure}
+
+Two of the most common transformer-based architectures are cross-encoder and bi-encoder models, which are shown in Figure \ref{fig:bi-encoder} and Figure \ref{fig:cross-encoder} respectively.
 Bi-encoders independently embed queries and documents using transformer models like BERT~(\cite{devlin:2018:BERT}).
-For the document collection, this can be done offline since the embeddings are independent of the query.
+For the document collection, embedding can be done offline since the embeddings are independent of the query.
 This separation allows them to efficiently process large datasets as the embeddings for the documents can be pre-computed and stored.
 It also enables efficient retrieval, since at inference time only the embedding for the current query has to be calculated and compared to the pre-computed document embeddings.
 The documents are then ranked according to their embedding similarity to the query.
@@ -511,7 +511,7 @@ This model architecture allows for precisely tuning retrieval efficiency vs. eff
 \caption{ColBERT Retrieval Model. The query and document are processed separately to generate token embeddings. The maximum cosine similarity between all token embeddings of the query and document is calculated and summed over all query tokens, which is the relevance score of the document given the query.}
 \label{fig:colbert}
 \end{figure}
-ColBERT~(\cite{khattab:2020:Colbert}) is another BERT-based model for document ranking.
+ColBERT~(\cite{khattab:2020:Colbert}) is another BERT-based model for document ranking, visualized in Figure \ref{fig:colbert}.
 It shares similarities with the general bi-encoder architecture but introduces some modifications to improve effectiveness.
 Instead of representing each document and query as a single vector (e.g. the [CLS] token), ColBERT uses the contextualized embeddings for each token in the document or query.
 For the documents, embedding can again be done offline, so that at the retrieval stage, only the embeddings for the query have to be generated and compared to the documents.
@@ -531,7 +531,7 @@ From the ranked passages a highly ranked one is selected as the positive passage
 Improvements to the architecture are made by incorporating a residual compression technique.
 While for ColBERTv1 each token embedding is saved separately in its original state, ColBERTv2 represents each token embedding as its nearest neighboring centroid embedding and a residual.
 The centroids are calculated using k-means clustering on the token embeddings of a sample of all passages at indexing time. 
-This allows for a more compact representation of the token embeddings since only the centroid embedding has to be stored.
+Clustering allows for a more compact representation of the token embeddings since only the centroid embedding has to be stored.
 
 As shown by the authors, ColBERTv2 is more effective than ColBERTv1 on all evaluated datasets, while also being more efficient
 
@@ -557,7 +557,7 @@ Based on that, the discounted cumulative gain (DCG) is defined as
 \[ \text{DCG@k} = \sum_{i=1}^{k} \frac{r(d_i,q)}{\log_2(i+1)} ,\]
 where the relevance ratings are discounted by the logarithm of the rank of the document, to weight higher-ranked documents more than lower-ranked ones.
 The ideal DCG (IDCG) is the DCG of the ideal ranking, which is the ranking of documents sorted descending by their relevance rating.
-This produces the highest possible DCG for a set of retrieved documents.
+This ranking produces the highest possible DCG for a set of retrieved documents.
 Finally, the normalized DCG is calculated as
 \[ \text{nDCG@k} = \frac{\text{DCG@k}}{\text{IDCG@k}} \]
 which normalizes the DCG by the IDCG, producing a score between 0 and 1.

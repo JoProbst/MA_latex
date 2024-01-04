@@ -10,7 +10,7 @@ Some areas on which future work could focus are:
     \item \textbf{Retrieval Pipeline Improvements:} The retrieval pipeline used in this thesis is a first attempt at using IR methods for evaluating LLMs in LFQA. Future work could focus on improving the pipeline's effectiveness and investigate closely in which cases the retrieval pipeline does not align with human annotator preferences. 
     \item \textbf{Multidimensional Evaluation:} The currently used retrieval pipeline is only trained to rank documents based on their relevance, which is only one of the dimensions of answer quality. Future work could focus on extending the pipeline to rank documents based on their readability and credibility.
     \item \textbf{Human Evaluation:} The chosen retrieval pipeline is evaluated on the human-ranked documents from the dataset, but after including the LLM-generated answers the produced ranking is not reevaluated by medical experts. Future work could evaluate if human experts prefer the highest-ranked LLM-generated answers over the highly ranked web answers.
-    \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to consider the evaluation of these systems, which is more complex than the evaluation of single answers. A first step could be to concatenate the generated answers over multiple conversation turns and rank this against the web document, essentially evaluating the generated text as a whole.
+    \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to consider the evaluation of these systems, which is more complex than the evaluation of single answers. A first step could be to concatenate the generated answers over multiple conversation turns and rank the concatenated document against the web documents, essentially evaluating the generated text as a whole.
 \end{enumerate}
 
 \section{Conclusion}
@@ -26,5 +26,5 @@ Our contributions are:
     \item Comparing the effectiveness of LLMs on our benchmark to the effectiveness on other benchmarks.
 \end{enumerate}
 
-Although the dataset we adapted for this task has several limitations preventing it from being a challenging benchmark that allows for fine-grained evaluation of LLMs, this thesis lays the groundwork for a scalable evaluation method for LFQA.
+Although the dataset we adapted for LFQA has several limitations preventing our evaluation method from being a challenging benchmark that allows for fine-grained evaluation of LLMs, this thesis lays the groundwork for a scalable evaluation method for LFQA.
 The proposed rank-based implicit evaluation method is a solid foundation for future work, which could focus on improving the retrieval pipeline, extending the evaluation to other dimensions of answer quality, and creating a more challenging dataset.

@@ -31,14 +31,14 @@ The comments and post were collected by executing manually generated search quer
 To evaluate each of the three categories (relevance, readability, and credibility), each query was assigned 250 documents based on rank-biased precision (RBPA) (\cite{moffat:2008:Rank}).
 RBPA is a method for choosing which documents from a pool of documents to select for evaluation by human annotators.
 The pool of documents in this case is the collection of web documents and social media content returned by the participating teams of the shared task, as well as the organizer's baseline systems.
-From this, documents are evaluated based on their rank in different runs and then scored according to the three different dimensions.
+From this pool, documents are evaluated based on their rank in different runs and then scored according to the three different dimensions.
 A more detailed description of the pooling method can be found in \cite{lipani:2017:Fixed}.
 
 After the 250 documents per query are selected, the documents are assessed by humans for credibility, readability, and relevance.
 In total, there are 26 annotators, each annotating all documents for between one and four queries.
 The annotators were not medical experts but received written training material.
 In the end, three annotations were made for a total of $11 357$ unique documents.
-This differs from the total amount of annotations in each dimension which is $12 500$, since some documents were annotated multiple times but for different queries.
+This amount differs from the total amount of annotations in each dimension which is $12 500$, since some documents were annotated multiple times but for different queries.
 
 The annotations for relevance and readability are in the range 0 (not relevant / not readable), 1 (somewhat relevant / somewhat readable), and 2 (highly relevant / highly readable).
 For scoring credibility, a category 3 exists, which is also interpreted as highly credible.
@@ -47,10 +47,10 @@ The reasoning for this additional ranking score for credibility is not given in 
 The following sections describe how the dataset was collected and prepared for the experiments in this thesis.
 \subsection{Dataset Collection}
 There are two ways of accessing the CLEF eHealth 2021 dataset.
-Option one is to download the indexed collection directly.
+Option one is to download the indexed collection directly which is available on the organizers' GitHub repository.\footnote{\url{https://github.com/CLEFeHealth/CHS-2021}}
 This index does not contain the full text of the documents, so it can not be used to compare the original documents against newly generated answers.
 The second option is to download all documents individually, given their IDs.
-In theory, this can be achieved by using the provided scripts in the organizer's GitHub repository\footnote{\url{https://github.com/CLEFeHealth/CHS-2021}}.
+In theory, downloading all documents can be done by using the provided scripts in the GitHub repository.
 Scripts are provided to download the documents from the CommonCrawl archive, as well as the social media content directly over the respective APIs.
 Unfortunately, with Twitter shutting down their free tier of the API, at the beginning of April 2023, this is now only possible with a prohibitively expensive paid tier.
 For Reddit, those API changes followed just a few months later, making it impossible to download social media content from Reddit as well.
@@ -74,7 +74,7 @@ We now go more in-depth on the properties of the final dataset, considering the 
 
 The total number of queries in the final dataset is 50, each of which is accompanied by between 39 and 249 answers.
 The number of answers depends on how many of the given answers in the base dataset by \cite{goeuriot:2021:Consumer} were, still available, i.e. not from Reddit or Twitter.
-Since this was not the same for all queries, the number of answers per query varies.
+Since the number of documents by source was not the same for all queries, the number of answers per query varies.
 On average, there are about 178 assessed documents per query available.
 
 \subsection{Queries}
@@ -111,47 +111,49 @@ As expected, the keyword queries are shorter than the question queries, with a m
 The shortest query is only two words long, while the longest query is 20 words long.
 In a later section, we investigate the differences in answer ranking of the different models depending on the two query types.
 \subsection{Documents}
-\begin{table}[tb]
+\begin{figure}
 \centering
-\begin{tabular}{ll}
-\hline
-\textbf{Domain} & \textbf{Occurrences} \\
-\hline
-www.healthline.com & 603 \\
-www.nationalmssociety.org & 419 \\
-www.ms.org.au & 198 \\
-jhu.pure.elsevier.com & 191 \\
-www.msif.org & 183 \\
-www.psychologytoday.com & 161 \\
-www.urotoday.com & 155 \\
-www.news-medical.net & 150 \\
-www.sleepfoundation.org & 141 \\
-www.aafp.org & 139 \\
-\hline
-\end{tabular}
-\caption{Top 10 Most Frequently Occurring Domains}
-\label{tab:top_domains}
-\end{table}
+   \begin{minipage}{\textwidth}
+        \centering
+        \begin{tabular}{ll}
+        \hline
+        \textbf{Domain} & \textbf{Occurrences} \\
+        \hline
+        www.healthline.com & 603 \\
+        www.nationalmssociety.org & 419 \\
+        www.ms.org.au & 198 \\
+        jhu.pure.elsevier.com & 191 \\
+        www.msif.org & 183 \\
+        www.psychologytoday.com & 161 \\
+        www.urotoday.com & 155 \\
+        www.news-medical.net & 150 \\
+        www.sleepfoundation.org & 141 \\
+        www.aafp.org & 139 \\
+        \hline
+        \end{tabular}
+        \caption{Top 10 Most Frequently Occurring Domains}
+        \label{tab:top_domains}
+   \end{minipage} 
+   \begin{minipage}{\textwidth}
+        \includegraphics[width=\textwidth]{images/num_words_per_passage.pdf}
+        \caption{Histogram of the number of words per document. The plot is cut at 15,000 words, which excludes 120 or 2\% of the documents. The median number of words per document is 1354, while the mean is 2901.}
+        \label{fig:num_words_per_document}
+   \end{minipage}
+\end{figure}
 The documents in the dataset are scraped from a total of 234 different web domains.
 Table \ref{tab:top_domains} shows the top 10 most frequently occurring domains in the dataset.
 Most domains are health-related, belonging to either health organizations, medical journals, or health news websites.
 Some domains are more general, e.g. there are also wikipedia.org pages in the dataset, as well as some domains from essay writing or homework help websites.
 A total of 133 domains show up less than 10 times in the dataset, while 44 domains show up only once.
 
-\begin{figure}[tb]
-\centering
-\includegraphics[width=\textwidth]{images/num_words_per_passage.pdf}
-\caption{Histogram of the number of words per document. The plot is cut at 15,000 words, which excludes 120 or 2\% of the documents. The median number of words per document is 1354, while the mean is 2901.}
-\label{fig:num_words_per_document}
-\end{figure}
 After preprocessing, the documents are cleaned of all HTML tags and HTML elements containing fewer than 50 characters.
 Figure \ref{fig:num_words_per_document} shows that the number of words per document is very high, with a median of 1354 words and a mean of 2901 words.
-This is natural for documents scraped from the web, which not only contain the main text but also navigation bars, footers, sidebars, and other elements.
+The high word count is natural for documents scraped from the web, which not only contain the main text but also navigation bars, footers, sidebars, and other elements.
 Those can not be fully removed with our heuristic-based preprocessing methods.
 \subsection{Document Ratings}
 The evaluation dimensions of readability, credibility, and relevance are the human annotations from the CLEF eHealth 2021 dataset by \cite{goeuriot:2021:Consumer}.
 Documents can have multiple ratings for each dimension if they are annotated for multiple queries.
-This means that the total number of ratings per dimension (8902) is higher than the number of documents in the dataset (6692).
+Having multiple annotations for different queries results in the total number of ratings per dimension (8902) being higher than the number of documents in the dataset (6692).
 
 
 In general, a high number of documents are rated as not relevant to the given query.
@@ -160,7 +162,7 @@ Documents rated with 0 relevance make up nearly half of the dataset and generall
 The most relevant documents are generally also the most credible and readable ones.
 With a value of 0.08, there is no correlation between relevance and credibility.
 For readability and relevance, the correlation is 0.22, which is slightly stronger, but still does not show a strong connection.
-This can be interpreted as the relevance of a document being independent of its credibility and readability, which shows that the annotators were able to judge the relevance of a document independently of its credibility and readability.
+The correlation scores can be interpreted as the relevance of a document being independent of its credibility and readability, which shows that the annotators were able to judge the relevance of a document independently of its credibility and readability.
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{images/heatmap_qrels.pdf}
@@ -192,7 +194,7 @@ The ColBERT version 2 pipeline is based on the original implementation provided 
 \subsection{Retrieval Setup}
 The retrieval setup in this work differs from the usual retrieval setup, in which a large document collection is indexed, and then multiple queries are run against the index using different retrieval models.
 In our case, we build separate indices for each query, containing only the documents that are assessed for that query.
-This ensures that each document that is retrieved for a query is also assessed for that query.
+Having separate indices ensures that each document that is retrieved for a query is also assessed for that query.
 
 \subsection{Baseline Models}
 This section describes the implementation of the baseline models, namely DPH and TF-IDF.
@@ -203,14 +205,8 @@ Preprocessing is done with the default values, which include the following opera
     \item \textbf{Stopword removal}, to remove tokens that do not contain information about the content. We use the default PyTerrier stopword list.
     \item \textbf{Stemming}, to remove the different endings a token can have, leaving only the root of the word. The Porter stemmer, a rule-based stemmer, is used here.
 \end{itemize}
-The resulting inverted index contains all remaining tokens and a mapping from each token to the documents in which it occurs.
+The resulting inverted index contains all remaining tokens and a mapping from each token to the documents in which the token occurs.
 
-The two retrieval models TF-IDF and DPH are then applied using the default parameters, discussed in section \ref{sec:baseline-retrieval-models}.
-Both models are tested with and without query expansion.
-We use BO1 query expansion, which uses the documents retrieved by the original query to expand the query.
-It adds terms from the retrieved documents to the original query based on informativeness, which is a measure of how frequently the term occurs in the documents compared to how frequently it occurs in the whole collection.
-Terms that occur more frequently in the retrieved documents than in the collection are added to the query.
-Afterward, the expanded query is run against the index again, and the documents are ranked according to the new query.
 \begin{figure}[tb]
     \begin{tikzpicture}[node distance=3cm, every node/.style={scale=0.7}]
     \tikzstyle{box} = [rectangle, draw, fill=gray!10,  text width=2cm, text centered, rounded corners, minimum height=3em]
@@ -234,11 +230,17 @@ Afterward, the expanded query is run against the index again, and the documents 
     \draw [->] (query) -- (retrieval);
 
     \end{tikzpicture}
-\caption{Baseline retrieval pipeline, using either TF-IDF or DPH as retrieval model with optional query expansion. This retrieves and ranks assessed documents for a given query.}
+\caption{Baseline retrieval pipeline, using either TF-IDF or DPH as retrieval model with optional query expansion. This pipeline retrieves and ranks assessed documents for a given query.}
 \label{fig:baseline-pipeline}
 \end{figure}
+The two retrieval models TF-IDF and DPH are then applied using the default parameters, discussed in section \ref{sec:baseline-retrieval-models}.
+Both models are tested with and without query expansion.
+We use BO1 query expansion, which uses the documents retrieved by the original query to expand the query.
+It adds terms from the retrieved documents to the original query based on informativeness, which is a measure of how frequently the term occurs in the documents compared to how frequently the term occurs in the whole collection.
+Terms that occur more frequently in the retrieved documents than in the collection are added to the query.
+Afterward, the expanded query is run against the index again, and the documents are ranked according to the new query.
 The resulting pipeline is shown in Figure \ref{fig:baseline-pipeline}.
-This produces a ranked list of documents for each query, which can then be compared to the order of documents according to the human annotations.
+The pipeline produces a ranked list of documents for each query, which can then be compared to the order of documents according to the human annotations.
 
 \subsection{Transformer Models}
 In addition to the baseline models, we also use the transformer-based models ColBERT version 1 and 2, as well as the monoT5 and duoT5 models.
@@ -299,7 +301,7 @@ Other than this pre-training, the models are not fine-tuned to any specific task
 
 \subsubsection{Models optimized for dialog}\label{sec:dialog-models}
 Dialog-optimized models are fine-tuned for the task of interacting with a human in a dialog, usually as a chatbot.
-This is currently the use case of LLMs that comes closest to the task of LFQA, so including models optimized for dialog is a natural choice.
+Chatbots are currently the use case of LLMs that comes closest to the task of LFQA, so including models optimized for dialog is a natural choice.
 To make a model suitable for directly interacting with humans, different fine-tuning objectives are used in which the behavior of the model is aligned with the expectations of the human.
 
 The importance of this alignment is shown by \cite{ouyang:2022:Training}, who show that answers of their instruction-tuned model InstructGPT are preferred by humans compared to outputs by a model with over 100 times the number of parameters, but without any fine-tuning.
@@ -331,11 +333,11 @@ Additionally, they not only optimize for the helpfulness of the generated respon
 
 \item[ChatGPT,] is the largest model we used, with 175B parameters. 
 It was introduced by OpenAI at the end of 2022\footnote{\url{https://openai.com/blog/chatgpt/}}.
-As a commercial product, it can only be accessed through the OpenAI API, which we did using the provided Python library.
+As a commercial product, ChatGPT can only be accessed through the OpenAI API, which we did by using the provided Python library.
 
 With OpenAI becoming more secretive about their models since starting to monetize them, the exact training data and fine-tuning procedure are not known.
 In their blog post, they state that the model is a close sibling to the InstructGPT model mentioned above.
-This means the fine-tuning procedure is likely similar to the one described by \cite{ouyang:2022:Training} but with a larger model size.
+Being a sibling model means the fine-tuning procedure is likely similar to the one described by \cite{ouyang:2022:Training} but with a larger model size.
 The methods applied are similar to the ones used for the Llama 2 model, first using supervised fine-tuning, and then using RLHF to align the model with human preferences.
 \end{description}
 
@@ -365,7 +367,7 @@ ChatGPT                & 175B   & 2022 & Proprietary                & Proprietar
 
 \subsection{Prompting approaches}\label{sec:prompting-approaches}
 How a LLM is prompted to complete a task has a large impact on the quality of the generated response.
-\cite{reynolds:2021:Prompt} show this in the context of translating French to English.
+\cite{reynolds:2021:Prompt} show this impact in the context of translating French to English.
 They compare the effect of three different prompting strategies, finding that the most complex one leads to the best translations.
 Based on those results we use a similar approach of different prompting strategies for our experiments.
 We use the following four strategies:
@@ -383,24 +385,25 @@ To reduce the influence of random variations in the generated responses, we gene
 To generate answers for a given query, the query is passed to the LLM using one of the prompting strategies described above.
 Most LLMs take additional parameters as input, which are used to guide the text generation process.
 The following parameters are considered for the different models in our experiments:
-\begin{itemize}
-    \item \textbf{max new tokens}: This parameter defines the maximum number of new tokens to be generated by the LLM, limiting the length of the generated output.
-    \item \textbf{temperature}: The temperature parameter controls the randomness in the generation process. A higher temperature value increases randomness in the output, while a lower value leads to more deterministic outputs.
-    \item \textbf{top k}: This parameter sets a threshold for the number of most likely next tokens to consider at each step of generation, only allowing the model to choose from the top k tokens. A higher value for k will increase the diversity of the generated output, while a lower value will decrease diversity.
-    \item \textbf{top p}:  Also called nucleus sampling, specifies a cumulative probability threshold. The model will only consider the smallest set of tokens whose cumulative probability does not exceed the threshold.
-    \item \textbf{repetition penalty}: This parameter is used to discourage the model from repeating the same phrases. A repetition penalty greater than 1 will decrease the likelihood of tokens that have already appeared in the generated text, so the model produces more diverse and less repetitive content.
-\end{itemize}
+\begin{description}
+    \item [max new tokens] defines the maximum number of new tokens to be generated by the LLM, limiting the length of the generated output.
+    \item [temperature] controls the randomness in the generation process. A higher temperature value increases randomness in the output, while a lower value leads to more deterministic outputs.
+    \item [top k] sets a threshold for the number of most likely next tokens to consider at each step of generation, only allowing the model to choose from the top k tokens. A higher value for k will increase the diversity of the generated output, while a lower value will decrease diversity.
+    \item [top p/nucleus sampling] specifies a cumulative probability threshold. The model will only consider the smallest set of tokens whose cumulative probability does not exceed the threshold.
+    \item [repetition penalty] is used to discourage the model from repeating the same phrases. A repetition penalty greater than 1 will decrease the likelihood of tokens that have already appeared in the generated text, so the model produces more diverse and less repetitive content.
+\end{description}
 Not all parameters are available for all models and the optimal values for each parameter differ between models.
 We chose to set the same values for all models, to make the comparison between the models more consistent.
 We did not try to find the optimal values for each model but instead used values we found to work well with all models in manual experiments.
+\begin{description}
+\item[maximum number of new tokens] is set to 512 because that's the maximum length of the input for the GPT-2 models.
 
-The \textbf{maximum number of new tokens} is set to 512 because that's the maximum length of the input for the GPT-2 models.
+\item[Temperature] is set to 0.75, restricting the variability of the generated output, while still allowing for some randomness.
 
-\textbf{Temperature} is set to 0.75, restricting the variability of the generated output, while still allowing for some randomness.
+\item[Top k and top p] are set to 50 and to 0.95 respectively, which both restrict the number of tokens the model can choose from to more likely tokens.
 
-\textbf{Top k} is set to 50, and \textbf{top p} is set to 0.95, which both restrict the number of tokens the model can choose from to more likely tokens.
-
-Finally, we set a \textbf{repetition penalty} of 1.2, which is a relatively low value, but still helps to reduce repetition in the generated output, which we found to be a common problem, especially for the GPT-2 models, but also for the smaller instructing tuned models.
+\item[repetition penalty] is set to 1.2, which is a relatively low value, but still helps to reduce repetition in the generated output, which we found to be a common problem, especially for the GPT-2 models, but also for the smaller instructing tuned models.
+\end{description}
 Any additional parameters that are available for a model are left at their default values.
 
 The generating of the answers is done in two different ways.
@@ -408,5 +411,5 @@ For ChatGPT, we use the OpenAI API to generate the answers, specifically using t
 Since they do not provide any parameters apart from temperature and number of tokens, we only set those to our chosen values.
 
 For all other models, we use the HuggingFace library to generate the answers.
-This allows us to set all parameters as described above.
+The HuggingFace library allows us to set all parameters as described above.
 Each model is prompted ten times with each of the prompting strategies, resulting in 40 generated answers per query for each model.
