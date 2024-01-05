@@ -3,14 +3,15 @@
 \section{Future Work}
 In this thesis, we present a first approach to using IR methods for evaluating LLMs in LFQA, specifically in the medical domain.
 However, there is substantial room for further research and development.
-Some areas on which future work could focus are:
+Some areas for future work are:
 
 \begin{enumerate}
-    \item \textbf{Dataset Quality:} The currently used dataset is not originally designed for LFQA and has some limitations. Those limitations include the generally lower quality of web content as well as the problems in the annotation process. Future work could focus on designing a more comprehensive dataset that addresses these limitations and provides a more challenging benchmark for LLMs. An intermediate step could be to use the existing dataset and incorporate more sophisticated preprocessing steps to improve the quality of the data. Redoing the current annotations using a more consistent methodology could also improve the dataset quality.
+    \item \textbf{Dataset Quality:} The currently used dataset is not originally designed for LFQA and has some limitations. Those limitations include the generally lower quality of web content as well as the problems in the annotation process. By designing a more comprehensive dataset that addresses these limitations and provides a more challenging benchmark for LLMs we could resolve those limitations of the evaluation method.. An intermediate step could be to use the existing dataset and incorporate more sophisticated preprocessing steps to improve the quality of the data. Redoing the current annotations using a more consistent methodology could also improve the dataset quality.
     \item \textbf{Retrieval Pipeline Improvements:} The retrieval pipeline used in this thesis is a first attempt at using IR methods for evaluating LLMs in LFQA. Future work could focus on improving the pipeline's effectiveness and investigate closely in which cases the retrieval pipeline does not align with human annotator preferences. 
-    \item \textbf{Multidimensional Evaluation:} The currently used retrieval pipeline is only trained to rank documents based on their relevance, which is only one of the dimensions of answer quality. Future work could focus on extending the pipeline to rank documents based on their readability and credibility.
+    \item \textbf{Multidimensional Evaluation:} The currently used retrieval pipeline is only trained to rank documents based on their relevance, which is only one of the dimensions of answer quality. Extending the pipeline to rank documents based on their readability and credibility could improve the evaluation method.
     \item \textbf{Human Evaluation:} The chosen retrieval pipeline is evaluated on the human-ranked documents from the dataset, but after including the LLM-generated answers the produced ranking is not reevaluated by medical experts. Future work could evaluate if human experts prefer the highest-ranked LLM-generated answers over the highly ranked web answers.
     \item \textbf{Conversational LLMs:} As the current application of LLMs in chatbots is focusing on conversational experiences, it is important to consider the evaluation of these systems, which is more complex than the evaluation of single answers. A first step could be to concatenate the generated answers over multiple conversation turns and rank the concatenated document against the web documents, essentially evaluating the generated text as a whole.
+    \item \textbf{Adding supplementary material to queries:} As \cite{koopman:2023:dr} have shown, adding supplementary material to the query can heavily bias the generated answer. By adding supplementary material with different biases to the queries, we could investigate if a similar effect can be observed using the rank-based implicit evaluation method.
 \end{enumerate}
 
 \section{Conclusion}
@@ -19,7 +20,7 @@ We propose a rank-based implicit evaluation method that uses IR methods to rank 
 Our contributions are:
 \begin{enumerate}
     \item Adapting the existing dataset by \cite{goeuriot:2021:Consumer} to the LFQA task.
-    \item Implementing and evaluating different retrieval pipelines for the new dataset.
+    \item Evaluating different retrieval pipelines for the new dataset.
     \item Producing a supplementary dataset of 16,000 answers for the queries in the dataset, using multiple LLMs and prompting strategies.
     \item Evaluating the LFQA effectiveness of the LLMs using the most effective retrieval pipeline.
     \item Investigating which factors influence the ranking of the LLM-generated answers.
